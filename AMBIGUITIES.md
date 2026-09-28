@@ -40,3 +40,38 @@ the date when an entry affects the balance:
 - [Stripe Transaction Entries](https://docs.stripe.com/api/treasury/transaction_entries/list)
 - [Modern Treasury prior ledger states](https://docs.moderntreasury.com/ledgers/docs/verify-prior-ledger-states)
 - [AWS event sourcing](https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/event-sourcing-pattern.html)
+
+## Criterion 1 evaluation boundary
+
+Criterion 1 asks for the Day 2 closing balance "evaluated at end of Day 5 and
+before any fee is assessed". I read this as a knowledge boundary, not a value
+day: the balance for value day 2 using only entries appended up to the end of
+Day 5 in the replay order, before any fee entry.
+
+The boundary is the replay sequence of the last entry appended before the first
+Day 6 event (E9). E10 is dated Day 5 but appears after E9 in the replay order,
+so it falls outside this boundary. It posts to ACC-002, so it cannot change the
+ACC-001 result either way.
+
+Within Spec 1 the entries inside the boundary are E1, E2, E4, and E7. The Day 2
+balance is 1,200.00 − 950.00 − 620.00 = AED −370.00 (E4 has value day 3 and is
+excluded), so criterion 1 is accepted. It must be re-checked once
+authorizations, settlements, and fees exist, in case any of them affect ACC-001
+with a value day on or before Day 2 inside the boundary.
+
+## Invalid ledger input
+
+The assessment defines the valid event stream but does not say how malformed
+runtime input should be handled. Because the ledger is append-only, a bad entry
+could never be removed. I therefore reject it before anything is stored and
+without consuming a replay sequence:
+
+- an unknown account or a duplicate account id when the ledger is created;
+- an amount in a different currency from the account, a non-integer amount, or
+  a zero or negative amount;
+- a direction other than CREDIT or DEBIT;
+- an event day or value day outside Day 1 to Day 6.
+
+Balance queries reject value days outside Day 1 to Day 6 and boundaries outside
+0 to the last assigned sequence, rather than silently returning zero or the
+full balance.

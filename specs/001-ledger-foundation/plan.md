@@ -43,9 +43,9 @@ via type stripping; ES modules.
 |-----------|------|--------|
 | I. Exact Money | Money is `bigint` minor units; AED 2 dp / BHD 3 dp defined once in `src/money/money.ts`; mismatched currencies rejected; allocation preserves totals | ✅ Pass |
 | I. Exact Money | Dinero.js imported only in `src/money/money.ts`; ledger imports the adapter | ✅ Pass |
-| II. Append-Only Ledger | `Ledger` has no update/delete; entries frozen; sequence assigned by ledger; rejected appends leave state unchanged | ✅ Pass |
+| II. Append-Only Ledger | `Ledger` has no update/delete; entries frozen; sequence assigned by ledger; rejected appends and rejected `appendAll` batches leave state unchanged | ✅ Pass |
 | III. Temporal Correctness | `eventDay` and `valueDay` independent; `balanceByValueDay` and `balanceAsKnownAt` specified | ✅ Pass |
-| IV. Human-Owned Logic | Bodies throw `Not implemented`; tests are `assert.fail` only; expected values left as HC-1…HC-4 | ✅ Pass |
+| IV. Human-Owned Logic | At scaffolding: bodies threw `Not implemented`, tests were `assert.fail` only, expected values left as HC-1…HC-4. Implementation and assertions remained human-owned; accepted review fixes were delegated to AI at the human's request (constitution v1.1.0) | ✅ Pass |
 | V. Focused Scope | Only credit/debit; no auth, settlement, fee, reversal, interest, replay; one pinned dependency | ✅ Pass |
 
 **Post-design re-check**: ✅ Pass — the data model and contracts introduce no additional dependency,

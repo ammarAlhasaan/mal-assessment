@@ -4,7 +4,7 @@
 
 **Created**: 2026-09-28
 
-**Status**: Draft — awaiting human checkpoints
+**Status**: Implemented — human checkpoints and red runs confirmed
 
 **Input**: User description: "Build the money adapter and append-only ledger foundation required by the
 account-ledger assessment: exact AED/BHD money through a local adapter over Dinero.js (bigint),
@@ -133,7 +133,7 @@ while appending, and query both balance functions.
    at that boundary is requested, **Then** E7 is excluded (value approved at HC-3).
 3. **Given** the end-of-Day-5, pre-fee boundary defined at HC-4, **When** Day 2's closing balance as
    known at that boundary is requested, **Then** it is compared against acceptance criterion 1's claim
-   of AED −370.00 *(claim quoted from the assessment; verdict pending human approval at HC-3/HC-4)*.
+   of AED −370.00; the claim is accepted (HC-3).
 4. **Given** E10 appended to ACC-002 as approved at HC-2, **When** ACC-002's Day 5 closing balance is
    requested, **Then** it equals the E10 total, and ACC-001's balances are unaffected.
 5. **Given** an account with no entries, **When** any balance is requested, **Then** it is zero in the
@@ -168,8 +168,9 @@ while appending, and query both balance functions.
 - **FR-007**: Application and ledger code MUST depend only on the local money adapter; only
   `src/money/` may import Dinero.js.
 - **FR-008**: The ledger MUST accept CREDIT and DEBIT entries for registered accounts and reject
-  entries whose currency differs from the account's currency, entries for unknown accounts, and
-  entries with a zero or negative amount.
+  entries whose currency differs from the account's currency, entries for unknown accounts, entries
+  whose amount is not a positive `bigint`, entries with any other direction, and entries whose event
+  day or value day is not an integer from 1 to 6. Duplicate account ids MUST be rejected at creation.
 - **FR-009**: Each entry MUST store its event day and value day independently, plus the originating
   event identifier.
 - **FR-010**: The ledger MUST assign each appended entry the next replay sequence (starting at 1);
@@ -183,7 +184,11 @@ while appending, and query both balance functions.
 - **FR-014**: The ledger MUST return an account's closing ledger balance for a value day as known at a
   replay-sequence boundary, considering only entries with sequence at or before the boundary.
 - **FR-015**: E10 MUST be posted to ACC-002 as three CREDIT entries whose amounts come from the
-  adapter's equal allocation, as approved at HC-2.
+  adapter's equal allocation, appended together with `appendAll` (HC-2).
+- **FR-016**: The ledger MUST support appending a batch of entries atomically: if any entry in the
+  batch is invalid, nothing is stored and no sequence is consumed.
+- **FR-017**: Balance queries MUST reject value days outside 1–6 and boundaries outside
+  0…last sequence instead of returning a misleading balance.
 
 ### Key Entities
 
@@ -198,49 +203,54 @@ while appending, and query both balance functions.
 
 ## Human Checkpoints *(blocking — resolve before writing assertions)*
 
-Each checkpoint is recorded by the human in this section (or `checklists/human-checkpoints.md`) before
-the related test assertions are written. AI has not supplied any of these values.
+The approved checkpoints are encoded in the human-approved tests. The values below are copied from
+those tests (`test/money/money.test.ts`, `test/ledger/foundation-events.test.ts`) and from
+`AMBIGUITIES.md` / `REJECTED.md`.
 
 ### HC-1 — E10 allocation
 
 | Instalment | Amount (BHD) |
 |------------|--------------|
-| 1          | _pending human approval_ |
-| 2          | _pending human approval_ |
-| 3          | _pending human approval_ |
-| Sum        | _pending human approval_ |
+| 1          | 3.334 |
+| 2          | 3.333 |
+| 3          | 3.333 |
+| Sum        | 10.000 |
 
-- Order of remainder units (which instalment(s) receive the extra minor unit): _pending_.
-- Verdict and reasoning for acceptance criterion 7: _pending_ (to be copied into `REJECTED.md`).
+- Order of remainder units: from the first instalment onward.
+- Criterion 7: **rejected** — three instalments of BHD 3.334 total BHD 10.002 and would create
+  BHD 0.002. Recorded in `REJECTED.md`.
 
 ### HC-2 — How the three E10 instalments are posted to ACC-002
 
-- Number of entries, direction, event id on each entry: _pending_.
-- Event day / value day on each entry: _pending_.
-- Append order of the three instalments and their position in the replay order (the assessment lists
-  E10 after E9): _pending_.
+- Three CREDIT entries to ACC-002, each with event id `E10`.
+- Event day 5 and value day 5 on each entry.
+- Appended together with `appendAll` in allocation order (3.334, 3.333, 3.333), in the written replay
+  position after E9; the ledger is never reordered by date. Recorded in `AMBIGUITIES.md`.
 
 ### HC-3 — E1/E2/E4/E7 temporal balances (ACC-001)
 
 | Value day | Closing balance, all Spec 1 entries | As known before E7 appended |
 |-----------|-------------------------------------|-----------------------------|
-| Day 1     | _pending_ | _pending_ |
-| Day 2     | _pending_ | _pending_ |
-| Day 3     | _pending_ | _pending_ |
-| Day 4     | _pending_ | _pending_ |
-| Day 5     | _pending_ | _pending_ |
-| Day 6     | _pending_ | _pending_ |
+| Day 1     | 250.00  | 250.00 |
+| Day 2     | −370.00 | 250.00 |
+| Day 3     | 30.00   | 650.00 |
+| Day 4     | 30.00   | 650.00 |
+| Day 5     | 30.00   | 650.00 |
+| Day 6     | 30.00   | 650.00 |
 
-- Verdict for acceptance criterion 1 (claim: Day 2 closing balance at end of Day 5, pre-fee, is
-  AED −370.00): _pending human approval_.
+ACC-002 by value day: 0.000 on Days 1–4, 10.000 on Days 5–6.
+
+- Criterion 1: **accepted within Spec 1** — Day 2 closing balance as known at the end-of-Day-5,
+  pre-fee boundary is AED −370.00 (1,200.00 − 950.00 − 620.00). Re-check once authorizations,
+  settlements, and fees exist. Recorded in `AMBIGUITIES.md`.
 
 ### HC-4 — Replay-sequence boundaries
 
-- Definition of the "before E7" boundary: _pending_.
-- Definition of the "end of Day 5, before any fee is assessed" boundary, including whether E10 (event
-  Day 5, listed after E9) falls inside it: _pending_.
-- Rule for how tests obtain boundaries (captured via the ledger's last sequence while appending, not
-  hard-coded): _pending confirmation_.
+- "Before E7": `lastSequence()` immediately before E7 is appended.
+- "End of Day 5, before any fee": `lastSequence()` after the last entry appended before the first
+  Day 6 event (E9). E10 follows E9 in the replay order and is outside it; it posts to ACC-002, so it
+  cannot affect criterion 1.
+- Tests capture boundaries with `lastSequence()` while appending; no sequence numbers are hard-coded.
 
 ## Success Criteria *(mandatory)*
 

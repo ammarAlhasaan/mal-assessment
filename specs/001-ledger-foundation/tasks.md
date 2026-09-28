@@ -16,7 +16,7 @@ description: "Task list for the money and ledger foundation"
 - **[P]**: Can run in parallel (different files, no dependencies)
 - **[Story]**: US1 money, US2 E10 allocation, US3 append-only entries, US4 temporal balances
 - **[Owner]**: `AI` or `HUMAN` — the constitution's ownership split
-- `[x]` = done in the scaffolding pass; everything else is open
+- `[x]` = done; everything else is open
 
 ---
 
@@ -43,10 +43,10 @@ description: "Task list for the money and ledger foundation"
 
 ## Phase 3: Human checkpoints (blocks the assertions that reference them)
 
-- [ ] T010 [HUMAN] HC-1: approve E10 allocation amounts, remainder order, and the criterion 7 verdict (`spec.md`, `checklists/human-checkpoints.md`)
-- [ ] T011 [HUMAN] HC-2: approve how the three E10 instalments are posted to ACC-002
-- [ ] T012 [HUMAN] HC-3: approve E1/E2/E4/E7 closing balances for value days 1–6 (all entries and before E7) and the criterion 1 verdict
-- [ ] T013 [HUMAN] HC-4: approve the replay-sequence boundaries ("before E7", "end of Day 5, pre-fee")
+- [x] T010 [HUMAN] HC-1: approve E10 allocation amounts, remainder order, and the criterion 7 verdict (`spec.md`, `checklists/human-checkpoints.md`)
+- [x] T011 [HUMAN] HC-2: approve how the three E10 instalments are posted to ACC-002
+- [x] T012 [HUMAN] HC-3: approve E1/E2/E4/E7 closing balances for value days 1–6 (all entries and before E7) and the criterion 1 verdict
+- [x] T013 [HUMAN] HC-4: approve the replay-sequence boundaries ("before E7", "end of Day 5, pre-fee") — *confirmed on 2026-09-29*
 
 ---
 
@@ -54,9 +54,9 @@ description: "Task list for the money and ledger foundation"
 
 **Independent Test**: `node --test "test/money/**/*.test.ts"`
 
-- [ ] T014 [US1] [HUMAN] Write assertions for precision, creation, formatting, arithmetic, and comparison in `test/money/money.test.ts`
-- [ ] T015 [US1] [HUMAN] Confirm red run for T014
-- [ ] T016 [US1] [HUMAN] Implement `decimalPlaces`, `money`, `zero`, `format`, `add`, `subtract`, `compare` in `src/money/money.ts`
+- [x] T014 [US1] [HUMAN] Write assertions for precision, creation, formatting, arithmetic, and comparison in `test/money/money.test.ts`
+- [x] T015 [US1] [HUMAN] Confirm red run for T014 — *confirmed on 2026-09-29*
+- [x] T016 [US1] [HUMAN] Implement `decimalPlaces`, `money`, `zero`, `format`, `add`, `subtract`, `compare` in `src/money/money.ts`
 
 ---
 
@@ -64,19 +64,20 @@ description: "Task list for the money and ledger foundation"
 
 **Independent Test**: `node --test --test-name-pattern="equal allocation" "test/money/**/*.test.ts"`
 
-- [ ] T017 [US2] [HUMAN] Write E10 allocation and criterion 7 assertions in `test/money/money.test.ts` (depends on T010)
-- [ ] T018 [US2] [HUMAN] Confirm red run for T017
-- [ ] T019 [US2] [HUMAN] Implement `allocateEqually` in `src/money/money.ts`
+- [x] T017 [US2] [HUMAN] Write E10 allocation and criterion 7 assertions in `test/money/money.test.ts` (depends on T010)
+- [x] T018 [US2] [HUMAN] Confirm red run for T017 — *confirmed on 2026-09-29*
+- [x] T019 [US2] [HUMAN] Implement `allocateEqually` in `src/money/money.ts`
 
 ---
 
 ## Phase 6: User Story 3 — Append-only ledger entries (P1)
 
-**Independent Test**: `node --test --test-name-pattern="append-only|validation" "test/ledger/ledger.test.ts"`
+**Independent Test**: `node --test test/ledger/ledger.test.ts`
 
-- [ ] T020 [US3] [HUMAN] Write append-only and validation assertions in `test/ledger/ledger.test.ts`
-- [ ] T021 [US3] [HUMAN] Confirm red run for T020
-- [ ] T022 [US3] [HUMAN] Implement `createLedger` with `append`, `entries`, `lastSequence` in `src/ledger/ledger.ts` (depends on T016)
+- [x] T020 [US3] [HUMAN] Write append-only and validation assertions in `test/ledger/ledger.test.ts`
+- [x] T021 [US3] [HUMAN] Confirm red run for T020 — *confirmed on 2026-09-29*
+- [x] T022 [US3] [HUMAN] Implement `createLedger` with `append`, `entries`, `lastSequence` in `src/ledger/ledger.ts` (depends on T016)
+- [x] T022a [US3] [HUMAN] Add atomic `appendAll` for the E10 instalments (signature added to `src/ledger/types.ts` by the human)
 
 ---
 
@@ -84,21 +85,23 @@ description: "Task list for the money and ledger foundation"
 
 **Independent Test**: `node --test "test/ledger/**/*.test.ts"`
 
-- [ ] T023 [US4] [HUMAN] Write balance-query assertions in `test/ledger/ledger.test.ts`
-- [ ] T024 [US4] [HUMAN] Write E1/E2/E4/E7/E10 and criterion 1 assertions in `test/ledger/foundation-events.test.ts` (depends on T010–T013)
-- [ ] T025 [US4] [HUMAN] Confirm red run for T023–T024
-- [ ] T026 [US4] [HUMAN] Implement `balanceByValueDay` and `balanceAsKnownAt` in `src/ledger/ledger.ts` (depends on T022)
+- [x] T023 [US4] [HUMAN] Write balance-query assertions in `test/ledger/ledger.test.ts`
+- [x] T024 [US4] [HUMAN] Write E1/E2/E4/E7/E10 and criterion 1 assertions in `test/ledger/foundation-events.test.ts` (depends on T010–T013)
+- [x] T025 [US4] [HUMAN] Confirm red run for T023–T024 — *confirmed on 2026-09-29*
+- [x] T026 [US4] [HUMAN] Implement `balanceByValueDay` and `balanceAsKnownAt` in `src/ledger/ledger.ts` (depends on T022)
 
 ---
 
 ## Phase 8: Review and completion
 
-- [ ] T027 [AI] Review human code against the contracts and constitution without modifying it; confirm Dinero.js is imported only in `src/money/`
-- [ ] T028 [HUMAN] Apply accepted review findings
-- [ ] T029 [AI] Run `npm test` and `npm run typecheck`; report results
-- [ ] T030 [HUMAN] Record the criterion 7 rejection (from HC-1) for `REJECTED.md` and the criterion 1 verdict (from HC-3)
-- [ ] T031 [HUMAN] Record the real work and responsibilities for Spec 1 in `WORKLOG.md`
-- [ ] T032 [HUMAN] Commit the completed specification
+- [x] T027 [AI] Review human code against the contracts and constitution without modifying it; confirm Dinero.js is imported only in `src/money/`
+- [x] T028 [HUMAN→AI] Apply accepted review findings (applied by AI at the human's explicit request, 2026-09-29: typecheck fix, posting/query validation, duplicate accounts, `appendAll` snapshot, frozen money, `allocateEqually` parts guard, criterion 1 boundary test, criterion 7 test, added coverage, docs sync)
+- [x] T029 [AI] Run `npm test` and `npm run typecheck`; report results (51/51 pass, typecheck clean)
+- [x] T030 [HUMAN] Record the criterion 7 rejection (from HC-1) in `REJECTED.md` and the criterion 1 verdict (from HC-3) in `AMBIGUITIES.md`
+- [x] T030a [HUMAN] Confirm the end-of-Day-5 boundary definition written in `AMBIGUITIES.md` (HC-4, CHK012) — *confirmed on 2026-09-29*
+- [x] T030b [HUMAN] Confirm the red runs (CHK015) — *confirmed on 2026-09-29*
+- [x] T031 [HUMAN] Record the real work and responsibilities for Spec 1 in `WORKLOG.md`
+- [x] T032 [HUMAN] Commit the completed specification
 
 ---
 
@@ -112,6 +115,7 @@ description: "Task list for the money and ledger foundation"
 
 ## Notes
 
-- Do not edit test names or signatures without updating the contracts.
+- Do not edit test names or signatures without updating the contracts (the contracts were synced
+  with `appendAll` and the added validation on 2026-09-29).
 - No expected financial value enters a test until its checkpoint is marked in
   `checklists/human-checkpoints.md`.

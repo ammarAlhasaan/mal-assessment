@@ -76,8 +76,8 @@ a private Dinero instance (harder to compare in tests, more code for no Spec 1 b
 ratios. The resulting remainder order is confirmed by the human at HC-1.
 
 **Findings**: `allocate(dineroObject, ratios)` returns parts that always sum to the original amount.
-In 2.0.0 the remainder is distributed one minor unit at a time to the largest ratio first; with equal
-ratios the earlier shares receive the extra units.
+Since 2.0.0 (the pinned version is 2.0.2) the remainder is distributed one minor unit at a time to the
+largest ratio first; with equal ratios the earlier shares receive the extra units.
 Source: https://dinerojs.com/api/mutations/allocate
 
 **Rationale**: Tests assert the adapter contract (sum preserved, spread ≤ 1 minor unit, approved

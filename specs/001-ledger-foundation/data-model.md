@@ -10,14 +10,15 @@
 | `minorUnits` | `bigint`             | Integer minor units; may be negative (e.g. a balance) |
 
 - Precision: AED → 2 decimal places, BHD → 3. Defined once in the adapter's `CURRENCIES` table.
-- Money values are immutable; operations return new values.
+- Money values are frozen; operations return new frozen values. `money()` rejects unsupported
+  currencies and non-`bigint` minor units.
 - Operations on two values require the same `currency`.
 
 ## Account (`src/ledger/types.ts`)
 
 | Field      | Type           | Rules |
 |------------|----------------|-------|
-| `id`       | `AccountId` (`string`) | Unique within a ledger |
+| `id`       | `AccountId` (`string`) | Unique within a ledger (`DuplicateAccountError` otherwise) |
 | `currency` | `CurrencyCode` | Every entry for the account must use this currency |
 
 Assessment accounts: `ACC-001` (AED), `ACC-002` (BHD). Both open at zero; no opening entry is posted.
@@ -28,8 +29,8 @@ Assessment accounts: `ACC-001` (AED), `ACC-002` (BHD). Both open at zero; no ope
 |-------------|-------------------------|-------|
 | `eventId`   | `EventId` (`string`)    | Originating assessment event, e.g. `E7`; may repeat (E10 instalments) |
 | `accountId` | `AccountId`             | Must be a registered account |
-| `direction` | `"CREDIT" \| "DEBIT"`   | Sign is carried by direction, not by amount |
-| `amount`    | `Money`                 | Currency = account currency; `minorUnits > 0` |
+| `direction` | `"CREDIT" \| "DEBIT"`   | Sign is carried by direction, not by amount; any other value is rejected |
+| `amount`    | `Money`                 | Currency = account currency; `minorUnits` is a `bigint` and `> 0` |
 | `eventDay`  | `Day` (`1`–`6`)         | Day the ledger learns of the event |
 | `valueDay`  | `Day` (`1`–`6`)         | Day the entry affects balances; independent of `eventDay` |
 
@@ -52,10 +53,15 @@ Assessment accounts: `ACC-001` (AED), `ACC-002` (BHD). Both open at zero; no ope
 ## Validation and state transitions
 
 ```text
-PostingRequest ──validate──▶ accepted ──▶ LedgerEntry(sequence = last + 1), frozen, stored
-                    │
-                    └──▶ rejected (UnknownAccountError | AccountCurrencyMismatchError |
-                                   InvalidAmountError); ledger and sequence unchanged
+PostingRequest ──copy──▶ validate ──▶ accepted ──▶ LedgerEntry(sequence = last + 1), frozen, stored
+                               │
+                               └──▶ rejected (UnknownAccountError | AccountCurrencyMismatchError |
+                                              InvalidAmountError | InvalidPostingError);
+                                    ledger and sequence unchanged
+
+PostingRequest[] ──copy all──▶ validate all ──▶ all accepted ──▶ stored in order, consecutive sequences
+                                      │
+                                      └──▶ any rejected ──▶ nothing stored, sequence unchanged
 ```
 
 There is no transition out of "stored".
