@@ -6,8 +6,11 @@ import {
     AccountCurrencyMismatchError,
     InvalidAmountError
 } from "../../src/ledger/ledger.ts";
-import {money} from "../../src/money/money.ts";
-
+import type { PostingRequest } from "../../src/ledger/ledger.ts";
+import {
+    allocateEqually,
+    money,
+} from "../../src/money/money.ts";
 test("a new ledger has no entries", () => {
     const ledger = createLedger([
         {id: "ACC-001", currency: "AED"},
@@ -205,4 +208,64 @@ test("reports the latest replay sequence", () => {
     });
 
     assert.equal(ledger.lastSequence(), 2);
+});
+
+test("appends all three E10 instalments together in order", () => {
+    const ledger = createLedger([
+        { id: "ACC-002", currency: "BHD" },
+    ]);
+
+    const requests = allocateEqually(
+        money(10000n, "BHD"),
+        3,
+    ).map((amount): PostingRequest => ({
+        eventId: "E10",
+        accountId: "ACC-002",
+        direction: "CREDIT",
+        amount,
+        eventDay: 5,
+        valueDay: 5,
+    }));
+
+    const entries = ledger.appendAll(requests);
+
+    assert.deepEqual(
+        entries.map((entry) => entry.amount.minorUnits),
+        [3334n, 3333n, 3333n],
+    );
+
+    assert.deepEqual(
+        entries.map((entry) => entry.sequence),
+        [1, 2, 3],
+    );
+
+    assert.deepEqual(ledger.entries("ACC-002"), entries);
+});
+
+test("does not append a partial batch when one request is invalid", () => {
+    const ledger = createLedger([
+        { id: "ACC-002", currency: "BHD" },
+    ]);
+
+    const validRequest: PostingRequest = {
+        eventId: "E10",
+        accountId: "ACC-002",
+        direction: "CREDIT",
+        amount: money(3334n, "BHD"),
+        eventDay: 5,
+        valueDay: 5,
+    };
+
+    const invalidRequest: PostingRequest = {
+        ...validRequest,
+        accountId: "ACC-999",
+    };
+
+    assert.throws(
+        () => ledger.appendAll([validRequest, invalidRequest]),
+        UnknownAccountError,
+    );
+
+    assert.deepEqual(ledger.entries(), []);
+    assert.equal(ledger.lastSequence(), 0);
 });

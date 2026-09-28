@@ -30,4 +30,7 @@ export interface Ledger {
   append(request: PostingRequest): LedgerEntry;
   entries(accountId?: string): readonly LedgerEntry[];
   lastSequence(): ReplaySequence;
+  appendAll(
+      requests: readonly PostingRequest[],
+  ): readonly LedgerEntry[];
 }
