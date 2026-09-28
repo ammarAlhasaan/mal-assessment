@@ -1,6 +1,6 @@
 import { describe, test } from "node:test";
 import assert from "node:assert/strict";
-import {decimalPlaces, money, zero, format} from "../../src/money/money.ts";
+import {decimalPlaces, money, zero, format, add, CurrencyMismatchError} from "../../src/money/money.ts";
 
 describe("money adapter: currency precision", () => {
   test("AED uses 2 decimal places", () => {
@@ -54,5 +54,22 @@ describe("money adapter: formatting", () => {
 
   test("formats negative amounts with a leading minus sign", () => {
     assert.equal(format(money(-37000n, "AED")), "AED -370.00");
+  });
+});
+
+
+describe("money adapter: same-currency addition", () => {
+  test("adds two amounts of the same currency exactly", () => {
+    assert.deepEqual(
+        add(money(120000n, "AED"), money(40000n, "AED")),
+        money(160000n, "AED"),
+    );
+  });
+
+  test("rejects adding amounts of different currencies with CurrencyMismatchError", () => {
+    assert.throws(
+        () => add(money(100n, "AED"), money(100n, "BHD")),
+        CurrencyMismatchError,
+    );
   });
 });
