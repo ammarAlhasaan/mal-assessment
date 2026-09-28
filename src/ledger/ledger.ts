@@ -61,8 +61,14 @@ export function createLedger(
       return entry;
     },
 
-    entries() {
-      return [...storedEntries];
+    entries(accountId) {
+      if (accountId === undefined) {
+        return [...storedEntries];
+      }
+
+      return storedEntries.filter(
+          (entry) => entry.accountId === accountId,
+      );
     },
   };
 }
