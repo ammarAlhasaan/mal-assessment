@@ -119,3 +119,32 @@ test("rejects zero and negative posting amounts", () => {
 
     assert.deepEqual(ledger.entries(), []);
 });
+
+test("stores an immutable ledger entry", () => {
+    const ledger = createLedger([
+        { id: "ACC-001", currency: "AED" },
+    ]);
+
+    const entry = ledger.append({
+        eventId: "E1",
+        accountId: "ACC-001",
+        direction: "CREDIT",
+        amount: money(120000n, "AED"),
+        eventDay: 1,
+        valueDay: 1,
+    });
+
+    assert.equal(Object.isFrozen(entry), true);
+    assert.equal(Object.isFrozen(entry.amount), true);
+
+    assert.throws(() => {
+        (entry as { sequence: number }).sequence = 99;
+    }, TypeError);
+
+    assert.throws(() => {
+        (entry.amount as { minorUnits: bigint }).minorUnits = 1n;
+    }, TypeError);
+
+    assert.equal(ledger.entries()[0]?.sequence, 1);
+    assert.equal(ledger.entries()[0]?.amount.minorUnits, 120000n);
+});
