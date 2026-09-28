@@ -41,6 +41,11 @@ export function createLedger(
         );
       }
 
+      if (request.amount.minorUnits <= 0n) {
+        throw new InvalidAmountError(
+            "Posting amount must be positive",
+        );
+      }
 
       const entry: LedgerEntry = {
         ...request,
