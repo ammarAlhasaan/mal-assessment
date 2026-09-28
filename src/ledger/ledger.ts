@@ -70,6 +70,10 @@ export function createLedger(
           (entry) => entry.accountId === accountId,
       );
     },
+
+    lastSequence() {
+      throw new Error("Not implemented");
+    },
   };
 }
 

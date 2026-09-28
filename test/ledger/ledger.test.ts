@@ -175,3 +175,34 @@ test("returns entries for the requested account only", () => {
 
     assert.deepEqual(ledger.entries("ACC-002"), [e10]);
 });
+
+
+test("reports the latest replay sequence", () => {
+    const ledger = createLedger([
+        { id: "ACC-001", currency: "AED" },
+    ]);
+
+    assert.equal(ledger.lastSequence(), 0);
+
+    ledger.append({
+        eventId: "E1",
+        accountId: "ACC-001",
+        direction: "CREDIT",
+        amount: money(120000n, "AED"),
+        eventDay: 1,
+        valueDay: 1,
+    });
+
+    assert.equal(ledger.lastSequence(), 1);
+
+    ledger.append({
+        eventId: "E2",
+        accountId: "ACC-001",
+        direction: "DEBIT",
+        amount: money(95000n, "AED"),
+        eventDay: 1,
+        valueDay: 1,
+    });
+
+    assert.equal(ledger.lastSequence(), 2);
+});

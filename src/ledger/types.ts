@@ -6,6 +6,7 @@ import type {
 
 export type Day = 1 | 2 | 3 | 4 | 5 | 6;
 export type EntryDirection = "CREDIT" | "DEBIT";
+export type ReplaySequence = number;
 
 export interface Account {
   readonly id: string;
@@ -28,4 +29,5 @@ export interface LedgerEntry extends PostingRequest {
 export interface Ledger {
   append(request: PostingRequest): LedgerEntry;
   entries(accountId?: string): readonly LedgerEntry[];
+  lastSequence(): ReplaySequence;
 }
