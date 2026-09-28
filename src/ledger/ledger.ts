@@ -4,6 +4,10 @@ export class UnknownAccountError extends Error {
   override name = "UnknownAccountError";
 }
 
+export class AccountCurrencyMismatchError extends Error {
+  override name = "AccountCurrencyMismatchError";
+}
+
 export function createLedger(
     accounts: readonly Account[],
 ): Ledger {

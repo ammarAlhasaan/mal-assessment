@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { createLedger, UnknownAccountError } from "../../src/ledger/ledger.ts";
+import { createLedger, UnknownAccountError, AccountCurrencyMismatchError } from "../../src/ledger/ledger.ts";
 import { money } from "../../src/money/money.ts";
 
 test("a new ledger has no entries", () => {
@@ -55,6 +55,27 @@ test("rejects an entry for an unknown account", () => {
             valueDay: 1,
           }),
       UnknownAccountError,
+  );
+
+  assert.deepEqual(ledger.entries(), []);
+});
+
+test("rejects an entry whose currency differs from the account currency", () => {
+  const ledger = createLedger([
+    { id: "ACC-001", currency: "AED" },
+  ]);
+
+  assert.throws(
+      () =>
+          ledger.append({
+            eventId: "E1",
+            accountId: "ACC-001",
+            direction: "CREDIT",
+            amount: money(120000n, "BHD"),
+            eventDay: 1,
+            valueDay: 1,
+          }),
+      AccountCurrencyMismatchError,
   );
 
   assert.deepEqual(ledger.entries(), []);
