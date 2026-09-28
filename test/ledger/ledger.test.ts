@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { createLedger } from "../../src/ledger/ledger.ts";
+import { createLedger, UnknownAccountError } from "../../src/ledger/ledger.ts";
 import { money } from "../../src/money/money.ts";
 
 test("a new ledger has no entries", () => {
@@ -37,4 +37,25 @@ test("appends E1 as the first ledger entry", () => {
   });
 
   assert.deepEqual(ledger.entries(), [entry]);
+});
+
+test("rejects an entry for an unknown account", () => {
+  const ledger = createLedger([
+    { id: "ACC-001", currency: "AED" },
+  ]);
+
+  assert.throws(
+      () =>
+          ledger.append({
+            eventId: "E1",
+            accountId: "ACC-999",
+            direction: "CREDIT",
+            amount: money(120000n, "AED"),
+            eventDay: 1,
+            valueDay: 1,
+          }),
+      UnknownAccountError,
+  );
+
+  assert.deepEqual(ledger.entries(), []);
 });

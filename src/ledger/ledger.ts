@@ -27,6 +27,10 @@ export function createLedger(
   };
 }
 
+export class UnknownAccountError extends Error {
+  override name = "UnknownAccountError";
+}
+
 export type {
   Account,
   Ledger,
