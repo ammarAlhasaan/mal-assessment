@@ -1,5 +1,13 @@
 <!--
 Sync Impact Report
+- Version change: 1.0.0 → 1.1.0 (MINOR)
+- Modified principles: II. Append-Only Ledger (atomic batches, full posting validation);
+  IV. Human-Owned Financial Logic (explicit delegation of accepted review fixes; human-authored
+  signatures and test structure)
+- Templates requiring updates: none ✅
+- Deferred items: none
+
+Previous report (1.0.0)
 - Version change: template → 1.0.0 (initial ratification)
 - Principles defined: I. Exact Money, II. Append-Only Ledger, III. Temporal Correctness,
   IV. Human-Owned Financial Logic (Test-First), V. Focused Scope and Simplicity
@@ -32,8 +40,11 @@ library replaceable and the precision rules in one reviewable place.
 - Corrections are expressed only as new, compensating entries.
 - Every appended entry receives a strictly increasing replay sequence at append time. The sequence is
   the ledger's record of knowledge order and MUST NOT be supplied by callers.
-- Entries MUST be validated (known account, matching account currency, positive amount) before they
-  are appended; a rejected entry leaves the ledger and its sequence counter unchanged.
+- Entries MUST be validated (known account, matching account currency, positive integer amount,
+  known direction, event and value days inside the window) before they are appended; a rejected
+  entry leaves the ledger and its sequence counter unchanged.
+- Entries that belong together (such as instalments of one event) MAY be appended as a batch; a batch
+  is all-or-nothing.
 
 **Rationale**: The assessment makes append-only storage non-negotiable, and historical balance
 questions can only be answered if nothing is rewritten.
@@ -55,7 +66,10 @@ balances; the assessment's criteria depend on distinguishing what was true from 
   money-adapter and ledger function body, confirmation of the red test run, and the choice of which
   review findings to apply.
 - AI owns specification artifacts, dependency installation, types, interfaces, function signatures,
-  test file structure and test names, routine wiring, command execution, and code review.
+  test file structure and test names, routine wiring, command execution, and code review. The human
+  may also author signatures and tests; the contracts are then updated to match.
+- The human may explicitly delegate applying accepted review findings to AI. Delegated changes are
+  recorded in the task list and in `WORKLOG.md` as AI-authored.
 - AI scaffolding MUST NOT implement human-owned logic. Unimplemented human-owned functions throw
   `new Error("Not implemented")`; scaffolded test bodies contain only `assert.fail("Not implemented")`.
 - AI MUST NOT introduce expected financial values unless they are explicitly marked as pending human
@@ -107,4 +121,4 @@ visible, bounded, and reviewable.
 - Reviews MUST verify: no floating-point money, no Dinero.js import outside `src/money/`, no entry
   mutation or deletion, and ownership boundaries respected.
 
-**Version**: 1.0.0 | **Ratified**: 2026-09-28 | **Last Amended**: 2026-09-28
+**Version**: 1.1.0 | **Ratified**: 2026-09-28 | **Last Amended**: 2026-09-29
