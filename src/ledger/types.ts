@@ -37,4 +37,10 @@ export interface Ledger {
       accountId: string,
       valueDay: Day,
   ): Money;
+
+  balanceAsKnownAt(
+      accountId: string,
+      valueDay: Day,
+      boundary: ReplaySequence,
+  ): Money;
 }

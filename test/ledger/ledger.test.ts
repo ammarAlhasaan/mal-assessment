@@ -344,4 +344,59 @@ test("calculates the closing balance by value day", () => {
         ledger.balanceByValueDay("ACC-001", 3),
         money(3000n, "AED"),
     );
+
+});
+
+test("calculates a balance at a replay-sequence boundary", () => {
+    const ledger = createLedger([
+        { id: "ACC-001", currency: "AED" },
+    ]);
+
+    ledger.append({
+        eventId: "E1",
+        accountId: "ACC-001",
+        direction: "CREDIT",
+        amount: money(120000n, "AED"),
+        eventDay: 1,
+        valueDay: 1,
+    });
+
+    ledger.append({
+        eventId: "E2",
+        accountId: "ACC-001",
+        direction: "DEBIT",
+        amount: money(95000n, "AED"),
+        eventDay: 1,
+        valueDay: 1,
+    });
+
+    const beforeE7 = ledger.lastSequence();
+
+    ledger.append({
+        eventId: "E7",
+        accountId: "ACC-001",
+        direction: "DEBIT",
+        amount: money(62000n, "AED"),
+        eventDay: 5,
+        valueDay: 2,
+    });
+
+    assert.deepEqual(
+        ledger.balanceAsKnownAt("ACC-001", 2, 0),
+        money(0n, "AED"),
+    );
+
+    assert.deepEqual(
+        ledger.balanceAsKnownAt("ACC-001", 2, beforeE7),
+        money(25000n, "AED"),
+    );
+
+    assert.deepEqual(
+        ledger.balanceAsKnownAt(
+            "ACC-001",
+            2,
+            ledger.lastSequence(),
+        ),
+        money(-37000n, "AED"),
+    );
 });

@@ -102,9 +102,14 @@ export function createLedger(
                     zero(account.currency),
                 );
         },
+        balanceAsKnownAt() {
+            throw new Error("Not implemented");
+        },
+
         lastSequence() {
             return nextSequence - 1;
         },
+
 
     };
 }
