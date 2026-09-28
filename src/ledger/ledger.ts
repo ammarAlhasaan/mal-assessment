@@ -137,7 +137,9 @@ export function createLedger(
 
 export type {
     Account,
+    Day,
     Ledger,
     LedgerEntry,
     PostingRequest,
+    ReplaySequence,
 } from "./types.ts";
