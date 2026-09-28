@@ -1,7 +1,9 @@
 import type { CurrencyCode, Money } from "./types.ts";
+
 import {
   add as dineroAdd,
   dinero,
+  subtract as dineroSubtract,
   toDecimal,
   toSnapshot,
 } from "dinero.js/bigint";
@@ -66,6 +68,29 @@ export function add(augend: Money, addend: Money): Money {
   );
 
   return money(toSnapshot(result).amount, augend.currency);
+}
+
+
+/** Same-currency subtraction; throws CurrencyMismatchError otherwise. */
+export function subtract(minuend: Money, subtrahend: Money): Money {
+  if (minuend.currency !== subtrahend.currency) {
+    throw new CurrencyMismatchError(
+        `Cannot subtract ${subtrahend.currency} from ${minuend.currency}`,
+    );
+  }
+
+  const result = dineroSubtract(
+      dinero({
+        amount: minuend.minorUnits,
+        currency: CURRENCIES[minuend.currency],
+      }),
+      dinero({
+        amount: subtrahend.minorUnits,
+        currency: CURRENCIES[subtrahend.currency],
+      }),
+  );
+
+  return money(toSnapshot(result).amount, minuend.currency);
 }
 
 export type { CurrencyCode, Money } from "./types.ts";
