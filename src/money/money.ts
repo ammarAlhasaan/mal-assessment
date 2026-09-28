@@ -2,6 +2,7 @@ import type { CurrencyCode, Money } from "./types.ts";
 
 import {
   add as dineroAdd,
+  allocate as dineroAllocate,
   compare as dineroCompare,
   dinero,
   subtract as dineroSubtract,
@@ -114,6 +115,21 @@ export function compare(left: Money, right: Money): Comparison {
   );
 }
 
+/** Splits total into parts that preserve the exact total. */
+export function allocateEqually(
+    total: Money,
+    parts: number,
+): readonly Money[] {
+    const value = dinero({
+        amount: total.minorUnits,
+        currency: CURRENCIES[total.currency],
+    });
 
+    const ratios = Array.from({ length: parts }, () => 1n);
+
+    return dineroAllocate(value, ratios).map((part) =>
+        money(toSnapshot(part).amount, total.currency),
+    );
+}
 
 export type { Comparison, CurrencyCode, Money } from "./types.ts";
