@@ -72,7 +72,7 @@ export function createLedger(
     },
 
     lastSequence() {
-      throw new Error("Not implemented");
+      return nextSequence - 1;
     },
   };
 }
