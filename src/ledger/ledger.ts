@@ -1,4 +1,5 @@
 import type {Account, Ledger, LedgerEntry} from "./types.ts";
+import {zero} from "../money/money.ts";
 
 export class UnknownAccountError extends Error {
     override name = "UnknownAccountError";
@@ -74,8 +75,18 @@ export function createLedger(
                 (entry) => entry.accountId === accountId,
             );
         },
-        balanceByValueDay() {
-            throw new Error("Not implemented");
+        balanceByValueDay(accountId, valueDay) {
+            void valueDay;
+
+            const account = accountsById.get(accountId);
+
+            if (!account) {
+                throw new UnknownAccountError(
+                    `Unknown account: ${accountId}`,
+                );
+            }
+
+            return zero(account.currency);
         },
 
         lastSequence() {
