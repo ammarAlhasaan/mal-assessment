@@ -102,10 +102,30 @@ export function createLedger(
                     zero(account.currency),
                 );
         },
-        balanceAsKnownAt() {
-            throw new Error("Not implemented");
-        },
+        balanceAsKnownAt(accountId, valueDay, boundary) {
+            const account = accountsById.get(accountId);
 
+            if (!account) {
+                throw new UnknownAccountError(
+                    `Unknown account: ${accountId}`,
+                );
+            }
+
+            return storedEntries
+                .filter(
+                    (entry) =>
+                        entry.accountId === accountId &&
+                        entry.valueDay <= valueDay &&
+                        entry.sequence <= boundary,
+                )
+                .reduce(
+                    (balance, entry) =>
+                        entry.direction === "CREDIT"
+                            ? add(balance, entry.amount)
+                            : subtract(balance, entry.amount),
+                    zero(account.currency),
+                );
+        },
         lastSequence() {
             return nextSequence - 1;
         },
