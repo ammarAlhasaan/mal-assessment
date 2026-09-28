@@ -1,5 +1,9 @@
 import type {Account, Ledger, LedgerEntry} from "./types.ts";
-import {zero} from "../money/money.ts";
+import {
+    add,
+    subtract,
+    zero,
+} from "../money/money.ts";
 
 export class UnknownAccountError extends Error {
     override name = "UnknownAccountError";
@@ -76,8 +80,6 @@ export function createLedger(
             );
         },
         balanceByValueDay(accountId, valueDay) {
-            void valueDay;
-
             const account = accountsById.get(accountId);
 
             if (!account) {
@@ -86,9 +88,20 @@ export function createLedger(
                 );
             }
 
-            return zero(account.currency);
+            return storedEntries
+                .filter(
+                    (entry) =>
+                        entry.accountId === accountId &&
+                        entry.valueDay <= valueDay,
+                )
+                .reduce(
+                    (balance, entry) =>
+                        entry.direction === "CREDIT"
+                            ? add(balance, entry.amount)
+                            : subtract(balance, entry.amount),
+                    zero(account.currency),
+                );
         },
-
         lastSequence() {
             return nextSequence - 1;
         },

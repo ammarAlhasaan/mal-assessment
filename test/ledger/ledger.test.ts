@@ -287,3 +287,61 @@ test("returns zero in the account currency when it has no entries", () => {
         money(0n, "BHD"),
     );
 });
+
+
+test("calculates the closing balance by value day", () => {
+    const ledger = createLedger([
+        { id: "ACC-001", currency: "AED" },
+    ]);
+
+    ledger.append({
+        eventId: "E1",
+        accountId: "ACC-001",
+        direction: "CREDIT",
+        amount: money(120000n, "AED"),
+        eventDay: 1,
+        valueDay: 1,
+    });
+
+    ledger.append({
+        eventId: "E2",
+        accountId: "ACC-001",
+        direction: "DEBIT",
+        amount: money(95000n, "AED"),
+        eventDay: 1,
+        valueDay: 1,
+    });
+
+    ledger.append({
+        eventId: "E4",
+        accountId: "ACC-001",
+        direction: "CREDIT",
+        amount: money(40000n, "AED"),
+        eventDay: 3,
+        valueDay: 3,
+    });
+
+    ledger.append({
+        eventId: "E7",
+        accountId: "ACC-001",
+        direction: "DEBIT",
+        amount: money(62000n, "AED"),
+        eventDay: 5,
+        valueDay: 2,
+    });
+
+    assert.deepEqual(
+        ledger.balanceByValueDay("ACC-001", 1),
+        money(25000n, "AED"),
+    );
+
+    assert.deepEqual(
+        ledger.balanceByValueDay("ACC-001", 2),
+        money(-37000n, "AED"),
+    );
+
+    assert.deepEqual(
+        ledger.balanceByValueDay("ACC-001", 3),
+        money(3000n, "AED"),
+    );
+});
