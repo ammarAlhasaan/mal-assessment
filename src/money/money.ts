@@ -27,12 +27,25 @@ export function decimalPlaces(currency: CurrencyCode): number {
 }
 
 
-/** Creates money from integer minor units. */
+/** Thrown when money is created in a currency the adapter does not define. */
+export class UnsupportedCurrencyError extends Error {
+  override name = "UnsupportedCurrencyError";
+}
+
+/** Creates frozen money from integer minor units. */
 export function money(minorUnits: bigint, currency: CurrencyCode): Money {
-  return {
+  if (!Object.hasOwn(CURRENCIES, currency)) {
+    throw new UnsupportedCurrencyError(`Unsupported currency: ${String(currency)}`);
+  }
+
+  if (typeof minorUnits !== "bigint") {
+    throw new TypeError("Money minor units must be a bigint");
+  }
+
+  return Object.freeze({
     minorUnits,
     currency,
-  };
+  });
 }
 
 /** Zero in the given currency. */
@@ -120,11 +133,18 @@ export function compare(left: Money, right: Money): Comparison {
   );
 }
 
-/** Splits total into parts that preserve the exact total. */
+/**
+ * Splits total into parts that preserve the exact total and differ by at most
+ * one minor unit. Remainder units go to the earliest parts first.
+ */
 export function allocateEqually(
     total: Money,
     parts: number,
 ): readonly Money[] {
+    if (!Number.isSafeInteger(parts) || parts <= 0) {
+        throw new RangeError(`Parts must be a positive integer, got ${parts}`);
+    }
+
     const value = dinero({
         amount: total.minorUnits,
         currency: CURRENCIES[total.currency],
@@ -132,8 +152,10 @@ export function allocateEqually(
 
     const ratios = Array.from({ length: parts }, () => 1n);
 
-    return dineroAllocate(value, ratios).map((part) =>
-        money(toSnapshot(part).amount, total.currency),
+    return Object.freeze(
+        dineroAllocate(value, ratios).map((part) =>
+            money(toSnapshot(part).amount, total.currency),
+        ),
     );
 }
 

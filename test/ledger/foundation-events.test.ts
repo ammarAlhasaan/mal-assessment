@@ -56,6 +56,11 @@ test("replays the Spec 1 events and produces the expected balances", () => {
     valueDay: 2,
   });
 
+  // End of Day 5, before any fee: E7 is the last Spec 1 event on ACC-001 before
+  // the first Day 6 event (E9). E10 follows E9 in the replay order, so it is
+  // outside this boundary; it posts to ACC-002 and cannot change ACC-001 anyway.
+  const endOfDay5PreFee = ledger.lastSequence();
+
   const e10Requests = allocateEqually(
       money(10000n, "BHD"),
       3,
@@ -100,9 +105,10 @@ test("replays the Spec 1 events and produces the expected balances", () => {
       [0n, 0n, 0n, 0n, 10000n, 10000n],
   );
 
-  // Acceptance criterion 1 is correct.
+  // Acceptance criterion 1 is correct: Day 2 closing balance as known at the
+  // end of Day 5, before any fee, is AED -370.00.
   assert.deepEqual(
-      ledger.balanceByValueDay("ACC-001", 2),
+      ledger.balanceAsKnownAt("ACC-001", 2, endOfDay5PreFee),
       money(-37000n, "AED"),
   );
 });

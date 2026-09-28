@@ -4,9 +4,11 @@ import {
     createLedger,
     UnknownAccountError,
     AccountCurrencyMismatchError,
-    InvalidAmountError
+    InvalidAmountError,
+    InvalidPostingError,
+    DuplicateAccountError,
 } from "../../src/ledger/ledger.ts";
-import type {PostingRequest} from "../../src/ledger/ledger.ts";
+import type {Day, LedgerEntry, PostingRequest} from "../../src/ledger/ledger.ts";
 import {
     allocateEqually,
     money,
@@ -399,4 +401,175 @@ test("calculates a balance at a replay-sequence boundary", () => {
         ),
         money(-37000n, "AED"),
     );
+});
+const e1: PostingRequest = {
+    eventId: "E1",
+    accountId: "ACC-001",
+    direction: "CREDIT",
+    amount: money(120000n, "AED"),
+    eventDay: 1,
+    valueDay: 1,
+};
+
+test("stores E7's event day and value day independently", () => {
+    const ledger = createLedger([
+        {id: "ACC-001", currency: "AED"},
+    ]);
+
+    const e7 = ledger.append({
+        eventId: "E7",
+        accountId: "ACC-001",
+        direction: "DEBIT",
+        amount: money(62000n, "AED"),
+        eventDay: 5,
+        valueDay: 2,
+    });
+
+    assert.equal(e7.eventDay, 5);
+    assert.equal(e7.valueDay, 2);
+});
+
+test("changing the list returned by entries() does not change the ledger", () => {
+    const ledger = createLedger([
+        {id: "ACC-001", currency: "AED"},
+    ]);
+
+    ledger.append(e1);
+
+    const returned = ledger.entries() as LedgerEntry[];
+    returned.length = 0;
+
+    assert.equal(ledger.entries().length, 1);
+});
+
+test("changing a request after append does not change the stored entry", () => {
+    const ledger = createLedger([
+        {id: "ACC-001", currency: "AED"},
+    ]);
+
+    const request = {...e1, amount: {currency: "AED" as const, minorUnits: 100n}};
+    ledger.append(request);
+
+    request.amount.minorUnits = 999n;
+    (request as { eventId: string }).eventId = "E99";
+
+    assert.equal(ledger.entries()[0]?.amount.minorUnits, 100n);
+    assert.equal(ledger.entries()[0]?.eventId, "E1");
+});
+
+test("stores only posting fields, and the ledger assigns the sequence", () => {
+    const ledger = createLedger([
+        {id: "ACC-001", currency: "AED"},
+    ]);
+
+    const entry = ledger.append({...e1, sequence: 999, extra: true} as PostingRequest);
+
+    assert.deepEqual(entry, {...e1, sequence: 1});
+});
+
+test("a rejected append does not consume a replay sequence", () => {
+    const ledger = createLedger([
+        {id: "ACC-001", currency: "AED"},
+    ]);
+
+    assert.throws(
+        () => ledger.append({...e1, amount: money(0n, "AED")}),
+        InvalidAmountError,
+    );
+    assert.equal(ledger.lastSequence(), 0);
+
+    assert.equal(ledger.append(e1).sequence, 1);
+});
+
+test("rejects an unknown direction and days outside the window", () => {
+    const ledger = createLedger([
+        {id: "ACC-001", currency: "AED"},
+    ]);
+
+    const invalid = [
+        {...e1, direction: "FOO"},
+        {...e1, eventDay: 0},
+        {...e1, valueDay: 7},
+        {...e1, valueDay: 2.5},
+        {...e1, valueDay: "1"},
+    ] as unknown as PostingRequest[];
+
+    for (const request of invalid) {
+        assert.throws(() => ledger.append(request), InvalidPostingError);
+    }
+
+    assert.deepEqual(ledger.entries(), []);
+    assert.equal(ledger.lastSequence(), 0);
+});
+
+test("rejects minor units that are not a bigint", () => {
+    const ledger = createLedger([
+        {id: "ACC-001", currency: "AED"},
+    ]);
+
+    assert.throws(
+        () =>
+            ledger.append({
+                ...e1,
+                amount: {currency: "AED", minorUnits: 1.5 as unknown as bigint},
+            }),
+        InvalidAmountError,
+    );
+
+    assert.deepEqual(ledger.entries(), []);
+});
+
+test("rejects duplicate account ids", () => {
+    assert.throws(
+        () =>
+            createLedger([
+                {id: "ACC-001", currency: "AED"},
+                {id: "ACC-001", currency: "BHD"},
+            ]),
+        DuplicateAccountError,
+    );
+});
+
+test("balance queries for an unknown account throw UnknownAccountError", () => {
+    const ledger = createLedger([
+        {id: "ACC-001", currency: "AED"},
+    ]);
+
+    assert.throws(() => ledger.balanceByValueDay("ACC-999", 1), UnknownAccountError);
+    assert.throws(() => ledger.balanceAsKnownAt("ACC-999", 1, 0), UnknownAccountError);
+});
+
+test("balance queries reject value days and boundaries outside their range", () => {
+    const ledger = createLedger([
+        {id: "ACC-001", currency: "AED"},
+    ]);
+
+    ledger.append(e1);
+
+    for (const day of [0, 7, 2.5]) {
+        assert.throws(() => ledger.balanceByValueDay("ACC-001", day as Day), RangeError);
+    }
+
+    for (const boundary of [-1, 0.5, Number.NaN, 2]) {
+        assert.throws(() => ledger.balanceAsKnownAt("ACC-001", 1, boundary), RangeError);
+    }
+});
+
+test("appendAll with no requests appends nothing", () => {
+    const ledger = createLedger([
+        {id: "ACC-001", currency: "AED"},
+    ]);
+
+    assert.deepEqual(ledger.appendAll([]), []);
+    assert.equal(ledger.lastSequence(), 0);
+});
+
+test("appendAll works when called without its ledger as this", () => {
+    const ledger = createLedger([
+        {id: "ACC-001", currency: "AED"},
+    ]);
+
+    const {appendAll} = ledger;
+
+    assert.equal(appendAll([e1])[0]?.sequence, 1);
 });

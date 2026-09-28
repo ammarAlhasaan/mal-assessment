@@ -9,8 +9,10 @@ import {
     CurrencyMismatchError,
     subtract,
     compare,
-    allocateEqually
+    allocateEqually,
+    UnsupportedCurrencyError,
 } from "../../src/money/money.ts";
+import type {CurrencyCode} from "../../src/money/money.ts";
 
 describe("money adapter: currency precision", () => {
     test("AED uses 2 decimal places", () => {
@@ -167,9 +169,62 @@ describe("money adapter: equal allocation (E10)", () => {
     });
 
     test("acceptance criterion 7: three instalments of BHD 3.334 would not preserve the E10 total [HC-1]", () => {
-        const claimedTotal = 3334n * 3n;
+        const e10Total = money(10000n, "BHD");
+        const parts = allocateEqually(e10Total, 3);
+        const claimed = money(3334n, "BHD");
 
-        assert.equal(claimedTotal, 10002n);
-        assert.notEqual(claimedTotal, 10000n);
+        const claimedTotal = [claimed, claimed, claimed].reduce(add, zero("BHD"));
+        const allocatedTotal = parts.reduce(add, zero("BHD"));
+
+        assert.notDeepEqual(parts, [claimed, claimed, claimed]);
+        assert.deepEqual(allocatedTotal, e10Total);
+        assert.equal(compare(claimedTotal, e10Total), 1);
+    });
+
+    test("rejects a part count that is not a positive integer", () => {
+        const total = money(10000n, "BHD");
+
+        for (const parts of [0, -1, 2.5, Number.NaN]) {
+            assert.throws(() => allocateEqually(total, parts), RangeError);
+        }
+    });
+
+    test("allocates a negative total without losing minor units", () => {
+        assert.deepEqual(
+            allocateEqually(money(-10000n, "BHD"), 3),
+            [
+                money(-3334n, "BHD"),
+                money(-3333n, "BHD"),
+                money(-3333n, "BHD"),
+            ],
+        );
+    });
+});
+
+describe("money adapter: immutability and input validation", () => {
+    test("money values and allocations are frozen", () => {
+        assert.equal(Object.isFrozen(money(100n, "AED")), true);
+        assert.equal(Object.isFrozen(allocateEqually(money(100n, "AED"), 3)), true);
+    });
+
+    test("rejects a currency the adapter does not define", () => {
+        assert.throws(
+            () => money(100n, "USD" as CurrencyCode),
+            UnsupportedCurrencyError,
+        );
+    });
+
+    test("rejects minor units that are not a bigint", () => {
+        assert.throws(
+            () => money(1.5 as unknown as bigint, "AED"),
+            TypeError,
+        );
+    });
+});
+
+describe("money adapter: formatting amounts below one major unit", () => {
+    test("formats negative sub-unit amounts with a leading zero", () => {
+        assert.equal(format(money(-5n, "AED")), "AED -0.05");
+        assert.equal(format(money(-1n, "BHD")), "BHD -0.001");
     });
 });
