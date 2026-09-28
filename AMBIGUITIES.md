@@ -15,6 +15,14 @@ as BHD 3.334, BHD 3.333, and BHD 3.333.
 
 ## How E10 is posted
 
-It is not clear whether E10 should be one ledger entry or three. I chose three
+It is not clear whether E10 should be one ledger entry or three. I use three
 credit entries because the assessment says it is posted as three instalments.
-They all use event ID E10, account ACC-002, event day 5, and value day 5.
+All three entries share the E10 event ID, so they remain linked to the same
+business event. They are added together so a partial E10 cannot be recorded.
+
+This follows the common ledger pattern of grouping multiple entries under one
+transaction or business event:
+
+- [Stripe Transaction Entries](https://docs.stripe.com/api/treasury/transaction_entries)
+- [Modern Treasury ledger objects](https://docs.moderntreasury.com/ledgers/docs/guide-to-ledger-objects)
+- [Modern Treasury ledger guarantees](https://docs.moderntreasury.com/ledgers/docs/ledgers-guarantees)
