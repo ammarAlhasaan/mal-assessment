@@ -1,17 +1,28 @@
-import type { Account, Ledger } from "./types.ts";
+import type { Account, Ledger, LedgerEntry } from "./types.ts";
 
 export function createLedger(
     accounts: readonly Account[],
 ): Ledger {
   void accounts;
 
+  const storedEntries: LedgerEntry[] = [];
+  let nextSequence = 1;
+
   return {
-    append() {
-      throw new Error("Not implemented");
+    append(request) {
+      const entry: LedgerEntry = {
+        ...request,
+        sequence: nextSequence,
+      };
+
+      storedEntries.push(entry);
+      nextSequence += 1;
+
+      return entry;
     },
 
     entries() {
-      return [];
+      return [...storedEntries];
     },
   };
 }
