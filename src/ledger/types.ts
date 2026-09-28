@@ -27,5 +27,5 @@ export interface LedgerEntry extends PostingRequest {
 
 export interface Ledger {
   append(request: PostingRequest): LedgerEntry;
-  entries(): readonly LedgerEntry[];
+  entries(accountId?: string): readonly LedgerEntry[];
 }

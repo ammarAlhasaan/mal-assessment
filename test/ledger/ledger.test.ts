@@ -148,3 +148,30 @@ test("stores an immutable ledger entry", () => {
     assert.equal(ledger.entries()[0]?.sequence, 1);
     assert.equal(ledger.entries()[0]?.amount.minorUnits, 120000n);
 });
+
+test("returns entries for the requested account only", () => {
+    const ledger = createLedger([
+        { id: "ACC-001", currency: "AED" },
+        { id: "ACC-002", currency: "BHD" },
+    ]);
+
+    ledger.append({
+        eventId: "E1",
+        accountId: "ACC-001",
+        direction: "CREDIT",
+        amount: money(120000n, "AED"),
+        eventDay: 1,
+        valueDay: 1,
+    });
+
+    const e10 = ledger.append({
+        eventId: "E10",
+        accountId: "ACC-002",
+        direction: "CREDIT",
+        amount: money(3334n, "BHD"),
+        eventDay: 5,
+        valueDay: 5,
+    });
+
+    assert.deepEqual(ledger.entries("ACC-002"), [e10]);
+});
