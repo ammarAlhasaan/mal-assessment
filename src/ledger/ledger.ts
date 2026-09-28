@@ -8,6 +8,10 @@ export class AccountCurrencyMismatchError extends Error {
   override name = "AccountCurrencyMismatchError";
 }
 
+export class InvalidAmountError extends Error {
+  override name = "InvalidAmountError";
+}
+
 export function createLedger(
     accounts: readonly Account[],
 ): Ledger {
