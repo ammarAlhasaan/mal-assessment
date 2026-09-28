@@ -2,12 +2,12 @@ import type { CurrencyCode, Money } from "./types.ts";
 
 import {
   add as dineroAdd,
+  compare as dineroCompare,
   dinero,
   subtract as dineroSubtract,
   toDecimal,
   toSnapshot,
 } from "dinero.js/bigint";
-
 
 /** Single source of truth for currency precision: AED 2 decimal places, BHD 3. */
 const CURRENCIES: { readonly [C in CurrencyCode]: DineroCurrency<bigint, C> } = {
@@ -93,4 +93,27 @@ export function subtract(minuend: Money, subtrahend: Money): Money {
   return money(toSnapshot(result).amount, minuend.currency);
 }
 
-export type { CurrencyCode, Money } from "./types.ts";
+
+/** Same-currency comparison; throws CurrencyMismatchError otherwise. */
+export function compare(left: Money, right: Money): Comparison {
+  if (left.currency !== right.currency) {
+    throw new CurrencyMismatchError(
+        `Cannot compare ${left.currency} and ${right.currency}`,
+    );
+  }
+
+  return dineroCompare(
+      dinero({
+        amount: left.minorUnits,
+        currency: CURRENCIES[left.currency],
+      }),
+      dinero({
+        amount: right.minorUnits,
+        currency: CURRENCIES[right.currency],
+      }),
+  );
+}
+
+
+
+export type { Comparison, CurrencyCode, Money } from "./types.ts";

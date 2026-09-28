@@ -4,3 +4,5 @@ export interface Money {
     readonly currency: CurrencyCode;
     readonly minorUnits: bigint;
 }
+
+export type Comparison = -1 | 0 | 1;

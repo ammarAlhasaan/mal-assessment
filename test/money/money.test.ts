@@ -1,6 +1,6 @@
 import { describe, test } from "node:test";
 import assert from "node:assert/strict";
-import {decimalPlaces, money, zero, format, add, CurrencyMismatchError, subtract} from "../../src/money/money.ts";
+import {decimalPlaces, money, zero, format, add, CurrencyMismatchError, subtract, compare} from "../../src/money/money.ts";
 
 describe("money adapter: currency precision", () => {
   test("AED uses 2 decimal places", () => {
@@ -86,6 +86,25 @@ describe("money adapter: same-currency subtraction", () => {
   test("rejects subtracting amounts of different currencies with CurrencyMismatchError", () => {
     assert.throws(
         () => subtract(money(100n, "AED"), money(100n, "BHD")),
+        CurrencyMismatchError,
+    );
+  });
+});
+
+
+describe("money adapter: comparison", () => {
+  test("returns -1, 0, or 1 for less, equal, or greater amounts of the same currency", () => {
+    const smaller = money(95000n, "AED");
+    const larger = money(120000n, "AED");
+
+    assert.equal(compare(smaller, larger), -1);
+    assert.equal(compare(larger, larger), 0);
+    assert.equal(compare(larger, smaller), 1);
+  });
+
+  test("rejects comparing amounts of different currencies with CurrencyMismatchError", () => {
+    assert.throws(
+        () => compare(money(100n, "AED"), money(100n, "BHD")),
         CurrencyMismatchError,
     );
   });
