@@ -1,6 +1,6 @@
 import { describe, test } from "node:test";
 import assert from "node:assert/strict";
-import {decimalPlaces, money, zero} from "../../src/money/money.ts";
+import {decimalPlaces, money, zero, format} from "../../src/money/money.ts";
 
 describe("money adapter: currency precision", () => {
   test("AED uses 2 decimal places", () => {
@@ -39,5 +39,20 @@ describe("money adapter: zero", () => {
       minorUnits: 0n,
       currency: "BHD",
     });
+  });
+});
+
+
+describe("money adapter: formatting", () => {
+  test("formats AED with the currency code and exactly 2 decimal places", () => {
+    assert.equal(format(money(120000n, "AED")), "AED 1200.00");
+  });
+
+  test("formats BHD with the currency code and exactly 3 decimal places", () => {
+    assert.equal(format(money(10000n, "BHD")), "BHD 10.000");
+  });
+
+  test("formats negative amounts with a leading minus sign", () => {
+    assert.equal(format(money(-37000n, "AED")), "AED -370.00");
   });
 });
