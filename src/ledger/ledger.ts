@@ -1,15 +1,27 @@
 import type { Account, Ledger, LedgerEntry } from "./types.ts";
 
+export class UnknownAccountError extends Error {
+  override name = "UnknownAccountError";
+}
+
 export function createLedger(
     accounts: readonly Account[],
 ): Ledger {
-  void accounts;
 
   const storedEntries: LedgerEntry[] = [];
   let nextSequence = 1;
 
+  const knownAccountIds = new Set(
+      accounts.map((account) => account.id),
+  );
+
   return {
     append(request) {
+      if (!knownAccountIds.has(request.accountId)) {
+        throw new UnknownAccountError(
+            `Unknown account: ${request.accountId}`,
+        );
+      }
       const entry: LedgerEntry = {
         ...request,
         sequence: nextSequence,
@@ -27,9 +39,9 @@ export function createLedger(
   };
 }
 
-export class UnknownAccountError extends Error {
-  override name = "UnknownAccountError";
-}
+
+
+
 
 export type {
   Account,
