@@ -33,4 +33,8 @@ export interface Ledger {
   appendAll(
       requests: readonly PostingRequest[],
   ): readonly LedgerEntry[];
+  balanceByValueDay(
+      accountId: string,
+      valueDay: Day,
+  ): Money;
 }

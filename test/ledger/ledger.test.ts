@@ -6,11 +6,12 @@ import {
     AccountCurrencyMismatchError,
     InvalidAmountError
 } from "../../src/ledger/ledger.ts";
-import type { PostingRequest } from "../../src/ledger/ledger.ts";
+import type {PostingRequest} from "../../src/ledger/ledger.ts";
 import {
     allocateEqually,
     money,
 } from "../../src/money/money.ts";
+
 test("a new ledger has no entries", () => {
     const ledger = createLedger([
         {id: "ACC-001", currency: "AED"},
@@ -91,7 +92,7 @@ test("rejects an entry whose currency differs from the account currency", () => 
 
 test("rejects zero and negative posting amounts", () => {
     const ledger = createLedger([
-        { id: "ACC-001", currency: "AED" },
+        {id: "ACC-001", currency: "AED"},
     ]);
 
     const request = {
@@ -125,7 +126,7 @@ test("rejects zero and negative posting amounts", () => {
 
 test("stores an immutable ledger entry", () => {
     const ledger = createLedger([
-        { id: "ACC-001", currency: "AED" },
+        {id: "ACC-001", currency: "AED"},
     ]);
 
     const entry = ledger.append({
@@ -154,8 +155,8 @@ test("stores an immutable ledger entry", () => {
 
 test("returns entries for the requested account only", () => {
     const ledger = createLedger([
-        { id: "ACC-001", currency: "AED" },
-        { id: "ACC-002", currency: "BHD" },
+        {id: "ACC-001", currency: "AED"},
+        {id: "ACC-002", currency: "BHD"},
     ]);
 
     ledger.append({
@@ -182,7 +183,7 @@ test("returns entries for the requested account only", () => {
 
 test("reports the latest replay sequence", () => {
     const ledger = createLedger([
-        { id: "ACC-001", currency: "AED" },
+        {id: "ACC-001", currency: "AED"},
     ]);
 
     assert.equal(ledger.lastSequence(), 0);
@@ -212,7 +213,7 @@ test("reports the latest replay sequence", () => {
 
 test("appends all three E10 instalments together in order", () => {
     const ledger = createLedger([
-        { id: "ACC-002", currency: "BHD" },
+        {id: "ACC-002", currency: "BHD"},
     ]);
 
     const requests = allocateEqually(
@@ -244,7 +245,7 @@ test("appends all three E10 instalments together in order", () => {
 
 test("does not append a partial batch when one request is invalid", () => {
     const ledger = createLedger([
-        { id: "ACC-002", currency: "BHD" },
+        {id: "ACC-002", currency: "BHD"},
     ]);
 
     const validRequest: PostingRequest = {
@@ -268,4 +269,21 @@ test("does not append a partial batch when one request is invalid", () => {
 
     assert.deepEqual(ledger.entries(), []);
     assert.equal(ledger.lastSequence(), 0);
+});
+
+test("returns zero in the account currency when it has no entries", () => {
+    const ledger = createLedger([
+        {id: "ACC-001", currency: "AED"},
+        {id: "ACC-002", currency: "BHD"},
+    ]);
+
+    assert.deepEqual(
+        ledger.balanceByValueDay("ACC-001", 1),
+        money(0n, "AED"),
+    );
+
+    assert.deepEqual(
+        ledger.balanceByValueDay("ACC-002", 5),
+        money(0n, "BHD"),
+    );
 });

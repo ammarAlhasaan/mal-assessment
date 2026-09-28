@@ -74,6 +74,9 @@ export function createLedger(
                 (entry) => entry.accountId === accountId,
             );
         },
+        balanceByValueDay() {
+            throw new Error("Not implemented");
+        },
 
         lastSequence() {
             return nextSequence - 1;
