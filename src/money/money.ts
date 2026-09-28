@@ -14,7 +14,10 @@ export function decimalPlaces(currency: CurrencyCode): number {
 
 /** Creates money from integer minor units. */
 export function money(minorUnits: bigint, currency: CurrencyCode): Money {
-  throw new Error("Not implemented");
+  return {
+    minorUnits,
+    currency,
+  };
 }
 
 export type { CurrencyCode, Money } from "./types.ts";
