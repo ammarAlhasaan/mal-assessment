@@ -47,10 +47,13 @@ export function createLedger(
         );
       }
 
-      const entry: LedgerEntry = {
+      const entry: LedgerEntry = Object.freeze({
         ...request,
+        amount: Object.freeze({
+          ...request.amount,
+        }),
         sequence: nextSequence,
-      };
+      });
 
       storedEntries.push(entry);
       nextSequence += 1;
