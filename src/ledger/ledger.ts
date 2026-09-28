@@ -15,17 +15,29 @@ export function createLedger(
   const storedEntries: LedgerEntry[] = [];
   let nextSequence = 1;
 
-  const knownAccountIds = new Set(
-      accounts.map((account) => account.id),
+  const accountsById = new Map(
+      accounts.map((account) => [account.id, account]),
   );
+
 
   return {
     append(request) {
-      if (!knownAccountIds.has(request.accountId)) {
+
+      const account = accountsById.get(request.accountId);
+
+      if (!account) {
         throw new UnknownAccountError(
             `Unknown account: ${request.accountId}`,
         );
       }
+
+      if (account.currency !== request.amount.currency) {
+        throw new AccountCurrencyMismatchError(
+            `Account ${account.id} uses ${account.currency}, not ${request.amount.currency}`,
+        );
+      }
+
+
       const entry: LedgerEntry = {
         ...request,
         sequence: nextSequence,
