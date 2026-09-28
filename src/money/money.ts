@@ -1,13 +1,18 @@
-import type { CurrencyCode, Money } from "./types.ts";
+import type {
+    Comparison,
+    CurrencyCode,
+    Money,
+} from "./types.ts";
 
 import {
-  add as dineroAdd,
-  allocate as dineroAllocate,
-  compare as dineroCompare,
-  dinero,
-  subtract as dineroSubtract,
-  toDecimal,
-  toSnapshot,
+    add as dineroAdd,
+    allocate as dineroAllocate,
+    compare as dineroCompare,
+    dinero,
+    subtract as dineroSubtract,
+    toDecimal,
+    toSnapshot,
+    type DineroCurrency,
 } from "dinero.js/bigint";
 
 /** Single source of truth for currency precision: AED 2 decimal places, BHD 3. */
