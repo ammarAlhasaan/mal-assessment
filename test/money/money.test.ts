@@ -1,6 +1,6 @@
 import { describe, test } from "node:test";
 import assert from "node:assert/strict";
-import {decimalPlaces, money} from "../../src/money/money.ts";
+import {decimalPlaces, money, zero} from "../../src/money/money.ts";
 
 describe("money adapter: currency precision", () => {
   test("AED uses 2 decimal places", () => {
@@ -22,6 +22,21 @@ describe("money adapter: creation from integer minor units", () => {
 
     assert.deepEqual(money(10000n, "BHD"), {
       minorUnits: 10000n,
+      currency: "BHD",
+    });
+  });
+});
+
+
+describe("money adapter: zero", () => {
+  test("zero is zero minor units in the requested currency", () => {
+    assert.deepEqual(zero("AED"), {
+      minorUnits: 0n,
+      currency: "AED",
+    });
+
+    assert.deepEqual(zero("BHD"), {
+      minorUnits: 0n,
       currency: "BHD",
     });
   });

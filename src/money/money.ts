@@ -20,4 +20,10 @@ export function money(minorUnits: bigint, currency: CurrencyCode): Money {
   };
 }
 
+/** Zero in the given currency. */
+export function zero(currency: CurrencyCode): Money {
+  throw new Error("Not implemented");
+}
+
+
 export type { CurrencyCode, Money } from "./types.ts";
