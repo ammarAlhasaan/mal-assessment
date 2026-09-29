@@ -9,11 +9,15 @@ import {
     allocate as dineroAllocate,
     compare as dineroCompare,
     dinero,
+    halfUp,
+    multiply,
     subtract as dineroSubtract,
     toDecimal,
     toSnapshot,
+    transformScale,
     type DineroCurrency,
 } from "dinero.js/bigint";
+
 
 /** Single source of truth for currency precision: AED 2 decimal places, BHD 3. */
 const CURRENCIES: { readonly [C in CurrencyCode]: DineroCurrency<bigint, C> } = {
@@ -158,5 +162,13 @@ export function allocateEqually(
         ),
     );
 }
+
+export function applyRate(
+    amount: Money,
+    rate: {readonly amount: bigint; readonly scale: bigint},
+): Money {
+    throw new Error("Not implemented");
+}
+
 
 export type { Comparison, CurrencyCode, Money } from "./types.ts";
