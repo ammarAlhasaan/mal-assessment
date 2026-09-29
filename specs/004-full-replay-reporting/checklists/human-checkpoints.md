@@ -28,7 +28,7 @@
 
 ## Before cycle 5 — entry point
 
-- [ ] CHK009 HC-9 — Replace `src/run.ts`; delete `test/smoke.test.ts`
+- [x] CHK009 HC-9 — Replace `src/run.ts`; delete `test/smoke.test.ts`; one commit; no cycle 5 test (stdout and exit code verified in cycle 6)
 
 ## Before cycle 6 — full scenario
 

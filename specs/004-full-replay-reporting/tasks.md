@@ -45,7 +45,7 @@ Commits: `test: define …` / `feat: implement …` (human) · `docs: record …
 
 ## Cycle 5 — entry point (US4) · `npm start`
 
-- [ ] T020 [HUMAN] Decide HC-9
+- [x] T020 [HUMAN] Decide HC-9
 - [ ] T021 [AI] Present `src/run.ts` and smoke-test removal
 - [ ] T022 [HUMAN] Commit
 - [ ] T023 [AI] Run `npm start`, tests, typecheck; record
