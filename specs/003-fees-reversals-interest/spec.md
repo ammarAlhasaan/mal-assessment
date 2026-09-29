@@ -184,8 +184,11 @@ day remains).
 
 **Proposed**: `reverse(ledger, {eventId, targetEventId, eventDay, valueDay})` appends one entry:
 opposite direction of the target (CREDIT for E7), target's account and amount (AED 620.00), eventId
-`E9`, eventDay 6, valueDay 2 (from E9, which here equals E7's). The link to E7 lives in the request
-and the returned value; `PostingRequest`/`LedgerEntry` are **not** extended (no Spec 1 change).
+`E9`, eventDay 6, valueDay 2 (from E9, which here equals E7's). The reversal relationship exists only
+in the input event/request (`targetEventId`). The ledger stores only the resulting compensating
+posting and does not persist `targetEventId`; the returned value is that plain `LedgerEntry`.
+`PostingRequest`/`LedgerEntry` are **not** extended (no Spec 1 change): the assessment never asks
+to query the link later.
 Alternative: add an optional `reverses` field to the Spec 1 types (Spec 1 change, `snapshot()` too).
 
 ### HC-7 — Reversal target validation

@@ -194,7 +194,11 @@ the affected days' balances afterwards rather than delaying the daily close:
 E9 reverses E7 without changing it. The reversal appends one new entry in the
 opposite direction with E7's account and amount (a CREDIT of AED 620.00). It
 keeps its own event id, event day (Day 6), and value day (Day 2) from E9. The
-ledger entry types are not extended; the link to E7 is the reversal request.
+reversal relationship exists only in the input event (the reversal request's
+target id). The ledger stores only the resulting compensating posting and does
+not persist the target id, because the assessment never asks to query that link
+later and persisting it would change the Spec 1 entry types. As a consequence,
+the ledger alone cannot show which entry a reversal cancelled.
 
 A reversal target must match exactly one ledger entry, otherwise the reversal
 is rejected before anything is appended. The stream has no multi-entry target,

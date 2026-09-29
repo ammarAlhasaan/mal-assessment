@@ -106,7 +106,7 @@ ACC-002 Day 6 closing after capitalization: 10.008 [10008]. ACC-002 is never neg
 |-------|----------|----------------------|-----|
 | Back-valued fees | Scan days 1…N | Current day only | Rule defines the balance by value date |
 | Fee identity | Deterministic event id from the ledger | Separate fee store | No extra state; ledger is the record |
-| Reversal link | In the request/return value | New optional field on Spec 1 types | Keeps Spec 1 unchanged |
+| Reversal link | Input request only; not persisted | New optional field on Spec 1 types | Keeps Spec 1 unchanged; no assessment query needs the link |
 | Fees after reversal | Retained | Auto-refund entries | No refund event in the stream |
 | Interest basis | Final value-dated balances | Per-day snapshots | Accruals uncapitalized until Day 6 |
 | Rounding | Half-up, per accrual | Round total only | Rule requires the rounded accruals to sum to the total |
