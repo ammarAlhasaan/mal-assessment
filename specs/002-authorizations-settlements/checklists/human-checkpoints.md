@@ -56,7 +56,7 @@ approve a later group early. Groups follow [tasks.md](../tasks.md).
 
 ## Workflow gates (per function cycle)
 
-- [ ] CHK028 Cycle 1 `availableBalance()` — assertions written by human, red confirmed, implemented, reviewed, green
+- [x] CHK028 Cycle 1 `availableBalance()` — assertions written by human, red confirmed, implemented, reviewed, green
 - [ ] CHK029 Cycle 2 `authorize()` — assertions, red, implemented, reviewed, green
 - [ ] CHK030 Cycle 3 lookup / derived state — assertions, red, implemented, reviewed, green
 - [ ] CHK031 Cycle 4 `settle()` (E5 and E6 in one cycle) — assertions, red, implemented, reviewed, green

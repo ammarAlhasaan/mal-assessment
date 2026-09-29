@@ -56,9 +56,9 @@ Cycle:
 - [x] T006 [US1] [HUMAN] Approve and write assertions in `test/authorizations/authorizations.test.ts` with synthetic values: no hold, one hold, several holds, negative result, currency mismatch, inputs unchanged
 - [x] T007 [US1] [HUMAN] Run the focused test and confirm the intended red failure
 - [x] T008 [US1] [HUMAN] Commit tests, types, and signature (`test: define available balance`)
-- [ ] T009 [US1] [HUMAN] Implement `availableBalance()`
-- [ ] T010 [US1] [AI] Run focused, module, full tests and typecheck; review without editing
-- [ ] T011 [US1] [HUMAN] Apply accepted findings (or delegate explicitly); commit (`feat: implement available balance`)
+- [x] T009 [US1] [HUMAN] Implement `availableBalance()`
+- [x] T010 [US1] [AI] Run focused, module, full tests and typecheck; review without editing
+- [x] T011 [US1] [HUMAN] Apply accepted findings (or delegate explicitly); commit (`feat: implement available balance`) — *body landed in `3281725`, committed as `test: define available balance`; no separate feat commit*
 
 **Gate**: cycle 1 green and reviewed; `availableBalance()` is complete and is not changed by later cycles.
 
