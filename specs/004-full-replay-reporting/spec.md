@@ -143,18 +143,25 @@ All pending. Options, recommendations, and values are in [research.md](research.
 | HC | Question | Recommendation |
 |----|----------|----------------|
 | HC-1 | Is each printed day an as-known-at-close view or the final value-dated view? | As known at that day's close, plus one final value-dated table after Day 6 |
-| HC-2 | Which printed day do fees, authorization states, and errors belong to? | The close at which they became known (processing day); fees also show value day |
-| HC-3 | Where does E10 appear? | Day 6 section, marked late (event day 5); final table shows it on value day 5 |
+| HC-2 | Which printed day do fees, authorization states, and errors belong to? | **Approved (2026-09-29, cycle 2)**: the close at which they became known (processing day); fees also show value day |
+| HC-3 | Where does E10 appear? | **Approved (2026-09-29, cycle 2)**: processed after E9 in the Day 6 close, marked late (event day 5); final table shows it on value day 5 |
 | HC-4 | Does Day 6's closing balance include capitalization? | **Approved (2026-09-29)**: yes (390.93 / 10.008); Day 6 prints only the two capitalization entries; daily accruals are documented in README/calculation tables, not printed |
-| HC-5 | What counts as an error, and its text? | Only E6's rejected settlement; Auth-B's rejection is an authorization state |
+| HC-5 | What counts as an error, and its text? | **Approved (2026-09-29, cycle 2)**: a settlement returned `REJECTED` (only E6); replay continues and catches no exceptions; Auth-B's rejection is an authorization state. Text decided with HC-6 |
 | HC-6 | Exact output format | Research R3 |
-| HC-7 | Authorization state line | Latest record per known authorization id at the close |
+| HC-7 | Authorization state line | **Approved (2026-09-29, cycle 2)**: latest record (`lookup`) per authorization id, first-appearance order, captured at each close; Auth-Z never listed |
 | HC-8 | Event stream shape (E10) | **Approved (2026-09-29)**: one input event, BHD 10.000, `instalments: 3`, last after E9 in the written stream; split in replay by `allocateEqually` into BHD 3.334, 3.333, 3.333 |
 | HC-9 | Entry point | Replace placeholder `src/run.ts`; delete `test/smoke.test.ts`; `npm start` |
 | HC-10 | Intentional failing test | Duplicate reversal of E7 is accepted; separate glob and command |
 | HC-11 | Criteria classification | Accept 1, 3, 4, 5; reject 2, 6, 7, 8 (unchanged) |
 | HC-12 | `NUMBERS.md` constants | Research R6 |
 | HC-13 | Full-scenario test scope | Structured result + exact CLI stdout |
+
+## Known limitations (documented, not tested)
+
+- **Zero interest at the final close** (cycle 2): `replay()` calls `capitalizeInterest()` for every
+  account. An account with no positive closing balance on Days 1–6 would produce a zero total, which
+  the ledger rejects (Spec 3 HC-10), so replay would throw. Both assessment accounts earn interest
+  (AED 0.93, BHD 0.008); not handled to avoid new behaviour. To be listed in `AMBIGUITIES.md` (cycle 8).
 
 ## Success Criteria *(mandatory)*
 

@@ -12,10 +12,10 @@
 
 ## Before cycle 2 — `replay()`
 
-- [ ] CHK002 HC-2 — Fees, states, errors belong to the close that produced them
-- [ ] CHK003 HC-3 — E10 processed after E9, reported in Day 6 as late
-- [ ] CHK005 HC-5 — Errors = E6 only; error text
-- [ ] CHK007 HC-7 — Authorization state = latest record per known id at the close
+- [x] CHK002 HC-2 — Fees, states, errors belong to the close that produced them
+- [x] CHK003 HC-3 — E10 processed after E9, in the Day 6 close; snapshots keep whole events so the renderer can mark it late
+- [x] CHK005 HC-5 — Errors = settlements returned `REJECTED` (E6 only); replay continues; no exception catching (error text: CHK006)
+- [x] CHK007 HC-7 — Authorization state = `lookup()` per authorization id in first-appearance order at each close; Auth-Z never listed
 
 ## Before cycle 3 — `buildDailyReport()`
 

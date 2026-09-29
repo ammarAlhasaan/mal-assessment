@@ -24,10 +24,10 @@ Commits: `test: define …` / `feat: implement …` (human) · `docs: record …
 
 ## Cycle 2 — `replay()` (US2) · `node --test test/replay/replay.test.ts`
 
-- [ ] T008 [HUMAN] Decide HC-2, HC-3, HC-5, HC-7
-- [ ] T009 [AI] Present test, types, implementation
-- [ ] T010 [HUMAN] Commit tests / implementation
-- [ ] T011 [AI] Run checks; review; record decisions
+- [x] T008 [HUMAN] Decide HC-2, HC-3, HC-5, HC-7 — *HC-5 error text deferred to cycle 4 (HC-6)*
+- [x] T009 [AI] Present test, types, implementation
+- [x] T010 [HUMAN] Commit tests / implementation — *`502d21a` test (red: 5 fail), `c0a939f` feat*
+- [x] T011 [AI] Run checks; review; record decisions — *5 focused, 100 total tests pass; typecheck passes; Spec 1–3 files unchanged; E1–E10 replay cross-checked against research R2 (not asserted until cycle 6)*
 
 ## Cycle 3 — `buildDailyReport()` (US3) · `node --test test/report/report.test.ts`
 
