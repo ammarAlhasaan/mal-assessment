@@ -81,3 +81,58 @@ The capitalized total is 10 + 9 + 25 + 17 + 16 + 16 = 93, or AED 0.93. Rounding
 the exact total of 91.8 would give AED 0.92 and leave the accruals and the
 capitalization one minor unit apart. ACC-002 capitalizes BHD 0.004 + 0.004 =
 BHD 0.008.
+
+# Abandoned Approaches
+
+Approaches we considered and dropped during the build, with the reason. The approved choices are in
+`AMBIGUITIES.md`.
+
+## One processing cutoff after the last event
+
+Running all fee assessment and interest once, after E10, was the simplest replay. It was abandoned
+because fees would only be assessed after E9 had cancelled E7: no day would be negative, no fee would
+ever be charged, criterion 1's "before any fee is assessed" would have no meaning, and interest would
+be AED 1.03. We close each day at the day rollover instead.
+
+## Checking only the current day for fees
+
+Assessing a fee only for day N at the close of day N would charge one fee on Day 5 for E7. It was
+abandoned because the fee rule defines a day's closing balance by value date, and E7 also makes Days 2
+and 4 negative. We check every value day up to N.
+
+## Rounding only the interest total
+
+Summing the exact daily interest and rounding once gives AED 0.92 for ACC-001. It was abandoned
+because the rounded daily accruals (10 + 9 + 25 + 17 + 16 + 16 = 93) would then not sum to the
+capitalized total, which the rule forbids.
+
+## Calculating interest as known at each day
+
+Accruing each day on the balance known at that day's end gives AED 0.81 for ACC-001 and BHD 0.004 for
+ACC-002. It was abandoned because accruals stay uncapitalized until Day 6, so the corrections from E7,
+E9, and the late E10 must be included.
+
+## Keeping Auth-A's unused hold
+
+Keeping the AED 15.00 that Auth-A did not settle as an active hold was abandoned because the stream has
+no release event, so it would stay held for the rest of the window. The whole hold closes at
+settlement.
+
+## Storing the reversal link on the ledger entry
+
+Adding a `reverses` field to the ledger entry would let the ledger reject a second reversal. It was
+not built because it changes the Spec 1 entry types and the assessment never queries the link. The
+cost of that choice is the intentionally failing test.
+
+## Refunding fees after the reversal
+
+Automatically refunding the three fees after E9 would make criterion 6 true. It was abandoned because
+the fees were correct on what was known at the Day 5 close, the ledger is append-only, and the stream
+has no refund event.
+
+## Printing daily accruals, or only one view of each day
+
+Printing each day's interest accrual was dropped because the assessment asks per day only for the
+balance, fees, authorization states, and errors; accruals are documented in `README.md` instead.
+Printing only the final value-dated balances, or only the as-known ones, was dropped because each alone
+hides half of what the back-valued events did; the report prints both.

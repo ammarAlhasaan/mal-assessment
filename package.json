@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "node --test",
+    "test": "node --test \"test/**/*.test.ts\"",
+    "test:limitation": "node --test test/limitations/duplicate-reversal.limitation.ts",
     "start": "node src/run.ts",
     "typecheck": "tsc"
   },

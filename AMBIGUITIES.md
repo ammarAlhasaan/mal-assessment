@@ -258,3 +258,69 @@ see `REJECTED.md`.
 E8 (Auth-B) is not re-evaluated after E9. It was rejected at its written replay
 position, and recorded decisions are final: the reversal changes balances, not
 past decisions.
+
+## What a printed day shows
+
+The assessment asks for a per-day closing ledger balance, but in this stream a day's balance changes
+after the day closes: E7 (Day 5) and E9 (Day 6) restate Day 2, and E10 (Day 5) arrives after Day 6.
+Each printed day is therefore the view at that day's close: the balance for that value day using only
+the entries known at that close, including the fees it assessed. After Day 6 a separate table prints
+the final value-dated closing balance for every day, so both what was known and what finally stood are
+visible.
+
+Printing only the final values would show a Day 2 fee "assessed" before E7 existed and would hide the
+AED −370.00 balance that criterion 1 is about. Printing only the as-known values would hide how E7,
+E9, and E10 restate earlier days.
+
+## Which day fees, states, and errors belong to
+
+Fees, authorization states, and errors are printed under the close at which they became known. A fee
+also prints its own value day, because the Day 5 close charges Days 2, 4, and 5. Authorization states
+are the latest recorded state of every authorization seen so far, captured at each close; this is
+needed because the authorization lookup returns only the current state.
+
+## Where E10 appears
+
+E10 is processed in its written place, after E9, and lands in the Day 6 close, marked
+`(late: event day 5)`. It does not reopen Day 5, so ACC-002's Day 5 balance as known at the Day 5 close
+is BHD 0.000. The final value-dated table shows BHD 10.000 on value day 5.
+
+E10 is one input event (BHD 10.000, three instalments); the replay splits it with the money adapter
+and posts the three credits together.
+
+## Interest in the report
+
+The assessment asks for daily accruals but not for printing them. Day 6's closing balances include the
+two capitalization credits (AED 390.93 and BHD 10.008), and the report prints only those two entries.
+The daily accruals are documented in `README.md`. This follows the common banking split between an
+internal accrual journal and the capitalization posted to the customer account:
+
+- [Oracle FLEXCUBE — Accounting Events](https://docs.oracle.com/cd/F75086_01/html/LN/LN17_AppdxB.htm)
+- [Oracle FLEXCUBE — Automatic Interest Accrual](https://docs.oracle.com/cd/F50901_01/html/LN/LN12_Auto.htm)
+- [SAP — Posting Rules for Interest Capitalization](https://help.sap.com/docs/LOCALIZATIONS_FOR_BANKING_SERVICES_FROM_SAP/372b9754aace462e90c8108efc4b797c/709e8a5123c23220e10000000a423f68.html)
+
+## What counts as an error
+
+An error is an event the system refused to process. The only one is E6: a settlement for Auth-Z, which
+has no authorization. The replay records it and continues. Its text is
+`REJECTED: no active authorization`, which is true for every settlement rejection the system can
+return; the settlement result carries no more specific reason.
+
+E8 (Auth-B) is not an error: it is a valid authorization request that was declined, so it appears as
+an authorization state, `REJECTED`. The replay does not catch thrown exceptions; none occur in the
+stream, and hiding one would hide a defect.
+
+## Runnable replay and the failing test
+
+`npm start` runs the replay without input and exits 0. The required failing test against our own
+design lives in `test/limitations/` and is run only by `npm run test:limitation`, which exits 1. The
+default `npm test` runs only `*.test.ts` files, so it stays green.
+
+## Replay limitations
+
+- **A reversal can be applied twice.** The reversal link is not stored (see "Reversal of E7"), so a
+  second reversal of E7 would be accepted and create AED 620.00. This is the intentionally failing test.
+- **An account that earns no interest.** The final close capitalizes interest for every account. An
+  account with no positive closing balance on any day would have a zero total, which the ledger rejects,
+  and the replay would stop with an error. Both assessment accounts earn interest, so this is recorded
+  rather than handled.
