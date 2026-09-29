@@ -17,7 +17,7 @@
 - [x] CHK005 HC-5 — Errors = settlements returned `REJECTED` (E6 only); replay continues; no exception catching (error text: CHK006)
 - [x] CHK007 HC-7 — Authorization state = `lookup()` per authorization id in first-appearance order at each close; Auth-Z never listed
 
-## Before cycle 3 — `buildDailyReport()`
+## Before cycle 3 — `buildReport()`
 
 - [x] CHK001 HC-1 — As known at each close + final value-dated table
 - [x] CHK004 HC-4 — Day 6 includes capitalization; prints only the two `INT-` entries; accruals documented, not printed

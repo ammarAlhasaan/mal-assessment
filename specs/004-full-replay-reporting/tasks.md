@@ -29,7 +29,7 @@ Commits: `test: define …` / `feat: implement …` (human) · `docs: record …
 - [x] T010 [HUMAN] Commit tests / implementation — *`502d21a` test (red: 5 fail), `c0a939f` feat*
 - [x] T011 [AI] Run checks; review; record decisions — *5 focused, 100 total tests pass; typecheck passes; Spec 1–3 files unchanged; E1–E10 replay cross-checked against research R2 (not asserted until cycle 6)*
 
-## Cycle 3 — `buildDailyReport()` (US3) · `node --test test/report/report.test.ts`
+## Cycle 3 — `buildReport()` (US3) · `node --test test/report/report.test.ts`
 
 - [x] T012 [HUMAN] Decide HC-1, HC-4 — *synthetic stream order corrected in review to A, D, B, C (C the only late event)*
 - [x] T013 [AI] Present test, types, implementation — *files written by AI at the human's request; commits by the human*
