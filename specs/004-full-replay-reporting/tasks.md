@@ -39,9 +39,9 @@ Commits: `test: define …` / `feat: implement …` (human) · `docs: record …
 ## Cycle 4 — `renderReport()` (US3) · `node --test test/report/render.test.ts`
 
 - [x] T016 [HUMAN] Decide HC-6 (and HC-5 error text)
-- [ ] T017 [AI] Present test, implementation
-- [ ] T018 [HUMAN] Commit tests / implementation
-- [ ] T019 [AI] Run checks; review; record decisions
+- [x] T017 [AI] Present test, implementation — *files written by AI at the human's request; commits by the human*
+- [x] T018 [HUMAN] Commit tests / implementation — *`e5db27e` is the test/red commit (stub + test; red: 1 fail) although titled `feat: implement report rendering`; `fa5ac31` `feat: implement report rendering output` is the implementation. History not amended.*
+- [x] T019 [AI] Run checks; review; record decisions — *1 focused, 103 total tests pass; typecheck passes; Spec 1–3 and replay files unchanged; E1–E10 render matches research R3 in scratch (asserted in cycle 6)*
 
 ## Cycle 5 — entry point (US4) · `npm start`
 
