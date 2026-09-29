@@ -33,6 +33,8 @@ modifies or reorders ledger entries.
 
 ### 2. `authorize()`
 
+Implemented as `createAuthorizations(ledger: Ledger): Authorizations` with `authorize(request: AuthorizationRequest): AuthorizationRecord` (`src/authorizations/types.ts`). The record is the frozen request plus `outcome: "APPROVED" | "REJECTED"`. Ledger balance: `balanceByValueDay(account, request.valueDay)` at call time (HC-4, HC-5). Duplicate IDs and invalid input are not handled (HC-6, HC-7).
+
 | Aspect | Contract |
 |--------|----------|
 | Inputs | authorization request (see [data-model.md](../data-model.md)) |

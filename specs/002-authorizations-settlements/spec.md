@@ -336,7 +336,7 @@ AED −155.00 to AED −170.00 (see HC-9).
 
 **Question**: Which states are required without over-designing?
 
-**Proposed**: Three outcomes, each derived from history:
+**Approved (2026-09-29)**: `APPROVED` and `REJECTED` records from `authorize()`; only `APPROVED` holds are active. Settled is added in cycle 4 (HC-1). Original proposal, each derived from history:
 
 | State | Hold active? | Reached by |
 |-------|--------------|-----------|
@@ -353,7 +353,7 @@ per HC-3).
 **Question**: Is a rejected authorization retained as an immutable result, or only returned to the
 caller?
 
-**Proposed**: Retained as an immutable history record with state Rejected and a reason. Spec 4 must
+**Approved (2026-09-29)**: Retained as an immutable history record with outcome `REJECTED` (no reason field). Spec 4 must
 print "authorization states and errors" per day; a rejected Auth-B (HC-9) must appear in that output.
 It creates no hold and no ledger entry.
 
@@ -364,7 +364,7 @@ criterion 4's wording — see HC-18.
 
 **Question**: At which replay boundary is available balance evaluated for an authorization decision?
 
-**Proposed**: At the authorization's written replay position: ledger entries appended before it
+**Approved (2026-09-29)**: At the authorization's written replay position: ledger entries appended before it
 (Spec 1 `lastSequence()` captured immediately before the decision) and holds active immediately
 before it, for the authorization's value day (HC-5). Not at start or end of the event day, and not
 after later events.
@@ -377,7 +377,7 @@ start-of-Day-5 or "before E7" boundary would exclude E7 and reverse the E8 decis
 **Question**: How do event day and value day apply to holds, which affect available balance but not
 ledger balance?
 
-**Proposed**:
+**Approved (2026-09-29)**:
 
 - A hold becomes active at its replay position (knowledge order), and closes at its settlement's
   replay position. Its value day is recorded but does not change which value days it affects.
@@ -392,11 +392,15 @@ must be approved because it defines the rule.
 
 ### HC-6 — Duplicate authorization IDs
 
+**Not handled (2026-09-29)**: no assessment event has a duplicate authorization ID.
+
 **Proposed**: A second authorization request with an ID that is already present (in any state) is
 rejected; the existing authorization is unchanged, and no hold is placed. No assessment event
 exercises this.
 
 ### HC-7 — Account or currency mismatch
+
+**Authorization part not handled (2026-09-29)**: no assessment event has an invalid authorization request. Settlement part decided in cycle 4.
 
 **Proposed**:
 
@@ -528,7 +532,7 @@ architecture notes in Spec 4).
 **Question**: Are lifecycle changes new immutable transition records with current state derived from
 history, or is mutable in-memory state allowed?
 
-**Proposed**: Immutable, append-only transition records; current state is derived from them.
+**Approved (2026-09-29)**: Immutable, append-only transition records; current state is derived from them.
 
 **Reconciliation with the constitution**: Principle II ("Ledger entries are immutable … corrections
 are new, compensating entries") literally governs ledger entries. The assessment's rule is broader:
@@ -545,11 +549,13 @@ justify it.
 **Question**: Are rejected authorizations and settlements part of the immutable domain-event
 history, even though they create no ledger posting?
 
-**Proposed**: Yes. Every incoming authorization and settlement event produces exactly one immutable
-outcome record (accepted or rejected, with reason). Rejections never create ledger entries and never
+**Approved (2026-09-29)**: Yes. Every incoming authorization and settlement event produces exactly one immutable
+outcome record (accepted or rejected). Settlement records are decided in cycle 4. Rejections never create ledger entries and never
 consume a ledger sequence. This gives Spec 4 its "errors" per day without re-running decisions.
 
 ### HC-15 — Replay sequence ordering across postings and authorization records
+
+**Deferred (2026-09-29)**: not needed to process E3 or E8; revisit only if a later cycle needs it.
 
 **Proposed**: Keep the Spec 1 ledger sequence unchanged (it counts ledger entries only — Spec 1
 contract, HC-4). Authorization records carry their own strictly increasing sequence, assigned by the

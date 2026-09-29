@@ -18,15 +18,15 @@ approve a later group early. Groups follow [tasks.md](../tasks.md).
 
 ## Before cycle 2 — `authorize()`
 
-- [ ] CHK002 HC-4 — Replay boundary at which the decision's ledger balance and active holds are taken
-- [ ] CHK003 HC-5 — How event day and value day apply to holds and to the decision's ledger balance
-- [ ] CHK004 HC-15 — Sequence ordering across ledger postings and authorization records
-- [ ] CHK005 HC-2 — Minimum authorization states (proposed: Approved-active, Rejected, Settled)
-- [ ] CHK006 HC-3 — Rejected authorization retained as an immutable record, or returned only
-- [ ] CHK007 HC-13 — Immutable transition records with derived state vs mutable state; reconciliation with the append-only constitution recorded
-- [ ] CHK008 HC-14 — Rejected incoming events are, or are not, part of the immutable domain-event history
-- [ ] CHK009 HC-6 — Duplicate authorization IDs
-- [ ] CHK010 HC-7 (authorization part) — Unknown account, currency mismatch, invalid amount or day on an authorization request
+- [x] CHK002 HC-4 — Replay boundary at which the decision's ledger balance and active holds are taken
+- [x] CHK003 HC-5 — How event day and value day apply to holds and to the decision's ledger balance
+- [ ] CHK004 HC-15 — Sequence ordering across ledger postings and authorization records — *deferred: not needed for E3/E8*
+- [x] CHK005 HC-2 — Minimum authorization states (proposed: Approved-active, Rejected, Settled)
+- [x] CHK006 HC-3 — Rejected authorization retained as an immutable record, or returned only
+- [x] CHK007 HC-13 — Immutable transition records with derived state vs mutable state; reconciliation with the append-only constitution recorded
+- [x] CHK008 HC-14 — Rejected incoming events are, or are not, part of the immutable domain-event history
+- [x] CHK009 HC-6 — Duplicate authorization IDs — *not handled: no assessment event*
+- [x] CHK010 HC-7 (authorization part) — Unknown account, currency mismatch, invalid amount or day on an authorization request — *not handled: no assessment event*
 
 ## Before cycle 3 — lookup and derived state
 
@@ -57,7 +57,7 @@ approve a later group early. Groups follow [tasks.md](../tasks.md).
 ## Workflow gates (per function cycle)
 
 - [x] CHK028 Cycle 1 `availableBalance()` — assertions written by human, red confirmed, implemented, reviewed, green
-- [ ] CHK029 Cycle 2 `authorize()` — assertions, red, implemented, reviewed, green
+- [x] CHK029 Cycle 2 `authorize()` — assertions, red, implemented, reviewed, green
 - [ ] CHK030 Cycle 3 lookup / derived state — assertions, red, implemented, reviewed, green
 - [ ] CHK031 Cycle 4 `settle()` (E5 and E6 in one cycle) — assertions, red, implemented, reviewed, green
 - [ ] CHK032 Cycle 5 replay coverage — assertions, red, implemented, reviewed, green

@@ -72,20 +72,20 @@ Cycle:
 
 Decisions for this cycle:
 
-- [ ] T012 [HUMAN] Decide HC-4, HC-5, HC-15 — decision boundary, value-day rule, record ordering (CHK002–CHK004)
-- [ ] T013 [HUMAN] Decide HC-2, HC-3, HC-13, HC-14 — states, rejection retention, immutable history (CHK005–CHK008)
-- [ ] T014 [HUMAN] Decide HC-6 and the authorization part of HC-7 — duplicate IDs, account/currency/amount validation (CHK009–CHK010)
+- [x] T012 [HUMAN] Decide HC-4, HC-5, HC-15 — decision boundary, value-day rule, record ordering (CHK002–CHK004) — *HC-15 deferred: not needed for E3/E8*
+- [x] T013 [HUMAN] Decide HC-2, HC-3, HC-13, HC-14 — states, rejection retention, immutable history (CHK005–CHK008)
+- [x] T014 [HUMAN] Decide HC-6 and the authorization part of HC-7 — duplicate IDs, account/currency/amount validation (CHK009–CHK010) — *not handled: no assessment event*
 - [ ] T015 [HUMAN] Record the decisions above in `AMBIGUITIES.md` (`docs: record authorization decisions`)
 
 Cycle:
 
-- [ ] T016 [US2] [AI] Explain the assessment source for `authorize()` and each planned case (approve, reject, exactly zero, no ledger entry, hold reduces available but not ledger, approved invalid-input cases)
-- [ ] T017 [US2] [AI] Add minimum types and throwing `authorize()` signature; update the contract
-- [ ] T018 [US2] [HUMAN] Approve and write assertions (synthetic values) in `test/authorizations/authorizations.test.ts`
-- [ ] T019 [US2] [HUMAN] Confirm red; commit (`test: define authorization approval`)
-- [ ] T020 [US2] [HUMAN] Implement `authorize()`
-- [ ] T021 [US2] [AI] Run focused, module, full tests and typecheck; review without editing
-- [ ] T022 [US2] [HUMAN] Apply accepted findings; commit (`feat: implement authorization approval`)
+- [x] T016 [US2] [AI] Explain the assessment source for `authorize()` and each planned case (approve, reject, exactly zero, no ledger entry, hold reduces available but not ledger, approved invalid-input cases)
+- [x] T017 [US2] [AI] Add minimum types and throwing `authorize()` signature; update the contract
+- [x] T018 [US2] [HUMAN] Approve and write assertions (synthetic values) in `test/authorizations/authorizations.test.ts`
+- [x] T019 [US2] [HUMAN] Confirm red; commit (`test: define authorization approval`)
+- [x] T020 [US2] [HUMAN] Implement `authorize()`
+- [x] T021 [US2] [AI] Run focused, module, full tests and typecheck; review without editing
+- [x] T022 [US2] [HUMAN] Apply accepted findings; commit (`feat: implement authorization approval`)
 
 ---
 
