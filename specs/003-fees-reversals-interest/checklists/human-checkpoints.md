@@ -34,7 +34,7 @@ Decide only the group for the next cycle, immediately before it starts.
 
 ## Before cycle 6 — Spec 3 event test
 
-- [ ] CHK013 HC-8 — E8 not re-evaluated after E9
-- [ ] CHK014 HC-14 — Criterion 1 accepted; criteria 2, 6, 8 rejected
-- [ ] CHK015 HC-15 — Fee, balance, and interest tables in research R1
-- [ ] CHK016 HC-16 — Event test scope (E1–E10, no printing)
+- [x] CHK013 HC-8 — E8 not re-evaluated after E9
+- [x] CHK014 HC-14 — Criterion 1 accepted; criteria 2, 6, 8 rejected
+- [x] CHK015 HC-15 — Fee, balance, and interest tables in research R1
+- [x] CHK016 HC-16 — Event test scope (E1–E10, no printing)

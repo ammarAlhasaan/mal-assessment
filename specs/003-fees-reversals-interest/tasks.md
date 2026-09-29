@@ -72,16 +72,16 @@ Commits: `test: define <behavior>` and `feat: implement <behavior>` (human) · `
 
 **Focused test**: `node --test test/fees/fee-reversal-interest-events.test.ts`
 
-- [ ] T029 [HUMAN] Approve HC-8, HC-14, HC-15, HC-16 (CHK013–CHK016)
-- [ ] T030 [US5] [AI] Present the scenario test
-- [ ] T031 [US5] [HUMAN] Apply, run, commit (`test: cover fee, reversal, and interest events`)
-- [ ] T032 [US5] [AI] Run full tests and typecheck; record criteria 2, 6, 8 in `REJECTED.md`, criterion 1 re-check and decisions in `AMBIGUITIES.md`
+- [x] T029 [HUMAN] Approve HC-8, HC-14, HC-15, HC-16 (CHK013–CHK016)
+- [x] T030 [US5] [AI] Present the scenario test
+- [x] T031 [US5] [HUMAN] Apply, run, commit (`test: cover fee, reversal, and interest events`) — *`f5767a1`; passed on first run because every behaviour was built in cycles 1–5; no production change needed*
+- [x] T032 [US5] [AI] Run full tests and typecheck; record criteria 2, 6, 8 in `REJECTED.md`, criterion 1 re-check and decisions in `AMBIGUITIES.md` — *93 tests pass; typecheck passes*
 
 ## Phase 8: Completion
 
-- [ ] T033 [AI] Final review: no Dinero.js outside `src/money/`, no entry mutation, Spec 1/2 behaviour unchanged (`git diff --stat main -- src/ledger src/authorizations test/ledger test/authorizations`)
+- [x] T033 [AI] Final review: no Dinero.js outside `src/money/`, no entry mutation, Spec 1/2 behaviour unchanged (`git diff --stat main -- src/ledger src/authorizations test/ledger test/authorizations`) — *no change; `src/money/money.ts` has only the approved `applyRate` addition; Dinero.js imported only in `src/money/`; Spec 3 code only appends*
 - [ ] T034 [HUMAN] Apply accepted findings (or delegate explicitly)
-- [ ] T035 [AI] Run `npm test` and `npm run typecheck`; report
+- [x] T035 [AI] Run `npm test` and `npm run typecheck`; report — *93 pass; typecheck passes*
 - [ ] T036 [HUMAN] Record Spec 3 in `WORKLOG.md`; merge
 
 ## Notes

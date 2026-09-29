@@ -247,3 +247,14 @@ total and no remainder exists to discard.
 A zero total would be rejected by the ledger's positive-amount rule; it does not
 occur in the window. Capitalization is performed once per account by the final
 close and is not guarded against a second call.
+
+## Spec 3 criteria and authorization re-check
+
+Criterion 1 remains accepted. Fees are first assessed at the Day 5 close, after
+the end-of-Day-5 boundary, so the Day 2 balance before any fee is still
+1,200.00 − 950.00 − 620.00 = AED −370.00. Criteria 2, 6, and 8 are rejected;
+see `REJECTED.md`.
+
+E8 (Auth-B) is not re-evaluated after E9. It was rejected at its written replay
+position, and recorded decisions are final: the reversal changes balances, not
+past decisions.
