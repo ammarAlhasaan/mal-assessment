@@ -222,3 +222,17 @@ mode. I round half up. The assessment's own balances produce no exact half
 and half even give the same result there; rounding down would lower ACC-001's
 interest from AED 0.93 to AED 0.90. A half-unit case (AED 12.50 → AED 0.01) is
 tested to fix the chosen mode.
+
+## Interest accrual basis
+
+Accruals stay uncapitalized until the end of Day 6, and the rule defines each
+day's closing balance by value date. Each daily accrual therefore uses that
+day's closing balance from all entries known at the final window close:
+the fees, E9, and the late E10 are all included. Calculating each day only from
+what was known at its own end would ignore E7 and E9's corrections to Days 2 to
+5, and E10 on Day 5.
+
+Days 1 to 6 all accrue. The capitalization credit itself earns no interest.
+Because the accrual calculation reads the ledger as it stands, it must be done
+before the capitalization credit is appended: capitalization computes and sums
+the accruals first, appends one credit, and never recalculates them afterwards.

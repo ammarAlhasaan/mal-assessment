@@ -2,7 +2,7 @@
 
 **Feature Branch**: `003-fees-reversals-interest`
 **Created**: 2026-09-29
-**Status**: Draft — HC-1–HC-7, HC-11, HC-12 and HC-17 approved; HC-8–HC-10 and HC-13–HC-16 pending
+**Status**: Draft — HC-1–HC-7, HC-9, HC-11, HC-12 and HC-17 approved; HC-10 approved for accruals (entry confirmed in cycle 5); HC-8, HC-14–HC-16 pending
 **Input**: "Spec 3 — Fees, Reversals, and Interest: E7, overdraft-fee assessment, E9 reversal in an
 append-only ledger, daily interest at 0.04% on positive closing balances, rounded daily accruals and
 one capitalized credit at the end of Day 6; acceptance criteria 1, 2, 6, and 8."
@@ -206,6 +206,8 @@ decisions are final; the reversal changes balances, not past decisions. No code 
 
 ### HC-9 — Which balances earn interest
 
+**Approved (2026-09-29, cycle 4)**: Option A.
+
 | Option | Basis | ACC-001 total | ACC-002 total |
 |--------|-------|---------------|---------------|
 | **A (proposed)** | Final value-dated closing balances known at capitalization (after E9, fees, E10) | AED 0.93 | BHD 0.008 |
@@ -215,6 +217,8 @@ decisions are final; the reversal changes balances, not past decisions. No code 
 balance by value date. Option B would ignore E7/E9's corrections and E10's late arrival for Day 5.
 
 ### HC-10 — Accrual days and capitalization entry
+
+**Approved (2026-09-29, cycle 4)**: Days 1–6 accrue. `dailyInterestAccruals()` reads the ledger as it is when called, so it must be called at the pre-capitalization boundary: `capitalizeInterest()` computes and sums the accruals before appending `INT-<account>` and never reads them again afterwards, and the event test captures accruals before capitalization. No signature change or extra guard (the capitalization entry fields are confirmed in cycle 5).
 
 **Proposed**: each of Days 1–6 accrues on that day's closing balance **before** capitalization; the
 capitalization credit itself earns nothing. Capitalization: one CREDIT per account, eventId

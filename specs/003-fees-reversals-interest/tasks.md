@@ -52,18 +52,18 @@ Commits: `test: define <behavior>` and `feat: implement <behavior>` (human) · `
 
 **Focused test**: `node --test --test-name-pattern="accrual" test/interest/interest.test.ts`
 
-- [ ] T019 [HUMAN] Decide HC-9, HC-10 (CHK010–CHK011)
-- [ ] T020 [US3] [AI] Present tests, signature, and implementation in one message
-- [ ] T021 [US3] [HUMAN] Apply and commit tests (`test: define daily interest accruals`)
-- [ ] T022 [US3] [HUMAN] Apply and commit implementation (`feat: implement daily interest accruals`)
-- [ ] T023 [US3] [AI] Run tests and typecheck; review; record decisions
+- [x] T019 [HUMAN] Decide HC-9, HC-10 (CHK010–CHK011)
+- [x] T020 [US3] [AI] Present tests, signature, and implementation in one message
+- [x] T021 [US3] [HUMAN] Apply and commit tests (`test: define daily interest accruals`) — *`8484ed0`*
+- [x] T022 [US3] [HUMAN] Apply and commit implementation (`feat: implement daily interest accruals`) — *`7c936f0`; 3 focused, 90 total tests pass; typecheck passes*
+- [x] T023 [US3] [AI] Run tests and typecheck; review; record decisions
 
 ## Phase 6: Cycle 5 — `capitalizeInterest()` (US4)
 
 **Focused test**: `node --test --test-name-pattern="capitaliz" test/interest/interest.test.ts`
 
 - [ ] T024 [HUMAN] Confirm HC-10 capitalization entry at the HC-17 final close (CHK012)
-- [ ] T025 [US4] [AI] Present tests, signature, and implementation in one message
+- [ ] T025 [US4] [AI] Present tests, signature, and implementation in one message — `capitalizeInterest()` computes and sums the accruals first, appends the credit once, and never reads accruals after appending
 - [ ] T026 [US4] [HUMAN] Apply and commit tests (`test: define interest capitalization`)
 - [ ] T027 [US4] [HUMAN] Apply and commit implementation (`feat: implement interest capitalization`)
 - [ ] T028 [US4] [AI] Run tests and typecheck; review; record decisions

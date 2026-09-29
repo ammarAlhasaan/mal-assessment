@@ -25,8 +25,8 @@ Decide only the group for the next cycle, immediately before it starts.
 
 ## Before cycle 4 — `dailyInterestAccruals()`
 
-- [ ] CHK010 HC-9 — Final value-dated balances at capitalization (Option A)
-- [ ] CHK011 HC-10 — Days 1–6 accrue; capitalization credit earns nothing
+- [x] CHK010 HC-9 — Final value-dated balances at capitalization (Option A)
+- [x] CHK011 HC-10 — Days 1–6 accrue; capitalization credit earns nothing
 
 ## Before cycle 5 — `capitalizeInterest()`
 
