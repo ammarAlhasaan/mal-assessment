@@ -147,7 +147,7 @@ All pending. Options, recommendations, and values are in [research.md](research.
 | HC-3 | Where does E10 appear? | **Approved (2026-09-29, cycle 2)**: processed after E9 in the Day 6 close, marked late (event day 5); final table shows it on value day 5 |
 | HC-4 | Does Day 6's closing balance include capitalization? | **Approved (2026-09-29)**: yes (390.93 / 10.008); Day 6 prints only the two capitalization entries; daily accruals are documented in README/calculation tables, not printed |
 | HC-5 | What counts as an error, and its text? | **Approved (2026-09-29, cycle 2)**: a settlement returned `REJECTED` (only E6); replay continues and catches no exceptions; Auth-B's rejection is an authorization state. Text decided with HC-6 |
-| HC-6 | Exact output format | Research R3 |
+| HC-6 | Exact output format | **Approved (2026-09-29, cycle 4)**: research R3; error line `<eventId> settlement <authId> <account> <amount> REJECTED: no active authorization` (HC-5 text); `Interest capitalized` only when present; no trailing newline |
 | HC-7 | Authorization state line | **Approved (2026-09-29, cycle 2)**: latest record (`lookup`) per authorization id, first-appearance order, captured at each close; Auth-Z never listed |
 | HC-8 | Event stream shape (E10) | **Approved (2026-09-29)**: one input event, BHD 10.000, `instalments: 3`, last after E9 in the written stream; split in replay by `allocateEqually` into BHD 3.334, 3.333, 3.333 |
 | HC-9 | Entry point | Replace placeholder `src/run.ts`; delete `test/smoke.test.ts`; `npm start` |

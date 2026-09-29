@@ -38,7 +38,7 @@ Commits: `test: define …` / `feat: implement …` (human) · `docs: record …
 
 ## Cycle 4 — `renderReport()` (US3) · `node --test test/report/render.test.ts`
 
-- [ ] T016 [HUMAN] Decide HC-6
+- [x] T016 [HUMAN] Decide HC-6 (and HC-5 error text)
 - [ ] T017 [AI] Present test, implementation
 - [ ] T018 [HUMAN] Commit tests / implementation
 - [ ] T019 [AI] Run checks; review; record decisions

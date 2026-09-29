@@ -24,7 +24,7 @@
 
 ## Before cycle 4 — `renderReport()`
 
-- [ ] CHK006 HC-6 — Exact output text (research R3)
+- [x] CHK006 HC-6 — Exact output text (research R3); error line `… REJECTED: no active authorization`; late label `(late: event day N)`; no trailing newline
 
 ## Before cycle 5 — entry point
 
