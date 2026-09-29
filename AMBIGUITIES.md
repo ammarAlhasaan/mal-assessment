@@ -236,3 +236,14 @@ Days 1 to 6 all accrue. The capitalization credit itself earns no interest.
 Because the accrual calculation reads the ledger as it stands, it must be done
 before the capitalization credit is appended: capitalization computes and sums
 the accruals first, appends one credit, and never recalculates them afterwards.
+
+## Interest capitalization
+
+At the final window close each account receives one credit, `INT-<account>`,
+with event day 6 and value day 6. Its amount is the exact sum of the six
+rounded daily accruals, so the rounded accruals always sum to the capitalized
+total and no remainder exists to discard.
+
+A zero total would be rejected by the ledger's positive-amount rule; it does not
+occur in the window. Capitalization is performed once per account by the final
+close and is not guarded against a second call.

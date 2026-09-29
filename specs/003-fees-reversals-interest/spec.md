@@ -2,7 +2,7 @@
 
 **Feature Branch**: `003-fees-reversals-interest`
 **Created**: 2026-09-29
-**Status**: Draft — HC-1–HC-7, HC-9, HC-11, HC-12 and HC-17 approved; HC-10 approved for accruals (entry confirmed in cycle 5); HC-8, HC-14–HC-16 pending
+**Status**: Draft — HC-1–HC-7, HC-9, HC-11, HC-12 and HC-17 approved; HC-10 approved; HC-8, HC-14–HC-16 pending
 **Input**: "Spec 3 — Fees, Reversals, and Interest: E7, overdraft-fee assessment, E9 reversal in an
 append-only ledger, daily interest at 0.04% on positive closing balances, rounded daily accruals and
 one capitalized credit at the end of Day 6; acceptance criteria 1, 2, 6, and 8."
@@ -218,12 +218,14 @@ balance by value date. Option B would ignore E7/E9's corrections and E10's late 
 
 ### HC-10 — Accrual days and capitalization entry
 
+**Approved (2026-09-29, cycle 5)**: one CREDIT `INT-<account>`, event day 6, value day 6, equal to the sum of the six rounded accruals, computed before the append. Amended: a zero total gets no special handling — the ledger rejects a zero amount; it does not occur in the stream (AED 0.93, BHD 0.008). Capitalizing twice is not guarded; the final window close calls it once per account (limitation).
+
 **Approved (2026-09-29, cycle 4)**: Days 1–6 accrue. `dailyInterestAccruals()` reads the ledger as it is when called, so it must be called at the pre-capitalization boundary: `capitalizeInterest()` computes and sums the accruals before appending `INT-<account>` and never reads them again afterwards, and the event test captures accruals before capitalization. No signature change or extra guard (the capitalization entry fields are confirmed in cycle 5).
 
 **Proposed**: each of Days 1–6 accrues on that day's closing balance **before** capitalization; the
 capitalization credit itself earns nothing. Capitalization: one CREDIT per account, eventId
 `INT-<accountId>`, eventDay 6, valueDay 6, appended at the final window close after the Day 6 fee
-assessment (HC-17). A zero total would append nothing (does not occur here).
+assessment (HC-17). A zero total would be rejected by the ledger (does not occur here; see cycle 5 amendment).
 
 ### HC-11 — Rounding mode
 

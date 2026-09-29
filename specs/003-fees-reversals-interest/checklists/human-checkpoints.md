@@ -30,7 +30,7 @@ Decide only the group for the next cycle, immediately before it starts.
 
 ## Before cycle 5 — `capitalizeInterest()`
 
-- [ ] CHK012 HC-10 — One CREDIT `INT-<account>`, event day 6, value day 6, at the final window close (HC-17)
+- [x] CHK012 HC-10 — One CREDIT `INT-<account>`, event day 6, value day 6, at the final window close (HC-17)
 
 ## Before cycle 6 — Spec 3 event test
 

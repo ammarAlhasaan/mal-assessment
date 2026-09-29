@@ -62,11 +62,11 @@ Commits: `test: define <behavior>` and `feat: implement <behavior>` (human) · `
 
 **Focused test**: `node --test --test-name-pattern="capitaliz" test/interest/interest.test.ts`
 
-- [ ] T024 [HUMAN] Confirm HC-10 capitalization entry at the HC-17 final close (CHK012)
-- [ ] T025 [US4] [AI] Present tests, signature, and implementation in one message — `capitalizeInterest()` computes and sums the accruals first, appends the credit once, and never reads accruals after appending
-- [ ] T026 [US4] [HUMAN] Apply and commit tests (`test: define interest capitalization`)
-- [ ] T027 [US4] [HUMAN] Apply and commit implementation (`feat: implement interest capitalization`)
-- [ ] T028 [US4] [AI] Run tests and typecheck; review; record decisions
+- [x] T024 [HUMAN] Confirm HC-10 capitalization entry at the HC-17 final close (CHK012)
+- [x] T025 [US4] [AI] Present tests, signature, and implementation in one message — `capitalizeInterest()` computes and sums the accruals first, appends the credit once, and never reads accruals after appending
+- [x] T026 [US4] [HUMAN] Apply and commit tests (`test: define interest capitalization`) — *`935191d`*
+- [x] T027 [US4] [HUMAN] Apply and commit implementation (`feat: implement interest capitalization`) — *`c6a83b4`; 5 focused, 92 total tests pass; typecheck passes*
+- [x] T028 [US4] [AI] Run tests and typecheck; review; record decisions
 
 ## Phase 7: Cycle 6 — Spec 3 event test (US5)
 
