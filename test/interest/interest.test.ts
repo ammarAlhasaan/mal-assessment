@@ -3,7 +3,8 @@ import assert from "node:assert/strict";
 import {money} from "../../src/money/money.ts";
 import {createLedger} from "../../src/ledger/ledger.ts";
 import type {Day, EntryDirection, Ledger} from "../../src/ledger/types.ts";
-import {dailyInterestAccruals} from "../../src/interest/interest.ts";
+import {capitalizeInterest, dailyInterestAccruals} from "../../src/interest/interest.ts";
+
 
 function aedLedger(): Ledger {
     return createLedger([{id: "ACC-1", currency: "AED"}]);
@@ -48,5 +49,37 @@ describe("daily interest accruals", () => {
 
         // Day 1: 100.00 -> 4; Days 2-6: 0.00 -> 0
         assert.deepEqual(dailyInterestAccruals(ledger, "ACC-1"), aed(4n, 0n, 0n, 0n, 0n, 0n));
+    });
+});
+
+describe("interest capitalization", () => {
+    // [Assessment] a single credit at the end of Day 6
+    test("appends one credit for the accrued interest on Day 6", () => {
+        const ledger = aedLedger();
+        post(ledger, "CREDIT", 25000n, 1, 1);
+        post(ledger, "CREDIT", 16500n, 3, 3);
+        const before = ledger.lastSequence();
+
+        const {sequence, ...entry} = capitalizeInterest(ledger, "ACC-1");
+
+        // 10 + 10 + 17 + 17 + 17 + 17 = 88
+        assert.deepEqual(entry, {
+            eventId: "INT-ACC-1",
+            accountId: "ACC-1",
+            direction: "CREDIT",
+            amount: money(88n, "AED"),
+            eventDay: 6,
+            valueDay: 6,
+        });
+        assert.equal(ledger.lastSequence(), before + 1);
+    });
+
+    // [Assessment; criterion 8] the rounded daily accruals sum exactly to the capitalized total
+    test("capitalizes the sum of the rounded accruals, not the rounded exact total", () => {
+        const ledger = aedLedger();
+        post(ledger, "CREDIT", 41500n, 1, 1);
+
+        // 6 x 17 = 102; rounding the exact 6 x 16.6 = 99.6 would give 100
+        assert.deepEqual(capitalizeInterest(ledger, "ACC-1").amount, money(102n, "AED"));
     });
 });
