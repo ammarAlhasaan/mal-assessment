@@ -16,5 +16,15 @@ export function dailyInterestAccruals(ledger: Ledger, accountId: string): readon
 }
 
 export function capitalizeInterest(ledger: Ledger, accountId: string): LedgerEntry {
-    throw new Error("Not implemented");
+    const accruals = dailyInterestAccruals(ledger, accountId);
+    const total = accruals.reduce(add);
+
+    return ledger.append({
+        eventId: `INT-${accountId}`,
+        accountId,
+        direction: "CREDIT",
+        amount: total,
+        eventDay: 6,
+        valueDay: 6,
+    });
 }
