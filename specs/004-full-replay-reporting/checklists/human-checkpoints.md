@@ -32,8 +32,8 @@
 
 ## Before cycle 6 — full scenario
 
-- [ ] CHK011 HC-11 — Criteria: accept 1, 3, 4, 5; reject 2, 6, 7, 8
-- [ ] CHK013 HC-13 — Structured result + exact stdout; research R2 values
+- [x] CHK011 HC-11 — Criteria: accept 1, 3, 4, 5; reject 2, 6, 7, 8
+- [x] CHK013 HC-13 — Structured result + exact stdout; research R2 values
 
 ## Before cycle 7 — intentional failure
 

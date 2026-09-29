@@ -152,9 +152,9 @@ All pending. Options, recommendations, and values are in [research.md](research.
 | HC-8 | Event stream shape (E10) | **Approved (2026-09-29)**: one input event, BHD 10.000, `instalments: 3`, last after E9 in the written stream; split in replay by `allocateEqually` into BHD 3.334, 3.333, 3.333 |
 | HC-9 | Entry point | **Approved (2026-09-29, cycle 5)**: replace placeholder `src/run.ts` with the replay wiring; delete `test/smoke.test.ts`; `npm start` |
 | HC-10 | Intentional failing test | Duplicate reversal of E7 is accepted; separate glob and command |
-| HC-11 | Criteria classification | Accept 1, 3, 4, 5; reject 2, 6, 7, 8 (unchanged) |
+| HC-11 | Criteria classification | **Approved (2026-09-29, cycle 6)**: accept 1, 3, 4, 5; reject 2, 6, 7, 8 (unchanged); each asserted in `test/replay/full-replay.test.ts` |
 | HC-12 | `NUMBERS.md` constants | Research R6 |
-| HC-13 | Full-scenario test scope | Structured result + exact CLI stdout |
+| HC-13 | Full-scenario test scope | **Approved (2026-09-29, cycle 6)**: structured result (research R2) + exact `node src/run.ts` stdout (R3) and exit 0 |
 
 ## Known limitations (documented, not tested)
 

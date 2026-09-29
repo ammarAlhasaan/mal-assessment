@@ -52,10 +52,10 @@ Commits: `test: define …` / `feat: implement …` (human) · `docs: record …
 
 ## Cycle 6 — full scenario (US5) · `node --test test/replay/full-replay.test.ts`
 
-- [ ] T024 [HUMAN] Approve HC-11, HC-13 and research R2/R3
-- [ ] T025 [AI] Present the scenario tests
-- [ ] T026 [HUMAN] Apply, run, commit
-- [ ] T027 [AI] Run checks; record criteria classification
+- [x] T024 [HUMAN] Approve HC-11, HC-13 and research R2/R3
+- [x] T025 [AI] Present the scenario tests — *file written by AI at the human's request*
+- [x] T026 [HUMAN] Apply, run, commit — *`bd71f28`; passed on first run because cycles 1–5 built every behaviour; no production change*
+- [x] T027 [AI] Run checks; record criteria classification — *104 tests pass; typecheck passes; criteria verdicts unchanged from Spec 1–3 (`REJECTED.md` complete for 2, 6, 7, 8; README table in cycle 8)*
 
 ## Cycle 7 — intentional failure (US6) · `npm run test:limitation`
 
