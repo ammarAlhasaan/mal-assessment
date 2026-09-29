@@ -1,6 +1,6 @@
 # Quickstart: Full Replay, Reporting, and Delivery
 
-Proposed commands (HC-9, HC-10); confirmed in cycle 8.
+Commands (HC-9, HC-10 approved); final confirmation in cycle 8.
 
 ```bash
 npm start                  # replay E1–E10 and print Days 1–6

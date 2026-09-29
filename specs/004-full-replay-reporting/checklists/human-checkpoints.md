@@ -37,7 +37,7 @@
 
 ## Before cycle 7 — intentional failure
 
-- [ ] CHK010 HC-10 — Duplicate-reversal limitation; `npm test` glob; `test:limitation` script
+- [x] CHK010 HC-10 — Duplicate-reversal limitation; `npm test` glob; `test:limitation` script
 
 ## Before cycle 8 — delivery
 

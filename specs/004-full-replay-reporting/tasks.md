@@ -59,10 +59,10 @@ Commits: `test: define …` / `feat: implement …` (human) · `docs: record …
 
 ## Cycle 7 — intentional failure (US6) · `npm run test:limitation`
 
-- [ ] T028 [HUMAN] Decide HC-10
-- [ ] T029 [AI] Present limitation test and `package.json` scripts
-- [ ] T030 [HUMAN] Commit
-- [ ] T031 [AI] Confirm `npm test` passes and `npm run test:limitation` exits 1; record
+- [x] T028 [HUMAN] Decide HC-10
+- [x] T029 [AI] Present limitation test and `package.json` scripts — *applied to the working tree by AI at the human's request*
+- [x] T030 [HUMAN] Commit — *`88332a9`*
+- [x] T031 [AI] Confirm `npm test` passes and `npm run test:limitation` exits 1; record — *104 pass (exit 0); limitation 1 fail (exit 1); typecheck passes*
 
 ## Cycle 8 — delivery
 
