@@ -34,13 +34,13 @@ approve a later group early. Groups follow [tasks.md](../tasks.md).
 
 ## Before cycle 4 — `settle()`
 
-- [ ] CHK012 HC-1 — Settlement smaller than hold: full hold closed and unused amount released immediately, or not
-- [ ] CHK013 HC-17 — Settlement ledger posting: direction, amount, event id, event day, value day
-- [ ] CHK014 HC-7 (settlement part) — Account or currency mismatch between settlement and authorization
-- [ ] CHK015 HC-8 — Settlement larger than its authorized amount
-- [ ] CHK016 HC-18 — Settlement of a present but non-active authorization; available-balance check at settlement
-- [ ] CHK017 HC-11 — Failure-atomic (not crash-atomic) settlement ordering accepted, and its residual limitation recorded
-- [ ] CHK018 HC-12 — State remaining after a rejected settlement, including E6
+- [x] CHK012 HC-1 — Settlement smaller than hold: full hold closed and unused amount released immediately, or not
+- [x] CHK013 HC-17 — Settlement ledger posting: direction, amount, event id, event day, value day
+- [x] CHK014 HC-7 (settlement part) — Account or currency mismatch between settlement and authorization — *not handled: no assessment event*
+- [x] CHK015 HC-8 — Settlement larger than its authorized amount — *not handled: no assessment event*
+- [x] CHK016 HC-18 — Settlement of a present but non-active authorization; available-balance check at settlement — *not handled: no assessment event*
+- [x] CHK017 HC-11 — Failure-atomic (not crash-atomic) settlement ordering accepted, and its residual limitation recorded
+- [x] CHK018 HC-12 — State remaining after a rejected settlement, including E6
 
 ## Before cycle 5 — Spec 2 replay (each value needs its event-by-event calculation in the spec)
 
@@ -59,6 +59,6 @@ approve a later group early. Groups follow [tasks.md](../tasks.md).
 - [x] CHK028 Cycle 1 `availableBalance()` — assertions written by human, red confirmed, implemented, reviewed, green
 - [x] CHK029 Cycle 2 `authorize()` — assertions, red, implemented, reviewed, green
 - [x] CHK030 Cycle 3 lookup / derived state — assertions, red, implemented, reviewed, green
-- [ ] CHK031 Cycle 4 `settle()` (E5 and E6 in one cycle) — assertions, red, implemented, reviewed, green
+- [x] CHK031 Cycle 4 `settle()` (E5 and E6 in one cycle) — assertions, red, implemented, reviewed, green
 - [ ] CHK032 Cycle 5 replay coverage — assertions, red, implemented, reviewed, green
 - [ ] CHK033 `npm test` and `npm run typecheck` pass; Spec 1 files unchanged; `WORKLOG.md` updated

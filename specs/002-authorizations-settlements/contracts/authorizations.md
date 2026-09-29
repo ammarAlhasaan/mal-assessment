@@ -59,6 +59,8 @@ Implemented as `lookup(authorizationId: string): AuthorizationRecord | undefined
 
 ### 4. `settle()`
 
+Implemented as `settle(request: SettlementRequest): SettlementRecord` on `Authorizations` (`SettlementRequest` = `AuthorizationRequest`; outcome `"SETTLED" | "REJECTED"`). Unknown id → `REJECTED`, nothing written, not stored. Otherwise: one DEBIT with the settlement's event id, account, amount, event day, value day; then a `SETTLED` record is appended, which closes the whole hold (HC-1). `lookup` may now return a `SettlementRecord`. Mismatch, over-settlement, and non-active authorization are not handled (HC-7, HC-8, HC-18).
+
 | Aspect | Contract |
 |--------|----------|
 | Inputs | settlement request (see [data-model.md](../data-model.md)) |

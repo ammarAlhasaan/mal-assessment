@@ -320,7 +320,7 @@ appended so far in the written replay order (Spec 1 `balanceAsKnownAt`).
 **Question**: When a settlement is smaller than its hold, is the complete hold closed and the unused
 amount released immediately?
 
-**Proposed**: Yes. E5 closes Auth-A's full AED 200.00 hold at E5's replay position; the unused
+**Approved (2026-09-29)**: Yes. E5 closes Auth-A's full AED 200.00 hold at E5's replay position; the unused
 AED 15.00 (200.00 − 185.00; 20000 − 18500 = 1500) stops reducing available balance immediately. No
 later partial settlement of Auth-A is possible.
 
@@ -400,6 +400,8 @@ exercises this.
 
 ### HC-7 — Account or currency mismatch
 
+**Settlement part not handled (2026-09-29)**: no assessment event has a settlement whose account or currency differs from its authorization.
+
 **Authorization part not handled (2026-09-29)**: no assessment event has an invalid authorization request. Settlement part decided in cycle 4.
 
 **Proposed**:
@@ -412,6 +414,8 @@ exercises this.
 No assessment event exercises this.
 
 ### HC-8 — Settlement larger than its authorization
+
+**Not handled (2026-09-29)**: no assessment event settles above its hold.
 
 **Proposed**: Rejected; no ledger entry; the authorization remains active. The assessment gives no
 over-capture tolerance, and accepting it would debit funds that were never checked against available
@@ -481,6 +485,8 @@ All three verdicts are **proposed and pending human approval**.
 
 ### HC-11 — Settlement consistency (failure-atomic, not crash-atomic)
 
+**Approved (2026-09-29)**: order implemented as: existence check → build frozen record → `ledger.append` DEBIT → push `SETTLED` record. Only the existence check (unknown authorization id) is implemented in step 1; the other listed checks are not handled (HC-7, HC-8, HC-18).
+
 **Question**: How is an accepted settlement posted while its hold is closed, so that partial state
 cannot occur?
 
@@ -519,7 +525,7 @@ architecture notes in Spec 4).
 
 ### HC-12 — State after a rejected settlement (E6)
 
-**Proposed**: After E6:
+**Approved (2026-09-29)**: After E6:
 
 - Ledger: unchanged — same entries, same `lastSequence()`, ACC-001 balance AED 465.00 [46500] for
   value days 4–6 as known after E6 (250.00 + 400.00 − 185.00).
@@ -545,6 +551,8 @@ constitution amendment; if the human prefers mutable state, the plan's Complexit
 justify it.
 
 ### HC-14 — Rejected incoming events in the domain-event history
+
+**Amended (2026-09-29, cycle 4)**: a rejected settlement is returned as a frozen `REJECTED` record but is not stored in the authorization history, so an unknown id (Auth-Z) stays not present for `lookup` and criterion 4. Where rejected settlements are kept for the per-day report is decided in Spec 4.
 
 **Question**: Are rejected authorizations and settlements part of the immutable domain-event
 history, even though they create no ledger posting?
@@ -586,11 +594,13 @@ is rejected (HC-9). These are pre-fee, pre-E9 values; Spec 3 will change them.
 
 ### HC-17 — Settlement ledger posting
 
-**Proposed**: E5 appends one DEBIT to ACC-001: event id `E5`, amount AED 185.00 [18500], event day 4,
+**Approved (2026-09-29)**: E5 appends one DEBIT to ACC-001: event id `E5`, amount AED 185.00 [18500], event day 4,
 value day 4 (the settlement's own days, not the authorization's). The hold is not posted to the
 ledger at any time.
 
 ### HC-18 — Settlement preconditions beyond existence
+
+**Not handled (2026-09-29)**: no assessment event settles a rejected or settled authorization. No available-balance check is made at settlement.
 
 **Proposed**:
 

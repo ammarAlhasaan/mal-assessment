@@ -120,20 +120,20 @@ no separate rejection function. **Depends on**: cycle 3 green.
 
 Decisions for this cycle:
 
-- [ ] T031 [HUMAN] Decide HC-1 and HC-17 — hold release on a smaller settlement; the settlement debit's fields (CHK012–CHK013)
-- [ ] T032 [HUMAN] Decide the settlement part of HC-7, and HC-8, HC-18 — mismatches, over-settlement, non-active authorization (CHK014–CHK016)
-- [ ] T033 [HUMAN] Decide HC-11 and HC-12 — failure-atomic (not crash-atomic) ordering and its recorded limitation; state after a rejected settlement (CHK017–CHK018)
+- [x] T031 [HUMAN] Decide HC-1 and HC-17 — hold release on a smaller settlement; the settlement debit's fields (CHK012–CHK013)
+- [x] T032 [HUMAN] Decide the settlement part of HC-7, and HC-8, HC-18 — mismatches, over-settlement, non-active authorization (CHK014–CHK016) — *not handled: no assessment event*
+- [x] T033 [HUMAN] Decide HC-11 and HC-12 — failure-atomic (not crash-atomic) ordering and its recorded limitation; state after a rejected settlement (CHK017–CHK018)
 - [ ] T034 [HUMAN] Record the decisions above in `AMBIGUITIES.md` (`docs: record settlement decisions`)
 
 Cycle:
 
-- [ ] T035 [US4] [AI] Explain the assessment source and each planned case (accepted settlement debit, hold closed, anticipated rejections leave no partial state, unknown id rejected with ledger unchanged, approved HC-7/HC-8/HC-18 rejections)
-- [ ] T036 [US4] [AI] Add minimum types and throwing `settle()` signature; update the contract
-- [ ] T037 [US4] [HUMAN] Approve and write assertions (synthetic values)
-- [ ] T038 [US4] [HUMAN] Confirm red; commit (`test: define settlement`)
-- [ ] T039 [US4] [HUMAN] Implement `settle()`
-- [ ] T040 [US4] [AI] Run focused, module, full tests and typecheck; review without editing (verify every anticipated rejection happens before the first write)
-- [ ] T041 [US4] [HUMAN] Apply accepted findings; commit (`feat: implement settlement`)
+- [x] T035 [US4] [AI] Explain the assessment source and each planned case (accepted settlement debit, hold closed, anticipated rejections leave no partial state, unknown id rejected with ledger unchanged, approved HC-7/HC-8/HC-18 rejections)
+- [x] T036 [US4] [AI] Add minimum types and throwing `settle()` signature; update the contract
+- [x] T037 [US4] [HUMAN] Approve and write assertions (synthetic values)
+- [x] T038 [US4] [HUMAN] Confirm red; commit (`test: define settlement`)
+- [x] T039 [US4] [HUMAN] Implement `settle()`
+- [x] T040 [US4] [AI] Run focused, module, full tests and typecheck; review without editing (verify every anticipated rejection happens before the first write)
+- [x] T041 [US4] [HUMAN] Apply accepted findings; commit (`feat: implement settlement`)
 
 ---
 
