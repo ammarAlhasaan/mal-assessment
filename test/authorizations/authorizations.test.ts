@@ -1,7 +1,11 @@
 import {describe, test} from "node:test";
 import assert from "node:assert/strict";
-import {availableBalance} from "../../src/authorizations/authorizations.ts";
 import {CurrencyMismatchError, money} from "../../src/money/money.ts";
+
+import {availableBalance, createAuthorizations} from "../../src/authorizations/authorizations.ts";
+import type {AuthorizationRequest} from "../../src/authorizations/types.ts";
+import {createLedger} from "../../src/ledger/ledger.ts";
+import type {Ledger} from "../../src/ledger/ledger.ts";
 
 describe("available balance", () => {
     test("with no active holds it equals the ledger balance", () => {
