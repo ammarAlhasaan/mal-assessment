@@ -98,17 +98,17 @@ green. No new checkpoint: the shape follows from the cycle 2 decisions.
 
 Decision for this cycle:
 
-- [ ] T023 [HUMAN] Confirm the lookup name and shape AI proposes from the approved HC-2/HC-3/HC-13/HC-14/HC-15 (CHK011)
+- [x] T023 [HUMAN] Confirm the lookup name and shape AI proposes from the approved HC-2/HC-3/HC-13/HC-14/HC-15 (CHK011)
 
 Cycle:
 
-- [ ] T024 [US3] [AI] Explain the assessment source and each planned case
-- [ ] T025 [US3] [AI] Add minimum types and the throwing lookup signature the human confirmed; update the contract
-- [ ] T026 [US3] [HUMAN] Approve and write assertions (present/approved, not present, rejected per HC-3, state as known at a boundary per HC-15)
-- [ ] T027 [US3] [HUMAN] Confirm red; commit (`test: define authorization lookup`)
-- [ ] T028 [US3] [HUMAN] Implement lookup and state derivation
-- [ ] T029 [US3] [AI] Run focused, module, full tests and typecheck; review without editing
-- [ ] T030 [US3] [HUMAN] Apply accepted findings; commit (`feat: implement authorization lookup`)
+- [x] T024 [US3] [AI] Explain the assessment source and each planned case
+- [x] T025 [US3] [AI] Add minimum types and the throwing lookup signature the human confirmed; update the contract
+- [x] T026 [US3] [HUMAN] Approve and write assertions (present/approved, not present, rejected per HC-3, state as known at a boundary per HC-15)
+- [x] T027 [US3] [HUMAN] Confirm red; commit (`test: define authorization lookup`)
+- [x] T028 [US3] [HUMAN] Implement lookup and state derivation
+- [x] T029 [US3] [AI] Run focused, module, full tests and typecheck; review without editing
+- [x] T030 [US3] [HUMAN] Apply accepted findings; commit (`feat: implement authorization lookup`)
 
 ---
 

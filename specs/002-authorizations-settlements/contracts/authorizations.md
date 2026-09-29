@@ -47,7 +47,7 @@ Implemented as `createAuthorizations(ledger: Ledger): Authorizations` with `auth
 
 ### 3. Authorization lookup and derived current state
 
-Name and signature intentionally not fixed (depend on HC-2, HC-3, HC-13, HC-14).
+Implemented as `lookup(authorizationId: string): AuthorizationRecord | undefined` on `Authorizations`. Returns the latest record for the id (its `outcome` is the current state), or `undefined` when the id is not present. No boundary parameter (HC-15 deferred).
 
 | Aspect | Contract |
 |--------|----------|

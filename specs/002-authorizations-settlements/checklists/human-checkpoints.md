@@ -30,7 +30,7 @@ approve a later group early. Groups follow [tasks.md](../tasks.md).
 
 ## Before cycle 3 — lookup and derived state
 
-- [ ] CHK011 Lookup name and shape confirmed (derived from CHK005–CHK008 and CHK004; no new financial decision)
+- [x] CHK011 Lookup name and shape confirmed (derived from CHK005–CHK008 and CHK004; no new financial decision)
 
 ## Before cycle 4 — `settle()`
 
@@ -58,7 +58,7 @@ approve a later group early. Groups follow [tasks.md](../tasks.md).
 
 - [x] CHK028 Cycle 1 `availableBalance()` — assertions written by human, red confirmed, implemented, reviewed, green
 - [x] CHK029 Cycle 2 `authorize()` — assertions, red, implemented, reviewed, green
-- [ ] CHK030 Cycle 3 lookup / derived state — assertions, red, implemented, reviewed, green
+- [x] CHK030 Cycle 3 lookup / derived state — assertions, red, implemented, reviewed, green
 - [ ] CHK031 Cycle 4 `settle()` (E5 and E6 in one cycle) — assertions, red, implemented, reviewed, green
 - [ ] CHK032 Cycle 5 replay coverage — assertions, red, implemented, reviewed, green
 - [ ] CHK033 `npm test` and `npm run typecheck` pass; Spec 1 files unchanged; `WORKLOG.md` updated
