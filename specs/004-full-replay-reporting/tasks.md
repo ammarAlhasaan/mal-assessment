@@ -18,9 +18,9 @@ Commits: `test: define …` / `feat: implement …` (human) · `docs: record …
 ## Cycle 1 — `ASSESSMENT_EVENTS` (US1) · `node --test test/replay/events.test.ts`
 
 - [x] T004 [HUMAN] Decide HC-8
-- [ ] T005 [AI] Present test, types, implementation
-- [ ] T006 [HUMAN] Commit tests / implementation
-- [ ] T007 [AI] Run checks; review; record decisions
+- [x] T005 [AI] Present test, types, implementation
+- [x] T006 [HUMAN] Commit tests / implementation — *`d6b6a2f` test (red: 2 fail), `3ea9b29` feat*
+- [x] T007 [AI] Run checks; review; record decisions — *2 focused, 95 total tests pass; typecheck passes; Spec 1–3 files unchanged*
 
 ## Cycle 2 — `replay()` (US2) · `node --test test/replay/replay.test.ts`
 
