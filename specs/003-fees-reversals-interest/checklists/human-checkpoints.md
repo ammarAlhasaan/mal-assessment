@@ -20,8 +20,8 @@ Decide only the group for the next cycle, immediately before it starts.
 
 ## Before cycle 3 — `applyRate()`
 
-- [ ] CHK008 HC-11 — Round half up per accrual at account precision
-- [ ] CHK009 HC-12 — Additive rate function in `src/money/`
+- [x] CHK008 HC-11 — Round half up per accrual at account precision
+- [x] CHK009 HC-12 — Additive rate function in `src/money/`
 
 ## Before cycle 4 — `dailyInterestAccruals()`
 

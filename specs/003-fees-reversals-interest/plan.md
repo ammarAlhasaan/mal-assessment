@@ -28,8 +28,8 @@ balances at the end of Day 6 and capitalized as one credit. Every value is pendi
 | IV. Human-Owned | No value in tests before approval; AI proposes signature/tests, human applies and commits | ✅ Pass |
 | V. Focused Scope | No printing, no replay orchestration beyond the Spec 3 event test | ✅ Pass |
 
-**Spec 1 touch**: additive `applyRate` in `src/money/money.ts` (+ tests in a new describe block of
-`test/money/money.test.ts`). Justified by Constitution I. No other Spec 1 or Spec 2 change.
+**Spec 1 touch**: additive `applyRate` in `src/money/money.ts` (+ tests in the new file
+`test/money/rate.test.ts`). Justified by Constitution I. No other Spec 1 or Spec 2 change.
 
 ## Project Structure
 
@@ -49,7 +49,7 @@ test/fees/fee-reversal-interest-events.test.ts   # Spec 3 event test (HC-16)
 
 ```ts
 // src/money/money.ts
-export function applyRate(amount: Money, rate: { amount: bigint; scale: number }): Money;
+export function applyRate(amount: Money, rate: { readonly amount: bigint; readonly scale: bigint }): Money;
 
 // src/fees/fees.ts
 export function assessOverdraftFees(ledger: Ledger, accountId: string, assessmentDay: Day): readonly LedgerEntry[];

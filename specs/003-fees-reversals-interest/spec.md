@@ -2,7 +2,7 @@
 
 **Feature Branch**: `003-fees-reversals-interest`
 **Created**: 2026-09-29
-**Status**: Draft — HC-1–HC-7 and HC-17 approved; HC-8–HC-16 pending
+**Status**: Draft — HC-1–HC-7, HC-11, HC-12 and HC-17 approved; HC-8–HC-10 and HC-13–HC-16 pending
 **Input**: "Spec 3 — Fees, Reversals, and Interest: E7, overdraft-fee assessment, E9 reversal in an
 append-only ledger, daily interest at 0.04% on positive closing balances, rounded daily accruals and
 one capitalized credit at the end of Day 6; acceptance criteria 1, 2, 6, and 8."
@@ -223,12 +223,16 @@ assessment (HC-17). A zero total would append nothing (does not occur here).
 
 ### HC-11 — Rounding mode
 
+**Approved (2026-09-29, cycle 3)**: round half up per accrual; pinned by the AED 12.50 → 0.01 test.
+
 **Proposed**: round half up (ties away from zero; balances are positive) at the account precision,
 per daily accrual. The stream contains no tie (16.6, 15.6, 15.6 minor units), so half-up and
 half-even give the same result; round-down would give AED 0.90 instead of 0.93. One synthetic tie
 test pins the chosen mode.
 
 ### HC-12 — Money-adapter addition
+
+**Approved (2026-09-29, cycle 3)**: `applyRate(amount, {amount, scale})` added to `src/money/money.ts`; tests in the new `test/money/rate.test.ts`.
 
 **Proposed**: add one function to `src/money/money.ts`, e.g. `applyRate(amount, rate)` with the rate
 as an integer and scale (0.04% = 4 at scale 4), using Dinero `multiply` + `transformScale` + `halfUp`.

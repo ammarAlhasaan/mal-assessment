@@ -40,13 +40,13 @@ Commits: `test: define <behavior>` and `feat: implement <behavior>` (human) · `
 
 ## Phase 4: Cycle 3 — `applyRate()` in `src/money/` (US3)
 
-**Focused test**: `node --test --test-name-pattern="rate" test/money/money.test.ts`
+**Focused test**: `node --test test/money/rate.test.ts` (new file; Spec 1's `money.test.ts` unchanged)
 
-- [ ] T014 [HUMAN] Decide HC-11, HC-12 (CHK008–CHK009)
-- [ ] T015 [US3] [AI] Present tests, signature, and implementation in one message
-- [ ] T016 [US3] [HUMAN] Apply and commit tests (`test: define rate application`)
-- [ ] T017 [US3] [HUMAN] Apply and commit implementation (`feat: implement rate application`)
-- [ ] T018 [US3] [AI] Run tests and typecheck; confirm existing money tests unchanged; record decisions
+- [x] T014 [HUMAN] Decide HC-11, HC-12 (CHK008–CHK009)
+- [x] T015 [US3] [AI] Present tests, signature, and implementation in one message
+- [x] T016 [US3] [HUMAN] Apply and commit tests (`test: define rate application`) — *`a0cd334`*
+- [x] T017 [US3] [HUMAN] Apply and commit implementation (`feat: implement rate application`) — *`da2a333`; 4 focused, 28 money, 87 total tests pass; typecheck passes*
+- [x] T018 [US3] [AI] Run tests and typecheck; confirm existing money tests unchanged; record decisions
 
 ## Phase 5: Cycle 4 — `dailyInterestAccruals()` (US3)
 

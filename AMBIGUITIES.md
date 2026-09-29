@@ -209,3 +209,16 @@ Fees assessed while E7 was in effect remain after E9. They were correct on what
 was known at the end of Day 5, the ledger is append-only, and the stream
 contains no fee-refund event. A refund would have to be its own compensating
 entry.
+
+## Interest rate and rounding
+
+The daily rate 0.04% is applied as 4 × 10⁻⁴ in exact integer arithmetic inside
+the money adapter, the only place allowed to round money. Each result is
+rounded to its currency's precision: 2 decimal places for AED, 3 for BHD.
+
+The assessment requires rounded daily accruals but does not name a rounding
+mode. I round half up. The assessment's own balances produce no exact half
+(the fractional accruals are 16.6, 15.6, and 15.6 AED minor units), so half up
+and half even give the same result there; rounding down would lower ACC-001's
+interest from AED 0.93 to AED 0.90. A half-unit case (AED 12.50 → AED 0.01) is
+tested to fix the chosen mode.
