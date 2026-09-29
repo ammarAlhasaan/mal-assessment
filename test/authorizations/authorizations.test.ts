@@ -4,7 +4,7 @@ import {CurrencyMismatchError, money} from "../../src/money/money.ts";
 
 import {availableBalance, createAuthorizations} from "../../src/authorizations/authorizations.ts";
 import type {AuthorizationRequest} from "../../src/authorizations/types.ts";
-import {createLedger} from "../../src/ledger/ledger.ts";
+import {createLedger, InvalidAmountError} from "../../src/ledger/ledger.ts";
 import type {Ledger} from "../../src/ledger/ledger.ts";
 
 describe("available balance", () => {
@@ -174,6 +174,16 @@ describe("authorize", () => {
         assert.deepEqual(outcomes, ["APPROVED", "REJECTED", "APPROVED"]);
     });
 
+    test("throws InvalidAmountError for a zero or negative hold amount", () => {
+        // [Assessment] a non-positive hold would raise available balance instead of reducing it
+        const {ledger, authorizations} = setup();
+        credit(ledger, 50000n);
+
+        assert.throws(() => authorizations.authorize(request("A", 0n)), InvalidAmountError);
+        assert.throws(() => authorizations.authorize(request("B", -5000n)), InvalidAmountError);
+        assert.equal(authorizations.lookup("B"), undefined);
+    });
+
     test("appends no ledger entry and leaves the ledger balance unchanged", () => {
         const {ledger, authorizations} = setup();
         credit(ledger, 50000n);
@@ -275,5 +285,19 @@ describe("settle", () => {
         assert.equal(authorizations.settle(request("A", 18500n)).outcome, "REJECTED");
         assert.equal(ledger.lastSequence(), 2);
         assert.deepEqual(ledger.balanceByValueDay("ACC-1", 1), money(31500n, "AED"));
+    });
+
+    test("rejects a settlement from a different account without moving funds", () => {
+        // [Assessment] funds must not leave an account that did not hold the authorization
+        const ledger = createLedger([{id: "ACC-1", currency: "AED"}, {id: "ACC-2", currency: "AED"}]);
+        const authorizations = createAuthorizations(ledger);
+        credit(ledger, 50000n);
+        authorizations.authorize(request("A", 20000n));
+
+        const record = authorizations.settle({...request("A", 18500n), accountId: "ACC-2"});
+
+        assert.equal(record.outcome, "REJECTED");
+        assert.equal(ledger.lastSequence(), 1);
+        assert.equal(authorizations.lookup("A")?.outcome, "APPROVED");
     });
 });

@@ -128,11 +128,18 @@ to remove this production risk.
 
 ## Spec 2 validation boundaries
 
-The assessment stream contains no duplicate authorization ID, settlement above
-the authorized amount, or settlement whose account or currency differs from
-the authorization. Spec 2 does not define those cases, except that a settlement
-for a non-active authorization is rejected. These are documented limitations,
-not implied acceptance behavior.
+An authorization amount must be positive. A zero or negative hold would raise
+the available balance instead of reducing it, so it throws `InvalidAmountError`,
+the same way the ledger treats a non-positive posting.
+
+A settlement must come from the same account as its authorization; otherwise it
+is `REJECTED` and no funds move. Currency needs no separate check: once the
+account matches, the ledger's currency check applies.
+
+A settlement above the authorized amount is accepted as long as the
+authorization is active. The assessment does not define an over-capture limit
+and the stream contains no such settlement, so I do not invent one. Duplicate
+authorization IDs are also not defined and remain a documented limitation.
 
 Acceptance criteria 3 and 4 are accepted. Criterion 5 is also accepted as a
 conditional rule; Auth-B is rejected in the supplied stream, so the rule is
@@ -157,9 +164,13 @@ A fee's event id is `FEE-<account>-D<day>`. A day is already charged when the
 ledger holds that id, so repeating an assessment never charges a day twice.
 Limitation: another posting that used the same id would be treated as a fee.
 
-The fee is written in AED. ACC-002 (BHD) is never negative in the window, so no
-BHD fee arises; the ledger's currency check would reject an AED fee on a BHD
-account.
+The fee is written in AED, but the rule applies it per account and ACC-002 is a
+BHD account. The assessment gives no BHD fee amount and no conversion rate. I do
+not invent a rate and do not skip the fee silently: ACC-002 is never negative in
+the supplied stream, so the ambiguity does not affect the result. If it did, the
+ledger's currency check would reject an AED fee on a BHD account and stop the
+replay, which is safer than dropping a required fee. A per-currency fee table
+would be needed to generalize.
 
 ## Processing cutoffs
 

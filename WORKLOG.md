@@ -29,7 +29,7 @@ sequence remain documented limitations outside the supplied Spec 2 events.
 Final verification: 74 tests pass, TypeScript typecheck passes, Spec 1 files are
 unchanged, and Dinero.js remains isolated to `src/money/`.
 
-## 2026-09-29 Asia/Dubai
+## 2026-09-29 14:41 Asia/Dubai
 
 Completed Spec 3 incrementally across six cycles: overdraft-fee assessment,
 reversal posting, rate application, daily interest accruals, interest
@@ -51,7 +51,7 @@ their calculations recorded in `REJECTED.md`. Final verification: 93 tests pass,
 TypeScript typecheck passes, Spec 1 and Spec 2 behavior is unchanged, and
 Dinero.js remains isolated to `src/money/`.
 
-## 2026-09-29 Asia/Dubai
+## 2026-09-29 16:18 Asia/Dubai
 
 Completed Spec 4 across the replay orchestration, daily report model, exact text
 rendering, runnable entry point, full E1–E10 scenario, and the intentionally
@@ -71,3 +71,14 @@ Final verification: `npm start` exits successfully with the approved report,
 104 tests pass, TypeScript typecheck passes, and `npm run test:limitation` exits
 non-zero with the single annotated duplicate-reversal failure. The incremental
 commit history remains intact without amending or squashing.
+
+## 2026-09-29 16:35 Asia/Dubai
+
+Final review. AI ran an architecture review and a code review; I compared them
+with a second opinion and kept only the fixes inside the assessment's rules.
+Authorizations now require a positive amount, and a settlement must come from
+the authorization's account. Criterion 6 now states that fees remain because E9
+reverses E7 only and no refund event exists, not because append-only forbids a
+refund. The BHD overdraft-fee ambiguity and the over-settlement policy are now
+documented. I rejected the other suggestions (zero-interest guard, a shared day
+constant, skipping BHD fees, an alternative interest figure) as outside scope.
