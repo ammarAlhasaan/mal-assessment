@@ -6,11 +6,11 @@ Decide only the group for the next cycle, immediately before it starts.
 
 ## Before cycle 1 — `assessOverdraftFees()`
 
-- [ ] CHK001 HC-1 — Fees assessed at end of day N for every value day 1…N (Option A)
-- [ ] CHK002 HC-2 — Ascending scan; earlier fees count in later days' balances
-- [ ] CHK003 HC-3 — Stateless; fee event id `FEE-<account>-D<day>` for idempotency
-- [ ] CHK004 HC-4 — AED accounts only; BHD fee not handled (never arises)
-- [ ] CHK017 HC-17 — Daily close at day rollover (fees); late arrivals do not reopen a day; final window close after the last written event (fees, then interest and capitalization)
+- [x] CHK001 HC-1 — Fees assessed at end of day N for every value day 1…N (Option A)
+- [x] CHK002 HC-2 — Ascending scan; earlier fees count in later days' balances
+- [x] CHK003 HC-3 — Stateless; fee event id `FEE-<account>-D<day>` for idempotency
+- [x] CHK004 HC-4 — AED accounts only; BHD fee not handled (never arises)
+- [x] CHK017 HC-17 — Daily close at day rollover (fees); late arrivals do not reopen a day; final window close after the last written event (fees, then interest and capitalization)
 
 ## Before cycle 2 — `reverse()`
 

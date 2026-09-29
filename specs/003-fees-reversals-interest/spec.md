@@ -2,7 +2,7 @@
 
 **Feature Branch**: `003-fees-reversals-interest`
 **Created**: 2026-09-29
-**Status**: Draft — awaiting human approval of HC-1…HC-17
+**Status**: Draft — HC-1–HC-4 and HC-17 approved; HC-5–HC-16 pending
 **Input**: "Spec 3 — Fees, Reversals, and Interest: E7, overdraft-fee assessment, E9 reversal in an
 append-only ledger, daily interest at 0.04% on positive closing balances, rounded daily accruals and
 one capitalized credit at the end of Day 6; acceptance criteria 1, 2, 6, and 8."
@@ -126,6 +126,8 @@ asserts the approved tables in [HC-15](#hc-15--calculation-tables) and the verdi
 
 ### HC-1 — When fees are assessed and whether back-valued entries trigger historical fees
 
+**Approved (2026-09-29, cycle 1)**: Option A.
+
 **Question**: E7 arrives on Day 5 with value day 2. Is Day 2 (and any later day it turns negative)
 charged retroactively?
 
@@ -144,11 +146,15 @@ assessment day (Day 5), so the ledger shows when the fee became known.
 
 ### HC-2 — Fees inside the same assessment run
 
+**Approved (2026-09-29, cycle 1)**: as proposed.
+
 **Proposed**: scan value days in ascending order; a fee booked for an earlier day is included in
 later days' closing balances. In this stream the order does not change which days are charged
 (Day 3 is AED 30.00 without the Day 2 fee and AED 5.00 with it — positive either way).
 
 ### HC-3 — Fee identity and idempotency
+
+**Approved (2026-09-29, cycle 1)**: as proposed.
 
 **Proposed**: stateless `assessOverdraftFees(ledger, accountId, assessmentDay)`; fee event id
 `FEE-<accountId>-D<day>` (e.g. `FEE-ACC-001-D2`); a day is already charged when the ledger holds an
@@ -156,6 +162,8 @@ entry with that id. Limitation: a non-fee posting using that id would be mistake
 Alternative: a stateful fee component like `createAuthorizations`.
 
 ### HC-4 — Fee currency
+
+**Approved (2026-09-29, cycle 1)**: as proposed; no dedicated test.
 
 **Proposed**: the rule is written in AED; fees are assessed only for AED accounts. ACC-002 (BHD) is
 never negative (0.000 on Days 1–4, 10.000 on Days 5–6), so no BHD fee question arises. Recorded as a
@@ -242,6 +250,8 @@ end-of-Day-6 capitalization, and asserts only the HC-15 values and HC-14 verdict
 only for ACC-002 interest. No printing (Spec 4).
 
 ### HC-17 — Processing cutoffs (daily close and final window close)
+
+**Approved (2026-09-29, cycle 1)**: as proposed; applied by the replay in cycle 6.
 
 The assessment does not say when end-of-day processing runs relative to the written stream, and the
 stream is not in day order: E10 (Day 5) follows E9 (Day 6).

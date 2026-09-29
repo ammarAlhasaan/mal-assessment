@@ -139,3 +139,52 @@ conditional rule; Auth-B is rejected in the supplied stream, so the rule is
 demonstrated by Auth-A and the focused authorization tests instead. Criterion 1
 remains AED −370.00 after adding E5 because E5 has value day 4 and does not
 affect the Day 2 closing balance.
+
+## Overdraft fees on back-valued days
+
+The fee rule defines a day's closing balance by value date, so a back-valued
+debit can make an earlier day negative after that day has closed. E7 arrives on
+Day 5 with value day 2. Each assessment therefore checks every value day from
+Day 1 to the assessment day and charges each negative day that has no fee yet.
+The fee's value day is the charged day; its event day is the assessment day, so
+the ledger still shows when the fee became known.
+
+Days are checked in ascending order and a fee already booked counts in later
+days' closing balances, because it is an entry with an earlier value day. In the
+assessment stream this does not change which days are charged.
+
+A fee's event id is `FEE-<account>-D<day>`. A day is already charged when the
+ledger holds that id, so repeating an assessment never charges a day twice.
+Limitation: another posting that used the same id would be treated as a fee.
+
+The fee is written in AED. ACC-002 (BHD) is never negative in the window, so no
+BHD fee arises; the ledger's currency check would reject an AED fee on a BHD
+account.
+
+## Processing cutoffs
+
+The assessment does not say when end-of-day processing runs relative to the
+written stream, and the stream is not in day order: E10 (Day 5) follows E9
+(Day 6). The written order is never changed.
+
+- The daily close for Days 1 to 5 runs at the day rollover, immediately before
+  the first written event with a higher event day. It assesses fees. The Day 5
+  close therefore runs after E8 and before E9.
+- A late event such as E10 does not reopen a closed day. It reaches the
+  balances through its value day at the next close.
+- The final window close runs after the last written event, E10: fee
+  reassessment for Days 1 to 6, then interest and one capitalization credit per
+  account.
+
+A single cutoff after the last event for everything was rejected: fees would
+only be assessed after E9 had cancelled E7, so no fee would ever be charged and
+criterion 1's "before any fee is assessed" would have no meaning.
+
+This matches common banking practice: posting date and value date are
+separate, the event record is append-only, and back-dated entries recalculate
+the affected days' balances afterwards rather than delaying the daily close:
+
+- [SAP — Value Date](https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/e200555127f24878bed8d1481c9d5a0b/86686d7218d34f7fb8a4b14780ec9385.html)
+- [AWS — Event Sourcing](https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/event-sourcing-pattern.html)
+- [Oracle — Backdated Transactions and Average Balances](https://docs.oracle.com/en/cloud/saas/financials/25d/faugl/backdated-transactions-and-average-balances.html)
+- [Oracle FLEXCUBE — Interest Recalculation](https://docs.oracle.com/cd/E86273_01/html/Int_Chargs/IC09_Int_Apli.htm)

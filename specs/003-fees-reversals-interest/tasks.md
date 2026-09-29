@@ -16,17 +16,17 @@ Commits: `test: define <behavior>` and `feat: implement <behavior>` (human) · `
 
 - [x] T001 [AI] Create branch `003-fees-reversals-interest` from `main` at `b573312`
 - [x] T002 [AI] Create `specs/003-fees-reversals-interest/` artifacts; point `.specify/feature.json` at it
-- [ ] T003 [HUMAN] Approve cycle order and HC-15 calculation tables
+- [x] T003 [HUMAN] Approve cycle order — *HC-15 tables are approved at T029, before cycle 6*
 
 ## Phase 2: Cycle 1 — `assessOverdraftFees()` (US1)
 
 **Focused test**: `node --test test/fees/fees.test.ts`
 
-- [ ] T004 [HUMAN] Decide HC-1, HC-2, HC-3, HC-4, HC-17 (CHK001–CHK004, CHK017)
-- [ ] T005 [US1] [AI] Present tests, signature, and implementation in one message
-- [ ] T006 [US1] [HUMAN] Apply and commit tests (`test: define overdraft fee assessment`)
-- [ ] T007 [US1] [HUMAN] Apply and commit implementation (`feat: implement overdraft fee assessment`)
-- [ ] T008 [US1] [AI] Run focused, full tests and typecheck; review; record HC-1–HC-4 and HC-17 in `AMBIGUITIES.md` (`docs: record overdraft fee decisions`)
+- [x] T004 [HUMAN] Decide HC-1, HC-2, HC-3, HC-4, HC-17 (CHK001–CHK004, CHK017)
+- [x] T005 [US1] [AI] Present tests, signature, and implementation in one message
+- [x] T006 [US1] [HUMAN] Apply and commit tests (`test: define overdraft fee assessment`) — *`3cb6cfe`*
+- [x] T007 [US1] [HUMAN] Apply and commit implementation (`feat: implement overdraft fee assessment`) — *`30dd6c1`; 5 focused, 79 total tests pass; typecheck passes*
+- [x] T008 [US1] [AI] Run focused, full tests and typecheck; review; record HC-1–HC-4 and HC-17 in `AMBIGUITIES.md` (`docs: record overdraft fee decisions`)
 
 ## Phase 3: Cycle 2 — `reverse()` (US2)
 
