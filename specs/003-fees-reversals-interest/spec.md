@@ -2,7 +2,7 @@
 
 **Feature Branch**: `003-fees-reversals-interest`
 **Created**: 2026-09-29
-**Status**: Draft — HC-1–HC-7, HC-9, HC-11, HC-12 and HC-17 approved; HC-10 approved; HC-8, HC-14–HC-16 pending
+**Status**: Implemented — all checkpoints approved (HC-13 superseded by HC-17); completion pending the human WORKLOG entry
 **Input**: "Spec 3 — Fees, Reversals, and Interest: E7, overdraft-fee assessment, E9 reversal in an
 append-only ledger, daily interest at 0.04% on positive closing balances, rounded daily accruals and
 one capitalized credit at the end of Day 6; acceptance criteria 1, 2, 6, and 8."
@@ -201,6 +201,8 @@ reversing a reversal are not in the stream: documented limitations, not tested.
 
 ### HC-8 — Authorization decisions after E9
 
+**Approved (2026-09-29, cycle 6)**: as proposed.
+
 **Proposed**: E8 (Auth-B, rejected at its replay position) is not re-evaluated after E9. Recorded
 decisions are final; the reversal changes balances, not past decisions. No code change to Spec 2.
 
@@ -251,6 +253,8 @@ adapter). No existing Spec 1 function or test changes.
 
 ### HC-14 — Criteria verdicts
 
+**Approved (2026-09-29, cycle 6)**: criterion 1 accepted; criteria 2, 6, 8 rejected and recorded in `REJECTED.md`.
+
 | # | Proposed verdict | Reason |
 |---|------------------|--------|
 | 1 | **Accept** (re-check) | No fee exists before the end-of-Day-5 boundary; 1,200.00 − 950.00 − 620.00 = −370.00 |
@@ -260,9 +264,13 @@ adapter). No existing Spec 1 function or test changes.
 
 ### HC-15 — Calculation tables
 
+**Approved (2026-09-29, cycle 6)**: all rows in research R1; asserted in `test/fees/fee-reversal-interest-events.test.ts`.
+
 See [research.md](research.md#r1-calculation-tables). Approve every row before any assertion.
 
 ### HC-16 — Scope of the Spec 3 event test
+
+**Approved (2026-09-29, cycle 6)**: as proposed.
 
 **Proposed**: one scenario test replays E1–E10 in written order with end-of-day fee assessment and
 end-of-Day-6 capitalization, and asserts only the HC-15 values and HC-14 verdicts. E10 is included
