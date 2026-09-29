@@ -75,3 +75,67 @@ without consuming a replay sequence:
 Balance queries reject value days outside Day 1 to Day 6 and boundaries outside
 0 to the last assigned sequence, rather than silently returning zero or the
 full balance.
+
+## Authorization decision boundary and hold timing
+
+An authorization is evaluated at its written replay position. The ledger
+balance is the balance for the authorization's value day using the entries
+known at that point, and the active holds are those established but not closed
+at that point. A hold starts when its authorization is processed; its recorded
+value day does not back-date the hold itself.
+
+This makes E3 approved: AED 1,200.00 − AED 950.00 − AED 200.00 leaves
+AED 50.00 available. E7 is processed before E8, so E8 sees ledger balance
+AED −155.00 and its AED 90.00 request is rejected because the result would be
+AED −245.00.
+
+Authorization records use their append order as the current knowledge order.
+A separate cross-store replay sequence was not needed for the Spec 2 events and
+is deferred until a later specification requires historical authorization
+queries.
+
+## Authorization outcomes and rejected requests
+
+Approved and rejected authorization requests are retained as immutable records.
+Only the latest `APPROVED` outcome for an authorization contributes an active
+hold. An accepted settlement adds a new immutable `SETTLED` record; it does not
+change the original authorization record.
+
+A rejected settlement is returned as a frozen `REJECTED` outcome but is not
+stored in authorization history. Therefore E6 does not make Auth-Z present.
+The replay layer must retain the returned rejection if it needs to print the
+error in the final report.
+
+## Settlement smaller than its hold
+
+E5 settles Auth-A for AED 185.00 against its AED 200.00 hold. I treat this as a
+final settlement: the complete hold closes and the unused AED 15.00 is released
+immediately. The assessment provides no later partial capture or release event,
+so retaining the remainder would leave it held indefinitely.
+
+A settlement is accepted only when the authorization's latest outcome is
+`APPROVED`. Settling a rejected or already-settled authorization is rejected
+without a ledger posting.
+
+## Settlement consistency limitation
+
+An accepted settlement validates the supported precondition, prepares its
+immutable outcome, appends the ledger debit, and then records `SETTLED`. This is
+failure-atomic for anticipated errors in this synchronous in-memory model, but
+it is not crash-atomic: a process failure between the two writes could leave a
+debit with the hold still active. A shared transactional store would be needed
+to remove this production risk.
+
+## Spec 2 validation boundaries
+
+The assessment stream contains no duplicate authorization ID, settlement above
+the authorized amount, or settlement whose account or currency differs from
+the authorization. Spec 2 does not define those cases, except that a settlement
+for a non-active authorization is rejected. These are documented limitations,
+not implied acceptance behavior.
+
+Acceptance criteria 3 and 4 are accepted. Criterion 5 is also accepted as a
+conditional rule; Auth-B is rejected in the supplied stream, so the rule is
+demonstrated by Auth-A and the focused authorization tests instead. Criterion 1
+remains AED −370.00 after adding E5 because E5 has value day 4 and does not
+affect the Day 2 closing balance.
