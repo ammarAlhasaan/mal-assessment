@@ -43,5 +43,8 @@ export function createAuthorizations(ledger: Ledger): Authorizations {
         lookup(authorizationId) {
             return records.findLast((record) => record.authorizationId === authorizationId);
         },
+        settle() {
+            throw new Error("Not implemented");
+        },
     };
 }

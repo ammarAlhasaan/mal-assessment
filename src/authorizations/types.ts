@@ -12,11 +12,19 @@ export interface AuthorizationRequest {
 
 export type AuthorizationOutcome = "APPROVED" | "REJECTED";
 
+export type SettlementRequest = AuthorizationRequest;
+export type SettlementOutcome = "SETTLED" | "REJECTED";
+
 export interface AuthorizationRecord extends AuthorizationRequest {
     readonly outcome: AuthorizationOutcome;
 }
 
 export interface Authorizations {
     authorize(request: AuthorizationRequest): AuthorizationRecord;
-    lookup(authorizationId: string): AuthorizationRecord | undefined;
+    settle(request: SettlementRequest): SettlementRecord;
+    lookup(authorizationId: string): AuthorizationRecord | SettlementRecord | undefined;
+}
+
+export interface SettlementRecord extends SettlementRequest {
+    readonly outcome: SettlementOutcome;
 }

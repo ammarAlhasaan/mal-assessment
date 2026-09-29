@@ -210,3 +210,49 @@ describe("lookup", () => {
         assert.equal(authorizations.lookup("AUTH-Z"), undefined);
     });
 });
+
+describe("settle", () => {
+    test("an accepted settlement appends exactly one DEBIT with the settlement's fields", () => {
+        const {ledger, authorizations} = setup();
+        credit(ledger, 50000n);
+        authorizations.authorize(request("AUTH-1", 20000n));
+
+        const record = authorizations.settle({...request("AUTH-1", 18500n), eventId: "SETTLE-1"});
+
+        assert.equal(record.outcome, "SETTLED");
+        assert.equal(ledger.lastSequence(), 2);
+        assert.deepEqual(ledger.entries().at(-1), {
+            eventId: "SETTLE-1",
+            accountId: "ACC-1",
+            direction: "DEBIT",
+            amount: money(18500n, "AED"),
+            eventDay: 1,
+            valueDay: 1,
+            sequence: 2,
+        });
+    });
+
+    test("a settlement smaller than its hold closes the whole hold", () => {
+        const {ledger, authorizations} = setup();
+        credit(ledger, 50000n);
+        authorizations.authorize(request("A", 20000n));
+
+        authorizations.settle(request("A", 18500n));
+
+        // ledger 50000 - 18500 = 31500; no hold left, so 31500 - 31500 = 0
+        assert.equal(authorizations.lookup("A")?.outcome, "SETTLED");
+        assert.equal(authorizations.authorize(request("B", 31500n)).outcome, "APPROVED");
+    });
+
+    test("rejects a settlement for an unknown authorization without moving funds", () => {
+        const {ledger, authorizations} = setup();
+        credit(ledger, 50000n);
+
+        const record = authorizations.settle(request("AUTH-Z", 18000n));
+
+        assert.equal(record.outcome, "REJECTED");
+        assert.equal(ledger.lastSequence(), 1);
+        assert.deepEqual(ledger.balanceByValueDay("ACC-1", 1), money(50000n, "AED"));
+        assert.equal(authorizations.lookup("AUTH-Z"), undefined);
+    });
+});
