@@ -1,5 +1,6 @@
 import {compare, money, subtract, zero} from "../money/money.ts";
 import type {Money} from "../money/money.ts";
+import {InvalidAmountError} from "../ledger/ledger.ts";
 import type {Ledger} from "../ledger/ledger.ts";
 import type {
     AuthorizationOutcome,
@@ -29,6 +30,9 @@ export function createAuthorizations(ledger: Ledger): Authorizations {
 
     return {
         authorize(request) {
+            if (compare(request.amount, zero(request.amount.currency)) <= 0) {
+                throw new InvalidAmountError("Authorization amount must be positive");
+            }
             const ledgerBalance = ledger.balanceByValueDay(request.accountId, request.valueDay);
             const activeHolds = records
                 .filter((record) =>
@@ -54,8 +58,11 @@ export function createAuthorizations(ledger: Ledger): Authorizations {
             return record;
         },
         settle(request) {
+            const authorization = latest(request.authorizationId);
             const outcome: SettlementOutcome =
-                latest(request.authorizationId)?.outcome === "APPROVED" ? "SETTLED" : "REJECTED";
+                authorization?.outcome === "APPROVED" && authorization.accountId === request.accountId
+                    ? "SETTLED"
+                    : "REJECTED";
 
             const record: SettlementRecord = Object.freeze({
                 eventId: request.eventId,
