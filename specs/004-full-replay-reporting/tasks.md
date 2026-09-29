@@ -46,9 +46,9 @@ Commits: `test: define …` / `feat: implement …` (human) · `docs: record …
 ## Cycle 5 — entry point (US4) · `npm start`
 
 - [x] T020 [HUMAN] Decide HC-9
-- [ ] T021 [AI] Present `src/run.ts` and smoke-test removal
-- [ ] T022 [HUMAN] Commit
-- [ ] T023 [AI] Run `npm start`, tests, typecheck; record
+- [x] T021 [AI] Present `src/run.ts` and smoke-test removal — *applied to the working tree by AI at the human's request*
+- [x] T022 [HUMAN] Commit — *`feb8273` (title typo `eat:` for `feat:`; history not amended)*
+- [x] T023 [AI] Run `npm start`, tests, typecheck; record — *`npm start` exits 0 and its stdout is identical to research R3 (75 lines, `diff`); 102 tests pass; typecheck passes*
 
 ## Cycle 6 — full scenario (US5) · `node --test test/replay/full-replay.test.ts`
 
