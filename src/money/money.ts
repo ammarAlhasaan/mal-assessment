@@ -167,8 +167,14 @@ export function applyRate(
     amount: Money,
     rate: {readonly amount: bigint; readonly scale: bigint},
 ): Money {
-    throw new Error("Not implemented");
-}
+    const currency = CURRENCIES[amount.currency];
+    const result = transformScale(
+        multiply(dinero({amount: amount.minorUnits, currency}), rate),
+        currency.exponent,
+        halfUp,
+    );
 
+    return money(toSnapshot(result).amount, amount.currency);
+}
 
 export type { Comparison, CurrencyCode, Money } from "./types.ts";
