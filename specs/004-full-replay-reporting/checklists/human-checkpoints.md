@@ -4,11 +4,11 @@
 
 ## Before any cycle
 
-- [ ] CHK000 Cycle order (plan) approved
+- [x] CHK000 Cycle order (plan) approved
 
 ## Before cycle 1 — event stream
 
-- [ ] CHK008 HC-8 — E10 as one event: total BHD 10.000, `instalments: 3`
+- [x] CHK008 HC-8 — E10 as one event: total BHD 10.000, `instalments: 3`; last after E9; split in replay by `allocateEqually` into 3.334, 3.333, 3.333
 
 ## Before cycle 2 — `replay()`
 

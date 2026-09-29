@@ -13,11 +13,11 @@ Commits: `test: define …` / `feat: implement …` (human) · `docs: record …
 
 - [x] T001 [AI] Verify clean `main` at `456eaf3`, Specs 1–3 merged, 93 tests pass, typecheck passes
 - [x] T002 [AI] Create branch `004-full-replay-reporting`; create artifacts; point `.specify/feature.json` at it
-- [ ] T003 [HUMAN] Approve cycle order (CHK000)
+- [x] T003 [HUMAN] Approve cycle order (CHK000)
 
 ## Cycle 1 — `ASSESSMENT_EVENTS` (US1) · `node --test test/replay/events.test.ts`
 
-- [ ] T004 [HUMAN] Decide HC-8
+- [x] T004 [HUMAN] Decide HC-8
 - [ ] T005 [AI] Present test, types, implementation
 - [ ] T006 [HUMAN] Commit tests / implementation
 - [ ] T007 [AI] Run checks; review; record decisions

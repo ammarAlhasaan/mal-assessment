@@ -149,7 +149,7 @@ All pending. Options, recommendations, and values are in [research.md](research.
 | HC-5 | What counts as an error, and its text? | Only E6's rejected settlement; Auth-B's rejection is an authorization state |
 | HC-6 | Exact output format | Research R3 |
 | HC-7 | Authorization state line | Latest record per known authorization id at the close |
-| HC-8 | Event stream shape (E10) | One event with total BHD 10.000 and `instalments: 3`, split in replay |
+| HC-8 | Event stream shape (E10) | **Approved (2026-09-29)**: one input event, BHD 10.000, `instalments: 3`, last after E9 in the written stream; split in replay by `allocateEqually` into BHD 3.334, 3.333, 3.333 |
 | HC-9 | Entry point | Replace placeholder `src/run.ts`; delete `test/smoke.test.ts`; `npm start` |
 | HC-10 | Intentional failing test | Duplicate reversal of E7 is accepted; separate glob and command |
 | HC-11 | Criteria classification | Accept 1, 3, 4, 5; reject 2, 6, 7, 8 (unchanged) |
