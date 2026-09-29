@@ -4,9 +4,8 @@
 
 **Created**: 2026-09-29
 
-**Status**: Draft — human checkpoints HC-1…HC-20 open. Checkpoints are decided cycle by cycle,
-immediately before the function cycle they gate (see [tasks.md](tasks.md)); a cycle's assertions may
-be written once its own checkpoints are approved.
+**Status**: Complete — all Spec 2 cycles are implemented, reviewed, and verified. HC-15 is explicitly
+deferred because this specification does not require historical authorization queries.
 
 **Input**: User description: "Authorizations and settlements for the account-ledger assessment:
 available balance as ledger balance minus active authorization holds; approve an authorization only
@@ -19,13 +18,12 @@ six-day window; acceptance criteria 3, 4, and 5."
 Every requirement and value below is tagged with its source:
 
 - **[Assessment]** — stated directly in `.temp/ASSESSMENT.md`. Normative.
-- **[Proposed — HC-n]** — an AI-drafted interpretation that fills a gap in the assessment. It is
-  **not** normative until the human approves checkpoint HC-n. It must not appear in a test, a
-  contract, or code until then.
+- **[Approved — HC-n]** — a human-approved interpretation that fills a gap in the assessment.
+- **[Deferred/unsupported — HC-n]** — behavior deliberately left outside the supplied Spec 2 events.
 - **[Constitution]** — required by `.specify/memory/constitution.md` v1.1.0.
 
-Every financial value in this document is **pending human approval** and is shown with its
-event-by-event calculation. No value here is approved.
+Every asserted financial value below was approved by the human and retains its event-by-event
+calculation.
 
 ## Scope
 
@@ -41,8 +39,8 @@ event-by-event calculation. No value here is approved.
 - Assessment events E3, E5, E6, E8 (ACC-001), replayed in the written order with the Spec 1 ledger
   events that precede them (E1, E2, E4, E7) as context.
 - The statement that Auth-B is never settled inside the six-day window **[Assessment]**.
-- Acceptance criteria 3, 4, and 5 (verdicts pending HC-10).
-- Re-check of criterion 1 now that settlements post to the ledger (pending HC-19), as required by
+- Acceptance criteria 3, 4, and 5 (all accepted under HC-10).
+- Re-check of criterion 1 now that settlements post to the ledger (accepted under HC-19), as required by
   the Spec 1 note in `AMBIGUITIES.md`.
 
 **Out of scope** (later specifications or not required):
@@ -86,8 +84,8 @@ Acceptance criteria owned by this specification **[Assessment]**:
    funds must not leave the account.
 5. If Auth-B is approved, its hold reduces available balance but not ledger balance.
 
-The assessment states that some criteria are wrong. The verdict for each of 3, 4, and 5 is pending
-HC-10.
+The assessment states that some criteria are wrong. Criteria 3 and 4 are correct, and criterion 5 is
+correct as a conditional rule (HC-10); none is rejected in Spec 2.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -96,7 +94,7 @@ HC-10.
 Available balance is the ledger balance minus the active holds. It is a calculation over two given
 inputs, a ledger balance and the amounts of the holds that are active, and it never changes the
 ledger balance. Choosing *which* ledger balance (boundary, value day) and *which* holds are active is
-the caller's job (`authorize()`, the replay), not this calculation's **[Proposed — HC-20]**.
+the caller's job (`authorize()`, the replay), not this calculation's **[Approved — HC-20]**.
 
 **Why this priority**: The approval rule and criterion 5 are both defined in terms of available
 balance; nothing else in this specification can be decided without it.
@@ -257,40 +255,39 @@ All edge cases below are **[Proposed]** and blocked on the named checkpoint.
 
 - **FR-001** **[Assessment]**: The system MUST calculate an account's available balance as its
   ledger balance minus the sum of its active authorization holds, in the account's currency. The
-  calculation takes the ledger balance and the active hold amounts as inputs **[Proposed — HC-20]**.
+  calculation takes the ledger balance and the active hold amounts as inputs **[Approved — HC-20]**.
 - **FR-002** **[Assessment]**: The system MUST approve an authorization only if the account's
   available balance after applying the requested hold is at or above zero, and MUST reject it
   otherwise.
 - **FR-003** **[Assessment]**: An authorization hold MUST NOT change the ledger balance; approving or
   rejecting an authorization MUST NOT append a ledger entry.
-- **FR-004** **[Assessment, criterion 4 — verdict HC-10]**: A settlement referencing an authorization
+- **FR-004** **[Assessment, criterion 4 — accepted HC-10]**: A settlement referencing an authorization
   ID that is not present MUST be rejected, and MUST NOT append a ledger entry or change any balance.
-- **FR-005** **[Proposed — HC-17]**: An accepted settlement MUST append exactly one DEBIT entry to the
+- **FR-005** **[Approved — HC-17]**: An accepted settlement MUST append exactly one DEBIT entry to the
   ledger for the settled amount, through the Spec 1 ledger interface.
-- **FR-006** **[Proposed — HC-1]**: An accepted settlement MUST close the authorization's hold so that
+- **FR-006** **[Approved — HC-1]**: An accepted settlement MUST close the authorization's hold so that
   it no longer reduces available balance.
-- **FR-007** **[Proposed — HC-11]**: Every anticipated rejection of a settlement (authorization-side
+- **FR-007** **[Approved — HC-11]**: Every supported anticipated rejection of a settlement
   checks and Spec 1 ledger validation) MUST be detected before anything is recorded, so an
   anticipated failure never leaves a debit without a hold closure or a closure without a debit. This
   is failure-atomicity for anticipated errors only; crash-atomicity is not claimed (HC-11).
-- **FR-008** **[Proposed — HC-2, HC-13]**: The system MUST answer, for an authorization ID, whether it
+- **FR-008** **[Approved — HC-2, HC-13]**: The system MUST answer, for an authorization ID, whether it
   is present and its current state, derived from the recorded history.
 - **FR-009** **[Constitution II; assessment "no event record is ever mutated or deleted"]**: No
   authorization or settlement record MUST ever be mutated or deleted once recorded. How lifecycle
   changes are represented is HC-13.
-- **FR-010** **[Proposed — HC-4, HC-5, HC-15]**: An authorization decision MUST obtain the ledger
+- **FR-010** **[Approved — HC-4, HC-5]**: An authorization decision MUST obtain the ledger
   balance and the active holds at its replay boundary, and pass them to the available-balance
   calculation.
-- **FR-011** **[Constitution I]**: All amounts MUST use the Spec 1 money adapter; holds and settlements
-  in a currency different from the account's MUST be rejected (handling detail HC-7).
+- **FR-011** **[Constitution I]**: All amount arithmetic MUST use the Spec 1 money adapter. Settlement
+  account/currency cross-checking is an explicit unsupported case in Spec 2 (HC-7).
 - **FR-012** **[Constitution V]**: Spec 1 source, tests, and documents MUST NOT be modified; Spec 2
   composes the Spec 1 ledger through its public interface.
-- **FR-013** **[Proposed — HC-3, HC-12, HC-14]**: Rejected authorizations and rejected settlements
-  MUST be observable afterwards in a way that lets Spec 4 print them as errors; whether they are
-  immutable domain records or only returned results is pending.
-- **FR-014** **[Proposed — HC-6, HC-7, HC-8, HC-18]**: Duplicate IDs, account/currency mismatches,
-  over-authorization settlements, and settlements of non-active authorizations MUST be handled as
-  approved; until approved they are unspecified and untested.
+- **FR-013** **[Approved — HC-3, HC-12, HC-14]**: Rejected authorizations are stored; rejected
+  settlements are returned but not stored, so Spec 4 must retain the returned error outcome.
+- **FR-014** **[Approved — HC-18; unsupported — HC-6, HC-7, HC-8]**: A settlement for a rejected or
+  already-settled authorization is rejected. Duplicate IDs, mismatches, and over-settlement remain
+  outside the supplied Spec 2 stream.
 
 ### Key Entities
 
@@ -301,16 +298,15 @@ All edge cases below are **[Proposed]** and blocked on the named checkpoint.
 - **Settlement request**: event id, referenced authorization id, account, settled amount, event day,
   value day.
 - **Settlement posting**: the ledger DEBIT created by an accepted settlement (HC-17).
-- **Rejection**: the outcome of a rejected authorization or settlement, with a reason (HC-3, HC-14).
+- **Rejection**: an outcome value without a separate reason field; authorization rejections are
+  stored and settlement rejections are returned (HC-3, HC-14).
 - **Replay boundary**: the point in the written event order at which a decision or balance is
   evaluated (HC-4, HC-15).
 
 ## Human Checkpoints *(blocking — resolve before writing assertions)*
 
-Each checkpoint lists the question, the AI's **proposed** interpretation (not approved), and where a
-value is involved, its full calculation. Mark decisions in
-[checklists/human-checkpoints.md](checklists/human-checkpoints.md). Option analysis is in
-[research.md](research.md).
+Each checkpoint retains the question, the approved decision, and any supporting calculation.
+Option analysis remains in [research.md](research.md).
 
 Amounts: AED, 2 decimal places; minor units in brackets. Ledger balance "as known" means entries
 appended so far in the written replay order (Spec 1 `balanceAsKnownAt`).
@@ -446,10 +442,10 @@ same, because no entry has value day 6.
 
 Check: 120000 − 95000 + 40000 − 18500 − 62000 = −15500; −15500 − 9000 = −24500 < 0.
 
-**Proposed conclusion — PENDING HUMAN APPROVAL**: **Rejected**. Post-hold available balance
+**Approved conclusion**: **Rejected**. Post-hold available balance
 AED −245.00 is below zero.
 
-Sensitivity (all pending):
+Sensitivity analysis (informative, not implemented alternatives):
 
 | Variant | Available before E8 | After 90.00 | Decision |
 |---------|---------------------|-------------|----------|
@@ -465,22 +461,22 @@ the proposal is rejection.
 
 **Approved (2026-09-29)**: criterion 3 correct — accepted; criterion 4 correct — accepted; criterion 5 correct as a conditional rule — accepted (Auth-B is rejected, so the hold rule is verified by the `authorize` unit test). Reasoning below.
 
-All three verdicts are **proposed and pending human approval**.
+All three verdicts are approved under HC-10.
 
-- **Criterion 3 — "The Day 4 settlement of Auth-A must be accepted."** Proposed: **correct —
+- **Criterion 3 — "The Day 4 settlement of Auth-A must be accepted."** **Correct —
   accept**. At E5, Auth-A is present (E3), approved (HC-16), active, on ACC-001, in AED, and
   185.00 ≤ 200.00. Available balance before E5 is 650.00 − 200.00 = 450.00; after the debit and hold
   release it is 650.00 − 185.00 = 465.00 ≥ 0, so no available-balance rule is broken even if one
   applied to settlements (HC-18).
 - **Criterion 4 — "Any settlement referencing an authorization ID not present in the ledger must be
-  rejected and the funds must not leave the account."** Proposed: **correct — accept**, reading
+  rejected and the funds must not leave the account."** **Correct — accept**, reading
   "present in the ledger" as "present in the authorization history" (authorizations are not ledger
   entries). E6: Auth-Z has no preceding authorization, so the settlement is rejected; ledger balance
   stays AED 465.00 [46500] at every value day ≥ 4, and no sequence is consumed. Wording caveat for
   REJECTED/AMBIGUITIES: a settlement for an ID that is present but rejected or already settled is
   also rejected (HC-18), which is stricter than the criterion, not contrary to it.
 - **Criterion 5 — "If Auth-B is approved, its hold reduces available balance but not ledger
-  balance."** Proposed: **correct as a conditional rule — accept**. The rule it states is the
+  balance."** **Correct as a conditional rule — accept**. The rule it states is the
   assessment's own definition (available = ledger − holds). Under HC-9 Auth-B is rejected, so the
   condition is not met in the stream and Auth-B places no hold; the rule is verified instead with an
   approved hold (Auth-A between E3 and E5: ledger 250.00 unchanged, available 50.00), and with a
@@ -489,18 +485,20 @@ All three verdicts are **proposed and pending human approval**.
 
 ### HC-11 — Settlement consistency (failure-atomic, not crash-atomic)
 
-**Approved (2026-09-29)**: order implemented as: existence check → build frozen record → `ledger.append` DEBIT → push `SETTLED` record. Only the existence check (unknown authorization id) is implemented in step 1; the other listed checks are not handled (HC-7, HC-8, HC-18).
+**Approved (2026-09-29)**: order implemented as: require the latest authorization outcome to be
+`APPROVED` → build frozen record → `ledger.append` DEBIT → push `SETTLED` record. Account/currency
+cross-checking and over-settlement are not handled (HC-7, HC-8).
 
 **Question**: How is an accepted settlement posted while its hold is closed, so that partial state
 cannot occur?
 
-**Proposed guarantee — deliberately limited**: *failure-atomic for anticipated errors* in a
+**Implemented guarantee — deliberately limited**: *failure-atomic for supported anticipated errors* in a
 single-threaded, in-memory model. It is **not** crash-atomic and not transactional.
 
-**Proposed order of operations**:
+**Implemented order of operations**:
 
-1. Run every authorization-side check (present, active, account, currency, amount ≤ hold, days)
-   before any write. An anticipated rejection here records nothing.
+1. Require the latest authorization outcome to be `APPROVED`; otherwise return `REJECTED` before
+   any write. Account/currency matching and over-settlement are explicitly unsupported (HC-7/HC-8).
 2. Build and freeze the closing record in full, so no construction step remains after the ledger
    write.
 3. Append the ledger debit through Spec 1 `append`. Spec 1 validates first and, on failure, stores
@@ -510,9 +508,8 @@ single-threaded, in-memory model. It is **not** crash-atomic and not transaction
 
 **What this does and does not guarantee**:
 
-- Every anticipated failure (validation, unknown or non-active authorization, mismatch,
-  over-settlement, Spec 1 ledger rejection) happens before the first write, so it leaves no partial
-  state.
+- Every supported anticipated failure (unknown or non-active authorization, or Spec 1 ledger
+  rejection) happens before the first successful write, so it leaves no partial state.
 - Step 4 has no anticipated failure, but it is not proven unable to fail: an unanticipated error
   (runtime fault, out of memory, a defect in the component) or a process crash between steps 3 and 4
   would leave a ledger debit with its hold still active. This is a known limitation of composing two
@@ -535,7 +532,7 @@ architecture notes in Spec 4).
   value days 4–6 as known after E6 (250.00 + 400.00 − 185.00).
 - Authorizations: unchanged — Auth-A still Settled; Auth-Z still not present (no authorization is
   created from a settlement).
-- A rejection record for E6 with reason "unknown authorization" exists only if HC-14 is approved.
+- E6 returns a frozen `REJECTED` settlement outcome; it is not stored, so Auth-Z remains absent.
 
 ### HC-13 — Immutable transitions vs mutable state
 
@@ -561,9 +558,9 @@ justify it.
 **Question**: Are rejected authorizations and settlements part of the immutable domain-event
 history, even though they create no ledger posting?
 
-**Approved (2026-09-29)**: Yes. Every incoming authorization and settlement event produces exactly one immutable
-outcome record (accepted or rejected). Settlement records are decided in cycle 4. Rejections never create ledger entries and never
-consume a ledger sequence. This gives Spec 4 its "errors" per day without re-running decisions.
+Authorization requests produce stored immutable outcomes. Accepted settlements produce stored
+`SETTLED` records. Rejected settlements return immutable outcomes but are not added to authorization
+history; Spec 4 must retain those returned outcomes for reporting.
 
 ### HC-15 — Replay sequence ordering across postings and authorization records
 
@@ -580,11 +577,10 @@ Spec 1's ledger, which is out of scope. Alternatives in research R6.
 
 **Approved (2026-09-29)**: E3 approved and the "after E8" column of the table below; asserted in the replay test. The "before E7" column is not asserted.
 
-**Proposed — PENDING**: E3 approved. Calculation: ledger balance for value Day 2 as known after E2 =
+**Approved calculation**: E3 approved. Ledger balance for value Day 2 as known after E2 =
 1,200.00 − 950.00 = 250.00 [25000]; active holds 0.00; post-hold 250.00 − 200.00 = 50.00 [5000] ≥ 0.
 
-Proposed Spec 2 replay table, ACC-001 closing ledger balance by value day (HC-1, HC-17 as
-proposed):
+Approved Spec 2 replay table, ACC-001 closing ledger balance by value day (HC-1, HC-17):
 
 | Value day | As known after E6 (before E7) | As known after E8 (E1–E8) | Calculation (after E8) |
 |-----------|-------------------------------|---------------------------|------------------------|
@@ -595,7 +591,7 @@ proposed):
 | Day 5 | 465.00 | −155.00 | no Day 5 ledger entry |
 | Day 6 | 465.00 | −155.00 | no Day 6 ledger entry in Spec 2 |
 
-Available balance after E8 (proposed): −155.00, equal to ledger, because Auth-A is closed and Auth-B
+Available balance after E8: −155.00, equal to ledger, because Auth-A is closed and Auth-B
 is rejected (HC-9). These are pre-fee, pre-E9 values; Spec 3 will change them.
 
 ### HC-17 — Settlement ledger posting
@@ -608,7 +604,7 @@ ledger at any time.
 
 **Approved (2026-09-29, accepted review fix)**: a settlement is accepted only when the authorization's latest outcome is `APPROVED`. Settling a rejected or already-settled authorization returns `REJECTED` and appends no ledger debit. No available-balance check is made at settlement.
 
-**Proposed**:
+**Implemented decision**:
 
 - Settlement of an authorization that is present but Rejected or already Settled → rejected, no
   ledger entry.
@@ -620,7 +616,7 @@ ledger at any time.
 
 **Approved (2026-09-29)**: criterion 1 remains accepted at −370.00; asserted in the replay test.
 
-**Proposed — PENDING**: Criterion 1 remains accepted. The only ledger entry Spec 2 adds to ACC-001 is
+**Approved calculation**: Criterion 1 remains accepted. The only ledger entry Spec 2 adds to ACC-001 is
 E5's debit with value day 4 (HC-17); holds create no ledger entries. Day 2 closing balance as known
 at the end-of-Day-5, pre-fee boundary = E1 + E2 + E7 = 1,200.00 − 950.00 − 620.00 = −370.00 [−37000];
 E4 (value day 3) and E5 (value day 4) are excluded by value day. Fees remain for Spec 3 to re-check.

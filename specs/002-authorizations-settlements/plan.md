@@ -76,7 +76,7 @@ specs/002-authorizations-settlements/
 └── tasks.md
 ```
 
-### Source Code (repository root) — proposed, not created
+### Source Code (repository root) — implemented
 
 ```text
 src/

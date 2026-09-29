@@ -2,8 +2,7 @@
 
 **Feature**: `002-authorizations-settlements` | **Date**: 2026-09-29
 
-Conceptual model only. No TypeScript types are defined here; minimum types are added one function
-cycle at a time (see [tasks.md](tasks.md)). Fields marked *pending HC-n* may change. Spec 1 entities
+This conceptual model reflects the implemented Spec 2 types. Spec 1 entities
 (`Money`, `Account`, `PostingRequest`, `LedgerEntry`, `Day`, `ReplaySequence`) are reused unchanged —
 see [../001-ledger-foundation/data-model.md](../001-ledger-foundation/data-model.md).
 
@@ -12,11 +11,11 @@ see [../001-ledger-foundation/data-model.md](../001-ledger-foundation/data-model
 | Field | Meaning | Rules |
 |-------|---------|-------|
 | event id | Assessment event, e.g. `E3` | — |
-| authorization id | e.g. `Auth-A` | Duplicate handling *pending HC-6* |
-| account id | e.g. `ACC-001` | Must be a registered ledger account *(pending HC-7)* |
-| hold amount | `Money` | Account currency; positive `bigint` minor units *(pending HC-7)* |
+| authorization id | e.g. `Auth-A` | Duplicate handling is outside the supplied stream (HC-6) |
+| account id | e.g. `ACC-001` | Ledger balance lookup supplies the account validation used by the assessment path |
+| hold amount | `Money` | Exact minor-unit amount through the money adapter |
 | event day | Day 1–6 | When the request arrives |
-| value day | Day 1–6 | Recorded independently; effect on holds *pending HC-5* |
+| value day | Day 1–6 | Selects the ledger balance used at the request's replay position (HC-5) |
 
 ## Settlement request (input)
 
@@ -24,29 +23,25 @@ see [../001-ledger-foundation/data-model.md](../001-ledger-foundation/data-model
 |-------|---------|-------|
 | event id | e.g. `E5` | — |
 | authorization id | Referenced authorization, e.g. `Auth-A`, `Auth-Z` | Must be present and active *(HC-18)* |
-| account id | e.g. `ACC-001` | Must match the authorization *(pending HC-7)* |
-| amount | `Money` | Currency matches the authorization; ≤ hold *(pending HC-8)* |
-| event day | Day 1–6 | Becomes the debit's event day *(pending HC-17)* |
-| value day | Day 1–6 | Becomes the debit's value day *(pending HC-17)* |
+| account id | e.g. `ACC-001` | Account mismatch is a documented unsupported case (HC-7) |
+| amount | `Money` | Over-settlement is a documented unsupported case (HC-8) |
+| event day | Day 1–6 | Becomes the debit's event day (HC-17) |
+| value day | Day 1–6 | Becomes the debit's value day (HC-17) |
 
-## Authorization record (history — proposed, pending HC-13, HC-14, HC-15)
+## Stored outcome records
 
-An immutable record appended once per incoming authorization or settlement outcome. Never updated or
-deleted.
+Authorization outcomes and accepted settlements are immutable records and are never updated or
+deleted. Rejected settlements are returned but not stored (HC-14).
 
 | Field | Meaning |
 |-------|---------|
-| record sequence | Strictly increasing, assigned by the authorization component *(HC-15)* |
-| ledger boundary | Ledger `lastSequence()` observed when the record was appended *(HC-15)* |
 | event id, event day, value day | From the incoming request |
 | authorization id, account id, amount | From the incoming request |
-| kind | Authorization approved · authorization rejected · settlement accepted · settlement rejected *(HC-2, HC-3, HC-14)* |
-| reason | For rejections only, e.g. insufficient available balance, unknown authorization *(HC-3, HC-14)* |
-| ledger entry sequence | For an accepted settlement: the sequence of its ledger debit *(HC-11, HC-17)* |
+| outcome | `APPROVED`, `REJECTED`, or `SETTLED` |
 
-## Authorization (derived, not stored as mutable state — proposed, HC-13)
+## Authorization state (derived, HC-13)
 
-Folded from the records for one authorization id, optionally only records known at a boundary.
+Derived from the latest stored record for one authorization id.
 
 | Derived field | Rule |
 |---------------|------|
@@ -55,15 +50,14 @@ Folded from the records for one authorization id, optionally only records known 
 | hold amount | Requested amount of the approving record |
 | hold active | State is Approved and no accepted settlement record follows *(HC-1)* |
 
-## State transitions (proposed, pending HC-1, HC-2, HC-6, HC-8, HC-18)
+## State transitions
 
 ```text
-authorization request ──validate──▶ available − hold ≥ 0 ? ──yes──▶ [Approved, hold active]
-          │                                    │
-          │                                    └──no───▶ [Rejected]  (no hold, no ledger entry)
-          └──invalid / duplicate id──▶ rejected outcome (HC-6, HC-7)
+authorization request ──▶ available − hold ≥ 0 ? ──yes──▶ [Approved, hold active]
+                                         │
+                                         └──no───▶ [Rejected] (no hold, no ledger entry)
 
-[Approved] ──accepted settlement (amount ≤ hold, same account & currency)──▶ [Settled, hold closed]
+[Approved] ──accepted assessment settlement──▶ [Settled, hold closed]
                      │ ledger DEBIT appended first; closing record appended only after it succeeds
                      │
                      └──rejected settlement──▶ [Approved] unchanged (no ledger entry)
@@ -76,14 +70,12 @@ There is no transition out of Rejected or Settled.
 
 ## Derived values
 
-- **Active holds** `(account, boundary)` = Σ hold amounts of authorizations for the account whose
-  hold is active as known at the boundary *(HC-4, HC-5, HC-15)*.
+- **Active holds** = Σ amounts whose latest stored outcome for the account is `APPROVED`.
 - **Available balance** `(ledger balance, active hold amounts)` = ledger balance − Σ active hold
-  amounts **[Assessment]**. Pure calculation over given inputs *(pending HC-20)*; it does not read
+  amounts **[Assessment]**. Pure calculation over given inputs (HC-20); it does not read
   the ledger or the history.
 - **Available balance for a decision** = available balance `(Spec 1 closing balance (account, value
-  day, boundary), active holds (account, boundary))` — the caller selects both inputs *(HC-4, HC-5,
-  HC-15)*.
+  day at the written replay position), active holds at that position)` (HC-4/HC-5).
 - **Approval test** = available balance for the decision − requested hold ≥ 0 **[Assessment]**.
 
 ## Invariants

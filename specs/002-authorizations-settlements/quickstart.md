@@ -16,7 +16,7 @@ All tests (Spec 1 must stay green throughout):
 npm test
 ```
 
-Only this specification's tests (once the human has created them in a function cycle):
+Only this specification's tests:
 
 ```bash
 node --test "test/authorizations/**/*.test.ts"
@@ -64,9 +64,8 @@ Expected: no output.
 2. After cycle 5: full `npm test`, `npm run typecheck`, AI review, human-applied findings, `WORKLOG.md`
    entry, human commit.
 
-## What the Spec 2 replay checks (values pending approval)
+## What the Spec 2 replay checks
 
 The cycle 5 scenario replays E1, E2, E3, E4, E5, E6, E7, E8 for ACC-001 in the written order and
-checks the outcomes and balances approved at HC-9, HC-10, HC-16, and HC-19. Proposed values and their
-calculations are in [spec.md](spec.md) → *Human Checkpoints*; none may be copied into a test until
-marked approved.
+checks the human-approved outcomes and balances from HC-9, HC-10, HC-16, and HC-19. Their
+event-by-event calculations are recorded in [spec.md](spec.md) → *Human Checkpoints*.

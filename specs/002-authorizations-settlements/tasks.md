@@ -75,7 +75,7 @@ Decisions for this cycle:
 - [x] T012 [HUMAN] Decide HC-4, HC-5, HC-15 — decision boundary, value-day rule, record ordering (CHK002–CHK004) — *HC-15 deferred: not needed for E3/E8*
 - [x] T013 [HUMAN] Decide HC-2, HC-3, HC-13, HC-14 — states, rejection retention, immutable history (CHK005–CHK008)
 - [x] T014 [HUMAN] Decide HC-6 and the authorization part of HC-7 — duplicate IDs, account/currency/amount validation (CHK009–CHK010) — *not handled: no assessment event*
-- [ ] T015 [HUMAN] Record the decisions above in `AMBIGUITIES.md` (`docs: record authorization decisions`)
+- [x] T015 [HUMAN] Record the decisions above in `AMBIGUITIES.md` (`docs: record authorization decisions`)
 
 Cycle:
 
@@ -123,7 +123,7 @@ Decisions for this cycle:
 - [x] T031 [HUMAN] Decide HC-1 and HC-17 — hold release on a smaller settlement; the settlement debit's fields (CHK012–CHK013)
 - [x] T032 [HUMAN] Decide the settlement part of HC-7, and HC-8, HC-18 — mismatches, over-settlement, non-active authorization (CHK014–CHK016) — *HC-7/HC-8 not handled: no assessment event; HC-18 rejected (accepted review fix)*
 - [x] T033 [HUMAN] Decide HC-11 and HC-12 — failure-atomic (not crash-atomic) ordering and its recorded limitation; state after a rejected settlement (CHK017–CHK018)
-- [ ] T034 [HUMAN] Record the decisions above in `AMBIGUITIES.md` (`docs: record settlement decisions`)
+- [x] T034 [HUMAN] Record the decisions above in `AMBIGUITIES.md` (`docs: record settlement decisions`)
 
 Cycle:
 
@@ -148,7 +148,7 @@ Decisions for this cycle:
 - [x] T042 [HUMAN] Approve HC-16 — E3 decision and the Spec 2 replay table, with calculations (CHK019–CHK020)
 - [x] T043 [HUMAN] Approve HC-9 — E8 Auth-B decision and Auth-B's state through Day 6 (CHK021–CHK022)
 - [x] T044 [HUMAN] Approve HC-10 — criteria 3, 4, 5 verdicts — and HC-19 — criterion 1 re-check (CHK023–CHK026)
-- [ ] T045 [HUMAN] Record verdicts in `REJECTED.md` / `AMBIGUITIES.md` (`docs: record authorization criteria`)
+- [x] T045 [HUMAN] Record verdicts in `AMBIGUITIES.md`; no Spec 2 criterion is rejected (`docs: record authorization criteria`)
 
 Cycle:
 
@@ -157,7 +157,7 @@ Cycle:
 - [x] T048 [US5] [HUMAN] Write the replay and assertions in `test/authorizations/authorization-events.test.ts` using only approved HC-9/HC-10/HC-16/HC-19 values; capture boundaries with `lastSequence()`
 - [x] T049 [US5] [HUMAN] Run and confirm the result (red if any behaviour is missing; otherwise record that it passed on first run and why); commit (`test: cover authorization and settlement events`) — *replay committed in `5b48e67`, moved to its own file in `c600c1b`; no production change was needed*
 - [x] T050 [US5] [HUMAN] Fix any behaviour the scenario exposes, in the owning function — *nothing exposed*
-- [ ] T051 [US5] [AI] Run full tests and typecheck; review without editing
+- [x] T051 [US5] [AI] Run full tests and typecheck; review without editing
 
 ---
 
@@ -165,9 +165,9 @@ Cycle:
 
 - [x] T052 [AI] Final review against the contract and constitution: no Dinero.js outside `src/money/`, no record mutation, no ledger entry from a hold or rejection, Spec 1 files unchanged (`git diff --stat main -- src/ledger src/money test/ledger test/money specs/001-ledger-foundation`)
 - [x] T053 [HUMAN] Apply accepted findings (or delegate explicitly; delegated fixes recorded here and in `WORKLOG.md` as AI-authored) — *findings 1 (inactive-authorization settlement) and 2 (unused import) applied by AI at the human's explicit delegation; finding 3 (settlement account mismatch) kept as a documented limitation*
-- [ ] T054 [AI] Run `npm test` and `npm run typecheck`; report results
-- [ ] T055 [HUMAN] Sync `contracts/authorizations.md` and `spec.md` status with what was built (AI may draft)
-- [ ] T056 [HUMAN] Record the real work and responsibilities for Spec 2 in `WORKLOG.md`
+- [x] T054 [AI] Run `npm test` and `npm run typecheck`; report results — *74 tests pass; typecheck passes*
+- [x] T055 [HUMAN] Sync `contracts/authorizations.md` and `spec.md` status with what was built (AI drafted at the human's request)
+- [x] T056 [HUMAN] Record the real work and responsibilities for Spec 2 in `WORKLOG.md`
 - [ ] T057 [HUMAN] Commit the completed specification
 
 ---

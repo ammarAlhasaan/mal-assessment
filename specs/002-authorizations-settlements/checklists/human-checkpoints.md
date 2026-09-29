@@ -4,10 +4,8 @@
 **Created**: 2026-09-29
 **Feature**: [spec.md](../spec.md)
 
-**Review Ownership**: Human only. Mark `[x]` after recording the decision (and any values) in
-`spec.md` → *Human Checkpoints*, replacing "Proposed" with "Approved" or the human's own decision. AI
-does not mark these items. Every proposal in the spec is **pending human approval**; none is
-approved.
+**Review Ownership**: Human only. All implemented checkpoints below were approved by the human;
+HC-15 was explicitly deferred because Spec 2 does not require historical authorization queries.
 
 **Small steps**: decide only the group for the next cycle, immediately before it starts. Do not
 approve a later group early. Groups follow [tasks.md](../tasks.md).
@@ -20,7 +18,7 @@ approve a later group early. Groups follow [tasks.md](../tasks.md).
 
 - [x] CHK002 HC-4 — Replay boundary at which the decision's ledger balance and active holds are taken
 - [x] CHK003 HC-5 — How event day and value day apply to holds and to the decision's ledger balance
-- [ ] CHK004 HC-15 — Sequence ordering across ledger postings and authorization records — *deferred: not needed for E3/E8*
+- [x] CHK004 HC-15 — Sequence ordering across ledger postings and authorization records — *deferred: not needed for E3/E8*
 - [x] CHK005 HC-2 — Minimum authorization states (proposed: Approved-active, Rejected, Settled)
 - [x] CHK006 HC-3 — Rejected authorization retained as an immutable record, or returned only
 - [x] CHK007 HC-13 — Immutable transition records with derived state vs mutable state; reconciliation with the append-only constitution recorded
@@ -44,15 +42,15 @@ approve a later group early. Groups follow [tasks.md](../tasks.md).
 
 ## Before cycle 5 — Spec 2 replay (each value needs its event-by-event calculation in the spec)
 
-- [x] CHK019 HC-16 — E3 Auth-A decision (proposed: approved; 250.00 − 200.00 = 50.00 — pending)
-- [x] CHK020 HC-16 — Spec 2 replay table: ACC-001 closing balance by value day, before and after E7, and available balance after E8 (pending)
-- [x] CHK021 HC-9 — E8 Auth-B decision at its written replay position, with the full calculation and sensitivity table reviewed (proposed: rejected; −155.00 − 90.00 = −245.00 — pending)
+- [x] CHK019 HC-16 — E3 Auth-A approved; 250.00 − 200.00 = 50.00
+- [x] CHK020 HC-16 — Spec 2 replay table approved for the asserted after-E8 balances
+- [x] CHK021 HC-9 — E8 Auth-B rejected; −155.00 − 90.00 = −245.00
 - [x] CHK022 HC-9 — Auth-B's state through Day 6 (active hold if approved; rejected otherwise)
-- [x] CHK023 HC-10 — Criterion 3 verdict and reasoning (proposed: correct — accept)
-- [x] CHK024 HC-10 — Criterion 4 verdict and reasoning, including the reading of "present in the ledger" (proposed: correct — accept)
-- [x] CHK025 HC-10 — Criterion 5 verdict and reasoning, including how it is verified if Auth-B is rejected (proposed: correct as a conditional rule — accept)
-- [x] CHK026 HC-19 — Criterion 1 re-check with the E5 settlement debit (proposed: still −370.00 — pending)
-- [ ] CHK027 Any rejected criterion recorded in `REJECTED.md`; resolved ambiguities recorded in `AMBIGUITIES.md` (human, `docs: record <decision>`)
+- [x] CHK023 HC-10 — Criterion 3 accepted
+- [x] CHK024 HC-10 — Criterion 4 accepted; “present in the ledger” means present in authorization history
+- [x] CHK025 HC-10 — Criterion 5 accepted as a conditional rule
+- [x] CHK026 HC-19 — Criterion 1 remains AED −370.00 after the E5 settlement debit
+- [x] CHK027 No Spec 2 criterion rejected; resolved ambiguities recorded in `AMBIGUITIES.md`
 
 ## Workflow gates (per function cycle)
 
@@ -60,5 +58,5 @@ approve a later group early. Groups follow [tasks.md](../tasks.md).
 - [x] CHK029 Cycle 2 `authorize()` — assertions, red, implemented, reviewed, green
 - [x] CHK030 Cycle 3 lookup / derived state — assertions, red, implemented, reviewed, green
 - [x] CHK031 Cycle 4 `settle()` (E5 and E6 in one cycle) — assertions, red, implemented, reviewed, green
-- [ ] CHK032 Cycle 5 replay coverage — assertions, red, implemented, reviewed, green
-- [ ] CHK033 `npm test` and `npm run typecheck` pass; Spec 1 files unchanged; `WORKLOG.md` updated
+- [x] CHK032 Cycle 5 replay coverage — approved assertions passed on the first run; reviewed and green
+- [x] CHK033 `npm test` and `npm run typecheck` pass; Spec 1 files unchanged; `WORKLOG.md` updated

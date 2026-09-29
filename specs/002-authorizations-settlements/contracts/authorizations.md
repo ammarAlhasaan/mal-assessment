@@ -1,9 +1,6 @@
-# Contract: Authorizations (`src/authorizations/` — proposed, not created)
+# Contract: Authorizations (`src/authorizations/`)
 
-**Status**: Draft. Responsibilities only. No TypeScript signatures are fixed here: the minimum types
-and a throwing signature are added at the start of each function cycle, after its checkpoints are
-approved, and this contract is then updated to match (Constitution IV). Contains no expected
-financial values.
+**Status**: Implemented and verified. The signatures below match `src/authorizations/`.
 
 Depends on `src/ledger/` (public `Ledger` interface only) and `src/money/`. Function bodies are
 human-owned unless the human explicitly delegates an accepted review fix.
@@ -14,7 +11,7 @@ An authorization component is bound to exactly one existing `Ledger`. It reads b
 `balanceByValueDay` / `balanceAsKnownAt` / `lastSequence` and writes only through `append`. It never
 modifies or reorders ledger entries.
 
-## Operations (in proposed implementation order)
+## Operations (implementation order)
 
 ### 1. `availableBalance()`
 
@@ -38,22 +35,22 @@ Implemented as `createAuthorizations(ledger: Ledger): Authorizations` with `auth
 | Aspect | Contract |
 |--------|----------|
 | Inputs | authorization request (see [data-model.md](../data-model.md)) |
-| Output | the decision (approved or rejected, with reason) — *shape pending HC-3, HC-14* |
+| Output | a frozen authorization record with outcome `APPROVED` or `REJECTED` |
 | Rule | Approve iff available balance − hold ≥ 0 **[Assessment]**, where available balance = `availableBalance()` applied to the ledger balance and active holds it selects at the request's boundary (*HC-4, HC-5, HC-15*) |
 | Effects on approval | Hold becomes active; one immutable record appended (*HC-13*) |
-| Effects on rejection | No hold; record retained or not per *HC-3/HC-14* |
+| Effects on rejection | No hold; immutable rejected authorization record retained (HC-3/HC-14) |
 | Never | Appends a ledger entry or changes a ledger balance **[Assessment]** |
-| Invalid input | Unknown account, currency mismatch, non-positive amount, day outside window, duplicate id — *handling pending HC-6, HC-7* |
+| Unsupported cases | Duplicate IDs and malformed authorization requests are outside the supplied event stream (HC-6/HC-7) |
 
 ### 3. Authorization lookup and derived current state
 
-Implemented as `lookup(authorizationId: string): AuthorizationRecord | undefined` on `Authorizations`. Returns the latest record for the id (its `outcome` is the current state), or `undefined` when the id is not present. No boundary parameter (HC-15 deferred).
+Implemented as `lookup(authorizationId: string): AuthorizationRecord | SettlementRecord | undefined` on `Authorizations`. Returns the latest stored record for the id, or `undefined` when the id is not present. No boundary parameter (HC-15 deferred).
 
 | Aspect | Contract |
 |--------|----------|
 | Responsibility | For an authorization id: whether it is present; if present, its account, hold amount, current state, and whether its hold is active |
 | Derivation | Computed from the immutable history, not from mutable state (*HC-13*) |
-| Boundary | May answer "as known at" a boundary (*HC-15*) |
+| Boundary | Current state only; historical boundary lookup is deferred (HC-15) |
 | Not present | Distinguishable from every present state (needed for E6 / criterion 4) |
 | Side effects | None |
 
@@ -64,17 +61,17 @@ Implemented as `settle(request: SettlementRequest): SettlementRecord` on `Author
 | Aspect | Contract |
 |--------|----------|
 | Inputs | settlement request (see [data-model.md](../data-model.md)) |
-| Output | the outcome (accepted with its ledger entry, or rejected with reason) — *shape pending HC-14* |
+| Output | a frozen settlement record with outcome `SETTLED` or `REJECTED` |
 | Accept when | Authorization's latest outcome is `APPROVED` (HC-18). Account/currency match and amount ≤ hold are not checked (*HC-7, HC-8 — not handled*) |
-| Effects on acceptance | Exactly one ledger DEBIT via `append` (*fields pending HC-17*); hold closed (*HC-1*). Failure-atomic for anticipated errors: every anticipated rejection is detected before the first write, so it records neither; not crash-atomic (*HC-11*) |
-| Effects on rejection | No ledger entry; ledger `lastSequence()` unchanged; authorization unchanged; record retained or not per *HC-14* |
+| Effects on acceptance | Exactly one ledger DEBIT via `append` using the settlement fields (HC-17), then one `SETTLED` record; full hold closed (HC-1) |
+| Effects on rejection | No ledger entry; ledger sequence and authorization history unchanged; frozen rejection returned but not stored (HC-12/HC-14) |
 | Unknown id | Rejected without moving funds **[Assessment, criterion 4 — verdict HC-10]** |
 
 ## Ordering and boundaries
 
 - Callers capture ledger boundaries with `lastSequence()` during replay; tests never hard-code
   sequence numbers (as in Spec 1).
-- Authorization-record ordering relative to ledger entries: *pending HC-15*.
+- Cross-store historical ordering is deferred because Spec 2 only queries current authorization state (HC-15).
 
 ## Invariants (all operations)
 
