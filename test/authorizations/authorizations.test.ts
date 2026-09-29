@@ -94,3 +94,90 @@ describe("available balance", () => {
         ]);
     });
 });
+
+
+function setup() {
+    const ledger = createLedger([{id: "ACC-1", currency: "AED"}]);
+    return {ledger, authorizations: createAuthorizations(ledger)};
+}
+
+function credit(ledger: Ledger, minorUnits: bigint) {
+    ledger.append({
+        eventId: "CREDIT",
+        accountId: "ACC-1",
+        direction: "CREDIT",
+        amount: money(minorUnits, "AED"),
+        eventDay: 1,
+        valueDay: 1,
+    });
+}
+
+function request(authorizationId: string, minorUnits: bigint): AuthorizationRequest {
+    return {
+        eventId: "EV-1",
+        authorizationId,
+        accountId: "ACC-1",
+        amount: money(minorUnits, "AED"),
+        eventDay: 1,
+        valueDay: 1,
+    };
+}
+
+describe("authorize", () => {
+    test("approves when available balance stays above zero after the hold", () => {
+        const {ledger, authorizations} = setup();
+        credit(ledger, 50000n);
+
+        const record = authorizations.authorize(request("AUTH-1", 20000n));
+
+        assert.deepEqual(record, {
+            eventId: "EV-1",
+            authorizationId: "AUTH-1",
+            accountId: "ACC-1",
+            amount: money(20000n, "AED"),
+            eventDay: 1,
+            valueDay: 1,
+            outcome: "APPROVED",
+        });
+        assert.ok(Object.isFrozen(record));
+    });
+
+    test("approves when available balance is exactly zero after the hold", () => {
+        const {ledger, authorizations} = setup();
+        credit(ledger, 50000n);
+
+        assert.equal(authorizations.authorize(request("AUTH-1", 50000n)).outcome, "APPROVED");
+    });
+
+    test("rejects when available balance would go below zero", () => {
+        const {ledger, authorizations} = setup();
+        credit(ledger, 50000n);
+
+        assert.equal(authorizations.authorize(request("AUTH-1", 50001n)).outcome, "REJECTED");
+    });
+
+    test("approved holds reduce later requests; rejected ones do not", () => {
+        const {ledger, authorizations} = setup();
+        credit(ledger, 50000n);
+
+        // 50000 - 30000 = 20000; 20000 - 25000 < 0 (no hold); 20000 - 20000 = 0
+        const outcomes = [
+            request("A", 30000n),
+            request("B", 25000n),
+            request("C", 20000n),
+        ].map((r) => authorizations.authorize(r).outcome);
+
+        assert.deepEqual(outcomes, ["APPROVED", "REJECTED", "APPROVED"]);
+    });
+
+    test("appends no ledger entry and leaves the ledger balance unchanged", () => {
+        const {ledger, authorizations} = setup();
+        credit(ledger, 50000n);
+
+        authorizations.authorize(request("A", 20000n));
+        authorizations.authorize(request("B", 90000n));
+
+        assert.equal(ledger.lastSequence(), 1);
+        assert.deepEqual(ledger.balanceByValueDay("ACC-1", 1), money(50000n, "AED"));
+    });
+});
