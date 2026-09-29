@@ -185,3 +185,28 @@ describe("authorize", () => {
         assert.deepEqual(ledger.balanceByValueDay("ACC-1", 1), money(50000n, "AED"));
     });
 });
+
+
+describe("lookup", () => {
+    test("finds an approved authorization with outcome APPROVED", () => {
+        const {ledger, authorizations} = setup();
+        credit(ledger, 50000n);
+        authorizations.authorize(request("AUTH-1", 20000n));
+
+        assert.equal(authorizations.lookup("AUTH-1")?.outcome, "APPROVED");
+    });
+
+    test("finds a rejected authorization with outcome REJECTED", () => {
+        const {ledger, authorizations} = setup();
+        credit(ledger, 50000n);
+        authorizations.authorize(request("AUTH-1", 50001n));
+
+        assert.equal(authorizations.lookup("AUTH-1")?.outcome, "REJECTED");
+    });
+
+    test("returns undefined for an id with no authorization", () => {
+        const {authorizations} = setup();
+
+        assert.equal(authorizations.lookup("AUTH-Z"), undefined);
+    });
+});

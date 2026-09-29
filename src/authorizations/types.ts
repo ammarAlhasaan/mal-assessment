@@ -18,4 +18,5 @@ export interface AuthorizationRecord extends AuthorizationRequest {
 
 export interface Authorizations {
     authorize(request: AuthorizationRequest): AuthorizationRecord;
+    lookup(authorizationId: string): AuthorizationRecord | undefined;
 }

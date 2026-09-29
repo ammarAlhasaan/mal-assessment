@@ -40,5 +40,8 @@ export function createAuthorizations(ledger: Ledger): Authorizations {
             records.push(record);
             return record;
         },
+        lookup() {
+            throw new Error("Not implemented");
+        },
     };
 }
