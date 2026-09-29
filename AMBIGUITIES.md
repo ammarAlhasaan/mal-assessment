@@ -188,3 +188,20 @@ the affected days' balances afterwards rather than delaying the daily close:
 - [AWS — Event Sourcing](https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/event-sourcing-pattern.html)
 - [Oracle — Backdated Transactions and Average Balances](https://docs.oracle.com/en/cloud/saas/financials/25d/faugl/backdated-transactions-and-average-balances.html)
 - [Oracle FLEXCUBE — Interest Recalculation](https://docs.oracle.com/cd/E86273_01/html/Int_Chargs/IC09_Int_Apli.htm)
+
+## Reversal of E7
+
+E9 reverses E7 without changing it. The reversal appends one new entry in the
+opposite direction with E7's account and amount (a CREDIT of AED 620.00). It
+keeps its own event id, event day (Day 6), and value day (Day 2) from E9. The
+ledger entry types are not extended; the link to E7 is the reversal request.
+
+A reversal target must match exactly one ledger entry, otherwise the reversal
+is rejected before anything is appended. The stream has no multi-entry target,
+repeated reversal, or reversal of a reversal, so these are limitations rather
+than tested behaviour.
+
+Fees assessed while E7 was in effect remain after E9. They were correct on what
+was known at the end of Day 5, the ledger is append-only, and the stream
+contains no fee-refund event. A refund would have to be its own compensating
+entry.
