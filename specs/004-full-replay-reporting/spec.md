@@ -138,7 +138,7 @@ window close after the last event, and returns a structured result.
 
 ## Human Checkpoints *(blocking)*
 
-All pending. Options, recommendations, and values are in [research.md](research.md).
+All checkpoints are approved. Their options, recommendations, and supporting values are in [research.md](research.md).
 
 | HC | Question | Recommendation |
 |----|----------|----------------|
@@ -153,7 +153,7 @@ All pending. Options, recommendations, and values are in [research.md](research.
 | HC-9 | Entry point | **Approved (2026-09-29, cycle 5)**: replace placeholder `src/run.ts` with the replay wiring; delete `test/smoke.test.ts`; `npm start` |
 | HC-10 | Intentional failing test | **Approved (2026-09-29, cycle 7)**: duplicate reversal of E7 is accepted (`test/limitations/duplicate-reversal.limitation.ts`); `npm test` = `node --test "test/**/*.test.ts"`; `npm run test:limitation` exits 1 |
 | HC-11 | Criteria classification | **Approved (2026-09-29, cycle 6)**: accept 1, 3, 4, 5; reject 2, 6, 7, 8 (unchanged); each asserted in `test/replay/full-replay.test.ts` |
-| HC-12 | `NUMBERS.md` constants | Research R6 |
+| HC-12 | `NUMBERS.md` constants | **Approved (2026-09-29, cycle 8)**: research R6; every implementation constant is traced to the assessment or an approved earlier decision, with its representation and why a smaller/halved value is not valid |
 | HC-13 | Full-scenario test scope | **Approved (2026-09-29, cycle 6)**: structured result (research R2) + exact `node src/run.ts` stdout (R3) and exit 0 |
 
 ## Known limitations (documented, not tested)

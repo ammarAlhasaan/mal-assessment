@@ -41,4 +41,4 @@
 
 ## Before cycle 8 — delivery
 
-- [ ] CHK012 HC-12 — `NUMBERS.md` constants (research R6)
+- [x] CHK012 HC-12 — `NUMBERS.md` constants (research R6)

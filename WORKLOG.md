@@ -50,3 +50,24 @@ Acceptance criterion 1 remains accepted. Criteria 2, 6, and 8 are rejected with
 their calculations recorded in `REJECTED.md`. Final verification: 93 tests pass,
 TypeScript typecheck passes, Spec 1 and Spec 2 behavior is unchanged, and
 Dinero.js remains isolated to `src/money/`.
+
+## 2026-09-29 Asia/Dubai
+
+Completed Spec 4 across the replay orchestration, daily report model, exact text
+rendering, runnable entry point, full E1–E10 scenario, and the intentionally
+failing design test. I approved the as-known daily view, the final value-dated
+table, the output format, the complete financial values, the acceptance-criteria
+classification, and the delivery-document constants.
+
+AI prepared the specification artifacts, calculations, report drafts, and
+documentation-only cycle updates, and ran the focused and final checks. The
+runnable assessment now prints every day's closing balances, assessed fees,
+authorization states, and errors, followed by the final value-dated balances.
+The separate limitation test demonstrates that the current model permits a
+second reversal of the same entry; this is intentionally documented rather than
+hidden from the normal suite.
+
+Final verification: `npm start` exits successfully with the approved report,
+104 tests pass, TypeScript typecheck passes, and `npm run test:limitation` exits
+non-zero with the single annotated duplicate-reversal failure. The incremental
+commit history remains intact without amending or squashing.

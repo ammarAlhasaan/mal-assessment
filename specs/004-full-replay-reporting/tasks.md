@@ -66,7 +66,7 @@ Commits: `test: define …` / `feat: implement …` (human) · `docs: record …
 
 ## Cycle 8 — delivery
 
-- [ ] T032 [HUMAN] Decide HC-12
-- [ ] T033 [AI] Draft `README.md`, `NUMBERS.md`; update `AMBIGUITIES.md`, `REJECTED.md`
-- [ ] T034 [HUMAN] Approve documents; record Spec 4 in `WORKLOG.md`
-- [ ] T035 [AI] Verify all four documented commands; confirm history intact (no squash)
+- [x] T032 [HUMAN] Decide HC-12 — *approved research R6 constants and explanations*
+- [x] T033 [AI] Draft `README.md`, `NUMBERS.md`; update `AMBIGUITIES.md`, `REJECTED.md` — *committed as `201b2df`*
+- [x] T034 [HUMAN] Approve documents; record Spec 4 in `WORKLOG.md`
+- [x] T035 [AI] Verify all four documented commands; confirm history intact (no squash) — *`npm start` exits 0; 104 tests pass; the limitation command exits 1 as designed; typecheck passes; incremental history retained*
