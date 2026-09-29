@@ -14,9 +14,9 @@ Decide only the group for the next cycle, immediately before it starts.
 
 ## Before cycle 2 — `reverse()`
 
-- [ ] CHK005 HC-5 — Fees retained after E9; no automatic refund
-- [ ] CHK006 HC-6 — Opposite direction, target account/amount, reversal's own id/event day/value day; no Spec 1 type change
-- [ ] CHK007 HC-7 — Unknown target rejected before append; other target cases are limitations
+- [x] CHK005 HC-5 — Fees retained after E9; no automatic refund
+- [x] CHK006 HC-6 — Opposite direction, target account/amount, reversal's own id/event day/value day; no Spec 1 type change
+- [x] CHK007 HC-7 — Unknown target rejected before append; other target cases are limitations
 
 ## Before cycle 3 — `applyRate()`
 

@@ -2,7 +2,7 @@
 
 **Feature Branch**: `003-fees-reversals-interest`
 **Created**: 2026-09-29
-**Status**: Draft — HC-1–HC-4 and HC-17 approved; HC-5–HC-16 pending
+**Status**: Draft — HC-1–HC-7 and HC-17 approved; HC-8–HC-16 pending
 **Input**: "Spec 3 — Fees, Reversals, and Interest: E7, overdraft-fee assessment, E9 reversal in an
 append-only ledger, daily interest at 0.04% on positive closing balances, rounded daily accruals and
 one capitalized credit at the end of Day 6; acceptance criteria 1, 2, 6, and 8."
@@ -171,12 +171,16 @@ limitation, not tested.
 
 ### HC-5 — Fees after E9
 
+**Approved (2026-09-29, cycle 2)**: as proposed; evidenced in cycle 6.
+
 **Proposed**: the three fees stay. The ledger is append-only, the fees were correct on what was known
 at the end of Day 5, and the stream contains no fee-refund event. A refund would itself be a new
 compensating entry; it is not invented here. The end-of-Day-6 reassessment adds no fee (no negative
 day remains).
 
 ### HC-6 — Reversal posting
+
+**Approved (2026-09-29, cycle 2)**: as proposed.
 
 **Proposed**: `reverse(ledger, {eventId, targetEventId, eventDay, valueDay})` appends one entry:
 opposite direction of the target (CREDIT for E7), target's account and amount (AED 620.00), eventId
@@ -185,6 +189,8 @@ and the returned value; `PostingRequest`/`LedgerEntry` are **not** extended (no 
 Alternative: add an optional `reverses` field to the Spec 1 types (Spec 1 change, `snapshot()` too).
 
 ### HC-7 — Reversal target validation
+
+**Approved (2026-09-29, cycle 2)**: the target must match exactly one entry, otherwise `InvalidReversalTargetError` before any append; only the unknown-target case is tested.
 
 **Proposed**: an unknown `targetEventId` is rejected before anything is appended (Constitution II:
 validate before append) — one test. Multi-entry targets, a second reversal of the same event, and

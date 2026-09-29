@@ -32,11 +32,11 @@ Commits: `test: define <behavior>` and `feat: implement <behavior>` (human) · `
 
 **Focused test**: `node --test test/reversals/reversals.test.ts`
 
-- [ ] T009 [HUMAN] Decide HC-5, HC-6, HC-7 (CHK005–CHK007)
-- [ ] T010 [US2] [AI] Present tests, signature, and implementation in one message
-- [ ] T011 [US2] [HUMAN] Apply and commit tests (`test: define reversal`)
-- [ ] T012 [US2] [HUMAN] Apply and commit implementation (`feat: implement reversal`)
-- [ ] T013 [US2] [AI] Run tests and typecheck; review; record decisions (`docs: record reversal decisions`)
+- [x] T009 [HUMAN] Decide HC-5, HC-6, HC-7 (CHK005–CHK007)
+- [x] T010 [US2] [AI] Present tests, signature, and implementation in one message
+- [x] T011 [US2] [HUMAN] Apply and commit tests (`test: define reversal`) — *`ac7743d`*
+- [x] T012 [US2] [HUMAN] Apply and commit implementation (`feat: implement reversal`) — *`9e4a2c7`; 4 focused, 83 total tests pass; typecheck passes*
+- [x] T013 [US2] [AI] Run tests and typecheck; review; record decisions (`docs: record reversal decisions`)
 
 ## Phase 4: Cycle 3 — `applyRate()` in `src/money/` (US3)
 
