@@ -423,6 +423,8 @@ balance. No assessment event exercises this.
 
 ### HC-9 — E8 Auth-B decision at its written replay position
 
+**Approved (2026-09-29)**: Auth-B is **rejected** at E8's written replay position (−155.00 − 90.00 = −245.00 < 0), per the calculation below. Asserted in `test/authorizations/authorization-events.test.ts`.
+
 **Question**: Approve or reject Auth-B (AED 90.00) at E8's written position?
 
 Event-by-event calculation for ACC-001, **assuming HC-1 (full release), HC-4 (replay position), and
@@ -460,6 +462,8 @@ Only a boundary that excludes E7 would approve Auth-B. Because E7 precedes E8 in
 the proposal is rejection.
 
 ### HC-10 — Verdicts for acceptance criteria 3, 4, 5
+
+**Approved (2026-09-29)**: criterion 3 correct — accepted; criterion 4 correct — accepted; criterion 5 correct as a conditional rule — accepted (Auth-B is rejected, so the hold rule is verified by the `authorize` unit test). Reasoning below.
 
 All three verdicts are **proposed and pending human approval**.
 
@@ -574,6 +578,8 @@ Spec 1's ledger, which is out of scope. Alternatives in research R6.
 
 ### HC-16 — E3 decision and E3/E5/E6 values
 
+**Approved (2026-09-29)**: E3 approved and the "after E8" column of the table below; asserted in the replay test. The "before E7" column is not asserted.
+
 **Proposed — PENDING**: E3 approved. Calculation: ledger balance for value Day 2 as known after E2 =
 1,200.00 − 950.00 = 250.00 [25000]; active holds 0.00; post-hold 250.00 − 200.00 = 50.00 [5000] ≥ 0.
 
@@ -611,6 +617,8 @@ ledger at any time.
   way — HC-10.)
 
 ### HC-19 — Criterion 1 re-check with Spec 2 postings
+
+**Approved (2026-09-29)**: criterion 1 remains accepted at −370.00; asserted in the replay test.
 
 **Proposed — PENDING**: Criterion 1 remains accepted. The only ledger entry Spec 2 adds to ACC-001 is
 E5's debit with value day 4 (HC-17); holds create no ledger entries. Day 2 closing balance as known

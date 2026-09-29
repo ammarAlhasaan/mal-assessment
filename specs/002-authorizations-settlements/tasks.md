@@ -145,18 +145,18 @@ window"; criteria 3, 4, 5; criterion 1 re-check. **Depends on**: cycle 4 green.
 
 Decisions for this cycle:
 
-- [ ] T042 [HUMAN] Approve HC-16 — E3 decision and the Spec 2 replay table, with calculations (CHK019–CHK020)
-- [ ] T043 [HUMAN] Approve HC-9 — E8 Auth-B decision and Auth-B's state through Day 6 (CHK021–CHK022)
-- [ ] T044 [HUMAN] Approve HC-10 — criteria 3, 4, 5 verdicts — and HC-19 — criterion 1 re-check (CHK023–CHK026)
+- [x] T042 [HUMAN] Approve HC-16 — E3 decision and the Spec 2 replay table, with calculations (CHK019–CHK020)
+- [x] T043 [HUMAN] Approve HC-9 — E8 Auth-B decision and Auth-B's state through Day 6 (CHK021–CHK022)
+- [x] T044 [HUMAN] Approve HC-10 — criteria 3, 4, 5 verdicts — and HC-19 — criterion 1 re-check (CHK023–CHK026)
 - [ ] T045 [HUMAN] Record verdicts in `REJECTED.md` / `AMBIGUITIES.md` (`docs: record authorization criteria`)
 
 Cycle:
 
-- [ ] T046 [US5] [AI] Explain the assessment source for the scenario and each checked value, citing its approved checkpoint
-- [ ] T047 [US5] [AI] Create the scenario test file structure and test name only (no assertions, no values)
-- [ ] T048 [US5] [HUMAN] Write the replay and assertions in `test/authorizations/authorization-events.test.ts` using only approved HC-9/HC-10/HC-16/HC-19 values; capture boundaries with `lastSequence()`
-- [ ] T049 [US5] [HUMAN] Run and confirm the result (red if any behaviour is missing; otherwise record that it passed on first run and why); commit (`test: cover authorization and settlement events`)
-- [ ] T050 [US5] [HUMAN] Fix any behaviour the scenario exposes, in the owning function
+- [x] T046 [US5] [AI] Explain the assessment source for the scenario and each checked value, citing its approved checkpoint
+- [x] T047 [US5] [AI] Create the scenario test file structure and test name only (no assertions, no values)
+- [x] T048 [US5] [HUMAN] Write the replay and assertions in `test/authorizations/authorization-events.test.ts` using only approved HC-9/HC-10/HC-16/HC-19 values; capture boundaries with `lastSequence()`
+- [x] T049 [US5] [HUMAN] Run and confirm the result (red if any behaviour is missing; otherwise record that it passed on first run and why); commit (`test: cover authorization and settlement events`) — *replay committed in `5b48e67`, moved to its own file in `c600c1b`; no production change was needed*
+- [x] T050 [US5] [HUMAN] Fix any behaviour the scenario exposes, in the owning function — *nothing exposed*
 - [ ] T051 [US5] [AI] Run full tests and typecheck; review without editing
 
 ---

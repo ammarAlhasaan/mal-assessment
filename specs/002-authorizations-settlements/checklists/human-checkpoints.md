@@ -44,14 +44,14 @@ approve a later group early. Groups follow [tasks.md](../tasks.md).
 
 ## Before cycle 5 — Spec 2 replay (each value needs its event-by-event calculation in the spec)
 
-- [ ] CHK019 HC-16 — E3 Auth-A decision (proposed: approved; 250.00 − 200.00 = 50.00 — pending)
-- [ ] CHK020 HC-16 — Spec 2 replay table: ACC-001 closing balance by value day, before and after E7, and available balance after E8 (pending)
-- [ ] CHK021 HC-9 — E8 Auth-B decision at its written replay position, with the full calculation and sensitivity table reviewed (proposed: rejected; −155.00 − 90.00 = −245.00 — pending)
-- [ ] CHK022 HC-9 — Auth-B's state through Day 6 (active hold if approved; rejected otherwise)
-- [ ] CHK023 HC-10 — Criterion 3 verdict and reasoning (proposed: correct — accept)
-- [ ] CHK024 HC-10 — Criterion 4 verdict and reasoning, including the reading of "present in the ledger" (proposed: correct — accept)
-- [ ] CHK025 HC-10 — Criterion 5 verdict and reasoning, including how it is verified if Auth-B is rejected (proposed: correct as a conditional rule — accept)
-- [ ] CHK026 HC-19 — Criterion 1 re-check with the E5 settlement debit (proposed: still −370.00 — pending)
+- [x] CHK019 HC-16 — E3 Auth-A decision (proposed: approved; 250.00 − 200.00 = 50.00 — pending)
+- [x] CHK020 HC-16 — Spec 2 replay table: ACC-001 closing balance by value day, before and after E7, and available balance after E8 (pending)
+- [x] CHK021 HC-9 — E8 Auth-B decision at its written replay position, with the full calculation and sensitivity table reviewed (proposed: rejected; −155.00 − 90.00 = −245.00 — pending)
+- [x] CHK022 HC-9 — Auth-B's state through Day 6 (active hold if approved; rejected otherwise)
+- [x] CHK023 HC-10 — Criterion 3 verdict and reasoning (proposed: correct — accept)
+- [x] CHK024 HC-10 — Criterion 4 verdict and reasoning, including the reading of "present in the ledger" (proposed: correct — accept)
+- [x] CHK025 HC-10 — Criterion 5 verdict and reasoning, including how it is verified if Auth-B is rejected (proposed: correct as a conditional rule — accept)
+- [x] CHK026 HC-19 — Criterion 1 re-check with the E5 settlement debit (proposed: still −370.00 — pending)
 - [ ] CHK027 Any rejected criterion recorded in `REJECTED.md`; resolved ambiguities recorded in `AMBIGUITIES.md` (human, `docs: record <decision>`)
 
 ## Workflow gates (per function cycle)
