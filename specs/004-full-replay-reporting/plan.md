@@ -45,7 +45,7 @@ test/limitations/duplicate-reversal.limitation.ts    # intentional failure (HC-1
 ```ts
 export function replay(accounts: readonly Account[], events: readonly ReplayEvent[]): ReplayResult;
 export function buildDailyReport(result: ReplayResult): readonly DayReport[];
-export function renderReport(report: readonly DayReport[], finalBalances: ...): string;
+// renderReport(): signature decided in cycle 4 (HC-6)
 ```
 
 ## Cycle Order

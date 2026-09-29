@@ -39,7 +39,7 @@ Closing balance = `balanceAsKnownAt(account, N, boundary after close N)`.
 | 6 | 14 | 390.93 [39093] | 390.00 + 0.93 | 10.008 [10008] | none | Auth-A SETTLED 185.00; Auth-B REJECTED 90.00 | none |
 
 Day 5 pre-fee value (not printed): −155.00. ACC-002 Day 5 is 0.000 because E10 is not yet known at
-the Day 5 close. Day 6 ACC-002: 10.000 + 0.008. Interest line on Day 6: ACC-001 accruals 0.10, 0.09,
+the Day 5 close. Day 6 ACC-002: 10.000 + 0.008. The calculation supporting the Day 6 capitalized-interest entries is: ACC-001 accruals 0.10, 0.09,
 0.25, 0.17, 0.16, 0.16 = 0.93; ACC-002 0.000 × 4, 0.004, 0.004 = 0.008 (Spec 3 HC-15).
 
 ### Final value-dated table (after the final close, boundary 14)
@@ -140,7 +140,8 @@ Final value-dated closing ledger balances
 ```
 
 The `Events:` line is not required by the assessment; it is proposed so the written order and the
-late E10 are visible (HC-3). Accrual detail is proposed for the README, not the output (HC-4 option).
+late E10 are visible (HC-3). Daily accruals are not printed; they are documented in `README.md` /
+calculation tables (HC-4, approved).
 
 ## R4. Checkpoint options
 
@@ -149,7 +150,7 @@ late E10 are visible (HC-3). Accrual detail is proposed for the README, not the 
 | HC-1 | A: as known at each close · B: final value-dated only · C: A + final table | **C.** A is what a day-by-day replay knows; B alone would print Day 2 = 225.00 with a Day 2 fee "assessed" before E7 existed and hide criterion 1's −370.00 story. The final table shows the restatements by E7/E9. |
 | HC-2 | By processing close · by value day | **Processing close.** "Assessed" is when the fee was booked (event day 5); the value day is printed on each fee line. Authorization states and errors belong to the close of the event that produced them. |
 | HC-3 | E10 in Day 6 (late) · E10 in Day 5 | **Day 6, labelled late.** Spec 3 HC-17: late events do not reopen a closed day. ACC-002 Day 5 prints 0.000 as known; final table shows 10.000 on value day 5. |
-| HC-4 | Day 6 includes capitalization · excludes it | **Includes.** Capitalization is booked at the final close with value day 6 (Spec 3 HC-10); an `Interest capitalized:` block explains 390.93 / 10.008. Optional: also print the six accruals per account. |
+| HC-4 | Day 6 includes capitalization · excludes it | **Approved (2026-09-29)**: Day 6 closing balances include the capitalization entries (Spec 3 HC-10). The report prints the two capitalized-interest entries only. Daily accrual details remain documented in README/calculation tables and are not printed per day. The assessment asks per day only for balance, fees, authorization states, and errors. Precedent (supplied by the human): banking systems separate internal accrual (accrual journals, no customer advice) from capitalization/liquidation posted to the account — [Oracle FLEXCUBE accounting events](https://docs.oracle.com/cd/F75086_01/html/LN/LN17_AppdxB.htm), [Oracle FLEXCUBE automatic accrual](https://docs.oracle.com/cd/F50901_01/html/LN/LN12_Auto.htm), [SAP interest capitalization](https://help.sap.com/docs/LOCALIZATIONS_FOR_BANKING_SERVICES_FROM_SAP/372b9754aace462e90c8108efc4b797c/709e8a5123c23220e10000000a423f68.html). |
 | HC-5 | Errors = E6 only · E6 + E8 | **E6 only.** E8 is a valid authorization request that was declined (a state, Spec 2 HC-3); E6 references an absent authorization. The replay records the returned `REJECTED` settlement; it does not catch thrown exceptions (none occur in the stream). Error text: see R3; alternative reason text "authorization not found" would need an extra `lookup` branch. |
 | HC-6 | Text in R3 · table layout · JSON | **R3 text.** Deterministic, no locale, no timestamps. |
 | HC-7 | Latest record amount · hold amount + settled amount | **Latest record** (what `lookup` returns): Auth-A shows 200.00 APPROVED, then 185.00 SETTLED. Auth-Z is never listed (criterion 4: not present). |
@@ -175,7 +176,7 @@ AED 620.00 credit, creating money.
   (persist `reverses`, or reject a target already reversed) — not implemented, because that changes
   Spec 1 types.
 - File: `test/limitations/duplicate-reversal.limitation.ts` (not `*.test.ts`).
-- `npm test`: `node --test "test/**/*.test.ts"` — same 92 files' tests, excludes the limitation.
+- `npm test`: `node --test "test/**/*.test.ts"` — runs the normal passing tests and excludes the limitation.
 - `npm run test:limitation`: `node --test test/limitations/duplicate-reversal.limitation.ts` — exits 1.
 - Typecheck still covers it (`tsconfig` includes `test/`).
 

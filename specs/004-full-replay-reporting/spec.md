@@ -145,7 +145,7 @@ All pending. Options, recommendations, and values are in [research.md](research.
 | HC-1 | Is each printed day an as-known-at-close view or the final value-dated view? | As known at that day's close, plus one final value-dated table after Day 6 |
 | HC-2 | Which printed day do fees, authorization states, and errors belong to? | The close at which they became known (processing day); fees also show value day |
 | HC-3 | Where does E10 appear? | Day 6 section, marked late (event day 5); final table shows it on value day 5 |
-| HC-4 | Does Day 6's closing balance include capitalization? | Yes (390.93 / 10.008), with an interest line listing accruals |
+| HC-4 | Does Day 6's closing balance include capitalization? | **Approved (2026-09-29)**: yes (390.93 / 10.008); Day 6 prints only the two capitalization entries; daily accruals are documented in README/calculation tables, not printed |
 | HC-5 | What counts as an error, and its text? | Only E6's rejected settlement; Auth-B's rejection is an authorization state |
 | HC-6 | Exact output format | Research R3 |
 | HC-7 | Authorization state line | Latest record per known authorization id at the close |
