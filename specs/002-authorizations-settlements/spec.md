@@ -606,7 +606,7 @@ ledger at any time.
 
 ### HC-18 — Settlement preconditions beyond existence
 
-**Not handled (2026-09-29)**: no assessment event settles a rejected or settled authorization. No available-balance check is made at settlement.
+**Approved (2026-09-29, accepted review fix)**: a settlement is accepted only when the authorization's latest outcome is `APPROVED`. Settling a rejected or already-settled authorization returns `REJECTED` and appends no ledger debit. No available-balance check is made at settlement.
 
 **Proposed**:
 

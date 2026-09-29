@@ -38,7 +38,7 @@ approve a later group early. Groups follow [tasks.md](../tasks.md).
 - [x] CHK013 HC-17 — Settlement ledger posting: direction, amount, event id, event day, value day
 - [x] CHK014 HC-7 (settlement part) — Account or currency mismatch between settlement and authorization — *not handled: no assessment event*
 - [x] CHK015 HC-8 — Settlement larger than its authorized amount — *not handled: no assessment event*
-- [x] CHK016 HC-18 — Settlement of a present but non-active authorization; available-balance check at settlement — *not handled: no assessment event*
+- [x] CHK016 HC-18 — Settlement of a present but non-active authorization; available-balance check at settlement — *rejected (accepted review fix); no available-balance check at settlement*
 - [x] CHK017 HC-11 — Failure-atomic (not crash-atomic) settlement ordering accepted, and its residual limitation recorded
 - [x] CHK018 HC-12 — State remaining after a rejected settlement, including E6
 

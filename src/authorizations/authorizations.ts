@@ -55,7 +55,7 @@ export function createAuthorizations(ledger: Ledger): Authorizations {
         },
         settle(request) {
             const outcome: SettlementOutcome =
-                latest(request.authorizationId) === undefined ? "REJECTED" : "SETTLED";
+                latest(request.authorizationId)?.outcome === "APPROVED" ? "SETTLED" : "REJECTED";
 
             const record: SettlementRecord = Object.freeze({
                 eventId: request.eventId,

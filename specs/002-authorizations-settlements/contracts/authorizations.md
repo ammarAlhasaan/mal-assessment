@@ -59,13 +59,13 @@ Implemented as `lookup(authorizationId: string): AuthorizationRecord | undefined
 
 ### 4. `settle()`
 
-Implemented as `settle(request: SettlementRequest): SettlementRecord` on `Authorizations` (`SettlementRequest` = `AuthorizationRequest`; outcome `"SETTLED" | "REJECTED"`). Unknown id → `REJECTED`, nothing written, not stored. Otherwise: one DEBIT with the settlement's event id, account, amount, event day, value day; then a `SETTLED` record is appended, which closes the whole hold (HC-1). `lookup` may now return a `SettlementRecord`. Mismatch, over-settlement, and non-active authorization are not handled (HC-7, HC-8, HC-18).
+Implemented as `settle(request: SettlementRequest): SettlementRecord` on `Authorizations` (`SettlementRequest` = `AuthorizationRequest`; outcome `"SETTLED" | "REJECTED"`). Unknown id → `REJECTED`, nothing written, not stored. Otherwise: one DEBIT with the settlement's event id, account, amount, event day, value day; then a `SETTLED` record is appended, which closes the whole hold (HC-1). `lookup` may now return a `SettlementRecord`. A rejected or already-settled authorization → `REJECTED`, nothing written (HC-18). Account/currency mismatch and over-settlement are not handled (HC-7, HC-8).
 
 | Aspect | Contract |
 |--------|----------|
 | Inputs | settlement request (see [data-model.md](../data-model.md)) |
 | Output | the outcome (accepted with its ledger entry, or rejected with reason) — *shape pending HC-14* |
-| Accept when | Authorization present and active; account and currency match; amount ≤ hold (*HC-7, HC-8, HC-18*) |
+| Accept when | Authorization's latest outcome is `APPROVED` (HC-18). Account/currency match and amount ≤ hold are not checked (*HC-7, HC-8 — not handled*) |
 | Effects on acceptance | Exactly one ledger DEBIT via `append` (*fields pending HC-17*); hold closed (*HC-1*). Failure-atomic for anticipated errors: every anticipated rejection is detected before the first write, so it records neither; not crash-atomic (*HC-11*) |
 | Effects on rejection | No ledger entry; ledger `lastSequence()` unchanged; authorization unchanged; record retained or not per *HC-14* |
 | Unknown id | Rejected without moving funds **[Assessment, criterion 4 — verdict HC-10]** |

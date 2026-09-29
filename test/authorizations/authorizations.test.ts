@@ -7,9 +7,6 @@ import type {AuthorizationRequest} from "../../src/authorizations/types.ts";
 import {createLedger} from "../../src/ledger/ledger.ts";
 import type {Ledger} from "../../src/ledger/ledger.ts";
 
-import type {Day, EntryDirection} from "../../src/ledger/types.ts";
-
-
 describe("available balance", () => {
     test("with no active holds it equals the ledger balance", () => {
         assert.deepEqual(
@@ -257,5 +254,26 @@ describe("settle", () => {
         assert.equal(ledger.lastSequence(), 1);
         assert.deepEqual(ledger.balanceByValueDay("ACC-1", 1), money(50000n, "AED"));
         assert.equal(authorizations.lookup("AUTH-Z"), undefined);
+    });
+
+    test("rejects settling a rejected authorization without moving funds", () => {
+        const {ledger, authorizations} = setup();
+        credit(ledger, 50000n);
+        authorizations.authorize(request("A", 50001n));
+
+        assert.equal(authorizations.settle(request("A", 10000n)).outcome, "REJECTED");
+        assert.equal(ledger.lastSequence(), 1);
+        assert.equal(authorizations.lookup("A")?.outcome, "REJECTED");
+    });
+
+    test("rejects settling an already-settled authorization without moving funds", () => {
+        const {ledger, authorizations} = setup();
+        credit(ledger, 50000n);
+        authorizations.authorize(request("A", 20000n));
+        authorizations.settle(request("A", 18500n));
+
+        assert.equal(authorizations.settle(request("A", 18500n)).outcome, "REJECTED");
+        assert.equal(ledger.lastSequence(), 2);
+        assert.deepEqual(ledger.balanceByValueDay("ACC-1", 1), money(31500n, "AED"));
     });
 });

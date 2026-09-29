@@ -121,7 +121,7 @@ no separate rejection function. **Depends on**: cycle 3 green.
 Decisions for this cycle:
 
 - [x] T031 [HUMAN] Decide HC-1 and HC-17 — hold release on a smaller settlement; the settlement debit's fields (CHK012–CHK013)
-- [x] T032 [HUMAN] Decide the settlement part of HC-7, and HC-8, HC-18 — mismatches, over-settlement, non-active authorization (CHK014–CHK016) — *not handled: no assessment event*
+- [x] T032 [HUMAN] Decide the settlement part of HC-7, and HC-8, HC-18 — mismatches, over-settlement, non-active authorization (CHK014–CHK016) — *HC-7/HC-8 not handled: no assessment event; HC-18 rejected (accepted review fix)*
 - [x] T033 [HUMAN] Decide HC-11 and HC-12 — failure-atomic (not crash-atomic) ordering and its recorded limitation; state after a rejected settlement (CHK017–CHK018)
 - [ ] T034 [HUMAN] Record the decisions above in `AMBIGUITIES.md` (`docs: record settlement decisions`)
 
@@ -163,8 +163,8 @@ Cycle:
 
 ## Phase 7: Review and completion
 
-- [ ] T052 [AI] Final review against the contract and constitution: no Dinero.js outside `src/money/`, no record mutation, no ledger entry from a hold or rejection, Spec 1 files unchanged (`git diff --stat main -- src/ledger src/money test/ledger test/money specs/001-ledger-foundation`)
-- [ ] T053 [HUMAN] Apply accepted findings (or delegate explicitly; delegated fixes recorded here and in `WORKLOG.md` as AI-authored)
+- [x] T052 [AI] Final review against the contract and constitution: no Dinero.js outside `src/money/`, no record mutation, no ledger entry from a hold or rejection, Spec 1 files unchanged (`git diff --stat main -- src/ledger src/money test/ledger test/money specs/001-ledger-foundation`)
+- [x] T053 [HUMAN] Apply accepted findings (or delegate explicitly; delegated fixes recorded here and in `WORKLOG.md` as AI-authored) — *findings 1 (inactive-authorization settlement) and 2 (unused import) applied by AI at the human's explicit delegation; finding 3 (settlement account mismatch) kept as a documented limitation*
 - [ ] T054 [AI] Run `npm test` and `npm run typecheck`; report results
 - [ ] T055 [HUMAN] Sync `contracts/authorizations.md` and `spec.md` status with what was built (AI may draft)
 - [ ] T056 [HUMAN] Record the real work and responsibilities for Spec 2 in `WORKLOG.md`
