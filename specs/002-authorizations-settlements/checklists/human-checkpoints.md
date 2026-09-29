@@ -14,7 +14,7 @@ approve a later group early. Groups follow [tasks.md](../tasks.md).
 
 ## Before cycle 1 — `availableBalance()`
 
-- [ ] CHK001 HC-20 — `availableBalance()` is a pure calculation over a given ledger balance and given active hold amounts (so cycle 1 is complete with holds)
+- [x] CHK001 HC-20 — `availableBalance()` is a pure calculation over a given ledger balance and given active hold amounts (so cycle 1 is complete with holds)
 
 ## Before cycle 2 — `authorize()`
 

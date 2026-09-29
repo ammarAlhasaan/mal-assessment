@@ -47,15 +47,15 @@ rule (a hold reduces available balance, not ledger balance).
 
 Decisions for this cycle:
 
-- [ ] T003 [HUMAN] Decide HC-20 — `availableBalance()` as a pure calculation over a given ledger balance and given active hold amounts (CHK001)
+- [x] T003 [HUMAN] Decide HC-20 — `availableBalance()` as a pure calculation over a given ledger balance and given active hold amounts (CHK001)
 
 Cycle:
 
-- [ ] T004 [US1] [AI] Explain the assessment source for `availableBalance()` and each planned test case
-- [ ] T005 [US1] [AI] Add minimum types and throwing `availableBalance()` signature in `src/authorizations/types.ts` / `src/authorizations/authorizations.ts`; update `contracts/authorizations.md` to match
-- [ ] T006 [US1] [HUMAN] Approve and write assertions in `test/authorizations/authorizations.test.ts` with synthetic values: no hold, one hold, several holds, negative result, currency mismatch, inputs unchanged
-- [ ] T007 [US1] [HUMAN] Run the focused test and confirm the intended red failure
-- [ ] T008 [US1] [HUMAN] Commit tests, types, and signature (`test: define available balance`)
+- [x] T004 [US1] [AI] Explain the assessment source for `availableBalance()` and each planned test case
+- [x] T005 [US1] [AI] Add minimum types and throwing `availableBalance()` signature in `src/authorizations/types.ts` / `src/authorizations/authorizations.ts`; update `contracts/authorizations.md` to match
+- [x] T006 [US1] [HUMAN] Approve and write assertions in `test/authorizations/authorizations.test.ts` with synthetic values: no hold, one hold, several holds, negative result, currency mismatch, inputs unchanged
+- [x] T007 [US1] [HUMAN] Run the focused test and confirm the intended red failure
+- [x] T008 [US1] [HUMAN] Commit tests, types, and signature (`test: define available balance`)
 - [ ] T009 [US1] [HUMAN] Implement `availableBalance()`
 - [ ] T010 [US1] [AI] Run focused, module, full tests and typecheck; review without editing
 - [ ] T011 [US1] [HUMAN] Apply accepted findings (or delegate explicitly); commit (`feat: implement available balance`)

@@ -606,10 +606,12 @@ E4 (value day 3) and E5 (value day 4) are excluded by value day. Fees remain for
 **Question**: Should `availableBalance()` look up balances and holds itself, or calculate from
 inputs it is given?
 
-**Proposed**: A pure calculation. Inputs: one ledger balance (`Money`) and the amounts of the active
-holds (`Money` values, possibly none). Output: ledger balance − Σ holds, in the same currency;
-currency mismatch rejected by the money adapter. No ledger or history access, no boundary
-parameter, no side effects.
+**Approved (2026-09-29)**: A pure calculation. Inputs: one ledger balance (`Money`) and a readonly
+list of the active hold amounts (`Money` values, possibly none). Output: ledger balance − Σ holds, in
+the same currency; currency mismatch rejected with the money adapter's existing
+`CurrencyMismatchError`. No ledger or history access, no boundary parameter, no side effects; inputs
+and the order and content of the holds list stay unchanged. Holds are not validated here;
+`authorize()` owns hold validation (HC-7).
 
 **Why**: It lets cycle 1 test the complete rule — including one and several active holds — without
 any authorization existing, so the function is finished in cycle 1 and never changes afterwards.

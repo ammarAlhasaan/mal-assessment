@@ -20,7 +20,9 @@ modifies or reorders ledger entries.
 
 | Aspect | Contract |
 |--------|----------|
-| Shape | Pure calculation over given inputs (*pending HC-20*) — does not read the ledger or the authorization history |
+| Shape | Pure calculation over given inputs (HC-20, approved) — does not read the ledger or the authorization history |
+| Signature | `availableBalance(ledgerBalance: Money, activeHolds: readonly Money[]): Money` |
+| Validation | Hold amounts are not validated here; `authorize()` owns that (HC-7) |
 | Inputs | one ledger balance (`Money`); the amounts of the active holds (`Money` values, possibly none) |
 | Output | `Money` in the ledger balance's currency; may be negative |
 | Rule | Ledger balance − Σ active hold amounts **[Assessment]** |
