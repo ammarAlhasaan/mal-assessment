@@ -142,7 +142,7 @@ All pending. Options, recommendations, and values are in [research.md](research.
 
 | HC | Question | Recommendation |
 |----|----------|----------------|
-| HC-1 | Is each printed day an as-known-at-close view or the final value-dated view? | As known at that day's close, plus one final value-dated table after Day 6 |
+| HC-1 | Is each printed day an as-known-at-close view or the final value-dated view? | **Approved (2026-09-29, cycle 3)**: as known at that day's close, plus one final value-dated table after Day 6 |
 | HC-2 | Which printed day do fees, authorization states, and errors belong to? | **Approved (2026-09-29, cycle 2)**: the close at which they became known (processing day); fees also show value day |
 | HC-3 | Where does E10 appear? | **Approved (2026-09-29, cycle 2)**: processed after E9 in the Day 6 close, marked late (event day 5); final table shows it on value day 5 |
 | HC-4 | Does Day 6's closing balance include capitalization? | **Approved (2026-09-29)**: yes (390.93 / 10.008); Day 6 prints only the two capitalization entries; daily accruals are documented in README/calculation tables, not printed |

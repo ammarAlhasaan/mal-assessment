@@ -29,7 +29,8 @@ the Spec 3 cutoffs and returns per-close snapshots, a report-model builder, a pu
 src/replay/types.ts       # ReplayEvent, CloseSnapshot, ReplayResult, DayReport
 src/replay/events.ts      # ASSESSMENT_ACCOUNTS, ASSESSMENT_EVENTS
 src/replay/replay.ts      # replay(accounts, events)
-src/report/report.ts      # buildDailyReport(result)
+src/report/types.ts       # AccountBalance, DayReport, FinalBalances, Report
+src/report/report.ts      # buildReport(accounts, result)
 src/report/render.ts      # renderReport(report)
 src/run.ts                # entry point (replaces placeholder, HC-9)
 test/replay/events.test.ts
@@ -44,7 +45,7 @@ test/limitations/duplicate-reversal.limitation.ts    # intentional failure (HC-1
 
 ```ts
 export function replay(accounts: readonly Account[], events: readonly ReplayEvent[]): ReplayResult;
-export function buildDailyReport(result: ReplayResult): readonly DayReport[];
+export function buildReport(accounts: readonly Account[], result: ReplayResult): Report;
 // renderReport(): signature decided in cycle 4 (HC-6)
 ```
 
@@ -54,7 +55,7 @@ export function buildDailyReport(result: ReplayResult): readonly DayReport[];
 |---|------|-------------------|-------------|-------------|
 | 1 | `ASSESSMENT_EVENTS` data | "Event stream, replayed in this order" | HC-8 | Assessment E1–E10 |
 | 2 | `replay()` | "replays the event stream"; Spec 3 HC-17; E6 | HC-2, HC-3, HC-5, HC-7 | Synthetic mini-streams |
-| 3 | `buildDailyReport()` | "per day: closing ledger balance…" | HC-1, HC-4 | Synthetic |
+| 3 | `buildReport()` | "per day: closing ledger balance…" | HC-1, HC-4 | Synthetic |
 | 4 | `renderReport()` | "prints" | HC-6 | Synthetic model → exact text |
 | 5 | `src/run.ts` wiring | "runnable … script" | HC-9 | None (routine wiring; covered by cycle 6) |
 | 6 | Full scenario | Whole stream; criteria | HC-11, HC-13 | Research R2/R3 |

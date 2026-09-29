@@ -31,10 +31,10 @@ Commits: `test: define …` / `feat: implement …` (human) · `docs: record …
 
 ## Cycle 3 — `buildDailyReport()` (US3) · `node --test test/report/report.test.ts`
 
-- [ ] T012 [HUMAN] Decide HC-1, HC-4
-- [ ] T013 [AI] Present test, types, implementation
-- [ ] T014 [HUMAN] Commit tests / implementation
-- [ ] T015 [AI] Run checks; review; record decisions
+- [x] T012 [HUMAN] Decide HC-1, HC-4 — *synthetic stream order corrected in review to A, D, B, C (C the only late event)*
+- [x] T013 [AI] Present test, types, implementation — *files written by AI at the human's request; commits by the human*
+- [x] T014 [HUMAN] Commit tests / implementation — *`b4dc5f7` test (red: 2 fail), `a8535eb` feat*
+- [x] T015 [AI] Run checks; review; record decisions — *2 focused, 102 total tests pass; typecheck passes; Spec 1–3 files unchanged*
 
 ## Cycle 4 — `renderReport()` (US3) · `node --test test/report/render.test.ts`
 

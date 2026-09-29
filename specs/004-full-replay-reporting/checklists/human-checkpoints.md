@@ -19,7 +19,7 @@
 
 ## Before cycle 3 — `buildDailyReport()`
 
-- [ ] CHK001 HC-1 — As known at each close + final value-dated table
+- [x] CHK001 HC-1 — As known at each close + final value-dated table
 - [x] CHK004 HC-4 — Day 6 includes capitalization; prints only the two `INT-` entries; accruals documented, not printed
 
 ## Before cycle 4 — `renderReport()`
