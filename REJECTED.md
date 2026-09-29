@@ -39,10 +39,12 @@ Day 2. No reading of the fee rule gives exactly one fee on Day 2.
 
 > After E9, all balances and fees return to their pre-E7 values.
 
-E9 appends a credit of AED 620.00 with value day 2. It cancels E7's principal
-on every value day, but the three fees assessed at the Day 5 close remain: the
-ledger is append-only, the fees were correct on what was known at that close,
-and the stream contains no refund event.
+E9 appends a credit of AED 620.00 with value day 2. It reverses E7 only. It
+does not reverse the fee entries already assessed at the Day 5 close, and the
+event stream contains no event that refunds fees. The Day 6 close re-checks
+every value day, finds no new negative day, and assessment only ever adds fees,
+so the three fees remain. Append-only alone does not force this: if policy
+required a refund, it would be represented by additional compensating entries.
 
 | Value day | Pre-E7 | After E9 | Difference |
 |-----------|--------|----------|------------|
@@ -127,8 +129,8 @@ cost of that choice is the intentionally failing test.
 ## Refunding fees after the reversal
 
 Automatically refunding the three fees after E9 would make criterion 6 true. It was abandoned because
-the fees were correct on what was known at the Day 5 close, the ledger is append-only, and the stream
-has no refund event.
+the fees were correct on what was known at the Day 5 close and the stream has no refund event. A refund
+would have been possible as new compensating entries; it was a policy choice, not an append-only limit.
 
 ## Printing daily accruals, or only one view of each day
 

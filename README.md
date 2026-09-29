@@ -14,7 +14,7 @@ assessments, authorization states, and errors. There is no web layer, persistenc
 | Command | What it does | Expected result |
 |---------|--------------|-----------------|
 | `npm start` | Replays E1–E10 and prints the report | Report below; exit code 0; no input needed |
-| `npm test` | Runs every `test/**/*.test.ts` file | 104 tests pass; exit code 0 |
+| `npm test` | Runs every `test/**/*.test.ts` file | 106 tests pass; exit code 0 |
 | `npm run test:limitation` | Runs the one intentionally failing test | 1 test fails; exit code 1 |
 | `npm run typecheck` | `tsc` over `src/` and `test/` | No errors |
 
