@@ -80,9 +80,9 @@ Commits: `test: define <behavior>` and `feat: implement <behavior>` (human) · `
 ## Phase 8: Completion
 
 - [x] T033 [AI] Final review: no Dinero.js outside `src/money/`, no entry mutation, Spec 1/2 behaviour unchanged (`git diff --stat main -- src/ledger src/authorizations test/ledger test/authorizations`) — *no change; `src/money/money.ts` has only the approved `applyRate` addition; Dinero.js imported only in `src/money/`; Spec 3 code only appends*
-- [ ] T034 [HUMAN] Apply accepted findings (or delegate explicitly)
+- [x] T034 [HUMAN] Apply accepted findings (or delegate explicitly) — *no final findings required changes*
 - [x] T035 [AI] Run `npm test` and `npm run typecheck`; report — *93 pass; typecheck passes*
-- [ ] T036 [HUMAN] Record Spec 3 in `WORKLOG.md`; merge
+- [x] T036 [HUMAN] Record Spec 3 in `WORKLOG.md`; merge — *WORKLOG recorded; merge remains the PR step*
 
 ## Notes
 
